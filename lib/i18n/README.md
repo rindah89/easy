@@ -1,6 +1,6 @@
-# Internationalization (i18n) Guide for EasyD
+# Internationalization (i18n) Guide for EasyRide
 
-This guide explains how to implement and use internationalization in the EasyD app to support multiple languages.
+This guide explains how to implement and use internationalization in the EasyRide app to support multiple languages.
 
 ## Table of Contents
 

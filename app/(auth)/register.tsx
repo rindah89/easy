@@ -167,7 +167,7 @@ export default function RegisterScreen() {
                     }
                   ]}
                 >
-                  Sign up to get started with easyD.
+                  Sign up to get started with easyRide.
                 </Text>
                 
                 {error && (

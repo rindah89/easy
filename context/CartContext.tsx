@@ -4,8 +4,8 @@ import { useAuth } from './AuthContext';
 
 // Version tag for cart data structure
 const CART_VERSION = '1.0';
-const CART_STORAGE_KEY = 'easyD_cart';
-const CART_TEMP_STORAGE_KEY = 'easyD_cart_temp';
+const CART_STORAGE_KEY = 'easyRide_cart';
+const CART_TEMP_STORAGE_KEY = 'easyRide_cart_temp';
 const MAX_CART_AGE_DAYS = 30; // Cart items expire after 30 days
 const MAX_STORAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB max storage size
 
@@ -378,13 +378,12 @@ export async function migrateCartToSupabase(userId: string) {
   try {
     if (!userId) return false;
     
-    const localCart = await AsyncStorage.getItem(`easyD_cart_items_${CART_VERSION}_${userId}`);
+    const localCart = await AsyncStorage.getItem(`easyRide_cart_items_${CART_VERSION}_${userId}`);
     if (localCart) {
       // This is a placeholder for future implementation
       console.log('Ready to migrate cart for user:', userId);
       // After successful migration to Supabase:
-      // await AsyncStorage.removeItem(`easyD_cart_items_${CART_VERSION}_${userId}`);
-      return true;
+      // await AsyncStorage.removeItem(`easyRide_cart_items_${CART_VERSION}_${userId}`);
     }
     return false;
   } catch (error) {

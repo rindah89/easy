@@ -1,5 +1,5 @@
 {
-  "name": "easyd",
+  "name": "easyride",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -64,9 +64,10 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "supabase": "file:2.19.7",
+    "supabase": "^2.19.7",
     "tamagui": "^1.125.24",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "expo-dev-client": "~5.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

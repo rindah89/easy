@@ -87,12 +87,13 @@ export default function HomeScreen() {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [selectedService, setSelectedService] = useState<string>('ride');
   const [destination, setDestination] = useState<string>('');
+  const { t } = useTranslation();
+  
   const [recentLocations] = useState<RecentLocation[]>([
     { id: 1, name: 'Home', address: '123 Rue de la Paix, Bonanjo, Douala', icon: 'home' },
     { id: 2, name: 'Work', address: 'Akwa Business Center, Douala', icon: 'briefcase' },
     { id: 3, name: 'Gym', address: 'California Fitness, Bonapriso, Douala', icon: 'dumbbell' },
   ]);
-  const { t } = useTranslation();
 
   useEffect(() => {
     (async () => {
@@ -125,7 +126,7 @@ export default function HomeScreen() {
         router.push({
           pathname: '/ride-selection',
           params: {
-            pickup: 'Current location',
+            pickup: t('home.currentLocation'),
             destination: destination
           }
         });
@@ -170,9 +171,26 @@ export default function HomeScreen() {
         <View style={[styles.serviceIconContainer, { backgroundColor: service.color }]}>
           <MaterialCommunityIcons name={service.icon} size={24} color="white" />
         </View>
-        <Text style={styles.serviceName}>{service.name}</Text>
+        <Text style={styles.serviceName}>
+          {t(`home.services.${getServiceTranslationKey(service.id)}`)}
+        </Text>
       </TouchableOpacity>
     );
+  };
+
+  // Helper function to map service IDs to translation keys
+  const getServiceTranslationKey = (serviceId: string): string => {
+    switch (serviceId) {
+      case 'ride': return 'ride';
+      case 'package': return 'package';
+      case 'pharmacy': return 'pharmacy';
+      case 'grocery': return 'grocery';
+      case 'car-rental': return 'carRental';
+      case 'furniture': return 'homeDecor';
+      case 'textiles': return 'textiles';
+      case 'food': return 'food';
+      default: return serviceId;
+    }
   };
 
   // Get first letter of name or email for avatar fallback
@@ -189,12 +207,46 @@ export default function HomeScreen() {
       router.push({
         pathname: '/ride-selection',
         params: {
-          pickup: 'Current location',
+          pickup: t('home.currentLocation'),
           destination: destination
         }
       });
     }
   };
+
+  // Get localized location name
+  const getLocalizedLocationName = (name: string): string => {
+    switch (name.toLowerCase()) {
+      case 'home': return t('home.locations.home');
+      case 'work': return t('home.locations.work');
+      case 'gym': return t('home.locations.gym');
+      default: return name;
+    }
+  };
+
+  // Get action button text based on selected service
+  const getActionButtonText = (): string => {
+    if (selectedService === 'ride') {
+      return destination.trim() ? t('home.actions.continueToSelectRide') : t('home.actions.requestRide');
+    } else if (selectedService === 'car-rental') {
+      return t('home.actions.browseCars');
+    } else if (selectedService === 'package') {
+      return t('home.actions.sendPackage');
+    } else if (selectedService === 'textiles') {
+      return t('home.actions.browseTextiles');
+    } else if (selectedService === 'pharmacy') {
+      return t('home.actions.browsePharmacy');
+    } else if (selectedService === 'furniture') {
+      return t('home.actions.browseHomeDecor');
+    } else if (selectedService === 'grocery') {
+      return t('home.actions.browseGrocery');
+    } else if (selectedService === 'food') {
+      return t('home.actions.browseRestaurants');
+    }
+    return "";
+  };
+
+  const userName = userProfile?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Rider';
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -203,8 +255,8 @@ export default function HomeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Hello, {userProfile?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Rider'}</Text>
-          <Text style={styles.subGreeting}>Where are you going today?</Text>
+          <Text style={styles.greeting}>{t('home.greeting', { name: userName })}</Text>
+          <Text style={styles.subGreeting}>{t('home.whereToday')}</Text>
         </View>
         
         <ProfileAvatar size={40} />
@@ -229,7 +281,7 @@ export default function HomeScreen() {
                   latitude: location.coords.latitude,
                   longitude: location.coords.longitude,
                 }}
-                title="You are here"
+                title={t('home.currentLocation')}
               />
             )}
           </MapView>
@@ -247,8 +299,8 @@ export default function HomeScreen() {
               <MaterialCommunityIcons name="circle" size={12} color={theme.colors.primary} style={styles.locationIcon} />
               <TextInput
                 mode="flat"
-                placeholder="Current location"
-                value="Current location"
+                placeholder={t('home.currentLocation')}
+                value={t('home.currentLocation')}
                 disabled
                 style={styles.locationInput}
                 underlineStyle={{ display: 'none' }}
@@ -261,7 +313,7 @@ export default function HomeScreen() {
               <MaterialCommunityIcons name="square" size={12} color={theme.colors.error} style={styles.locationIcon} />
               <TextInput
                 mode="flat"
-                placeholder="Where to?"
+                placeholder={t('home.whereTo')}
                 value={destination}
                 onChangeText={setDestination}
                 style={styles.locationInput}
@@ -275,7 +327,7 @@ export default function HomeScreen() {
 
         {/* Recent Locations */}
         <View style={styles.recentLocationsContainer}>
-          <Text style={styles.sectionTitle}>Recent Places</Text>
+          <Text style={styles.sectionTitle}>{t('home.recentPlaces')}</Text>
           {recentLocations.map((location) => (
             <TouchableOpacity 
               key={location.id} 
@@ -286,7 +338,7 @@ export default function HomeScreen() {
                 <MaterialCommunityIcons name={location.icon} size={20} color={theme.colors.primary} />
               </View>
               <View style={styles.recentLocationDetails}>
-                <Text style={styles.recentLocationName}>{location.name}</Text>
+                <Text style={styles.recentLocationName}>{getLocalizedLocationName(location.name)}</Text>
                 <Text style={styles.recentLocationAddress}>{location.address}</Text>
               </View>
               <MaterialCommunityIcons name="chevron-right" size={20} color={theme.colors.onSurfaceVariant} />
@@ -305,7 +357,7 @@ export default function HomeScreen() {
                 router.push({
                   pathname: '/ride-selection',
                   params: {
-                    pickup: 'Current location',
+                    pickup: t('home.currentLocation'),
                     destination: destination
                   }
                 });
@@ -332,15 +384,7 @@ export default function HomeScreen() {
           style={styles.requestButton}
           textStyle={styles.requestButtonText}
         >
-          {selectedService === 'ride' ? (destination.trim() ? 'Continue to Select Ride' : 'Request Ride') : 
-           selectedService === 'car-rental' ? 'Browse Cars' : 
-           selectedService === 'package' ? 'Send Package' :
-           selectedService === 'textiles' ? 'Browse Textiles' :
-           selectedService === 'pharmacy' ? 'Browse Pharmacy' :
-           selectedService === 'furniture' ? 'Browse Home & Decor' :
-           selectedService === 'grocery' ? 'Browse Grocery' :
-           selectedService === 'food' ? 'Browse Restaurants' :
-           `Request ${selectedService}`}
+          {getActionButtonText()}
         </Button>
       </View>
     </SafeAreaView>

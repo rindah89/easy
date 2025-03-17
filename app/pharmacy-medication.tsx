@@ -9,6 +9,7 @@ import { Text as CustomText } from '../components/CustomText';
 import { Card } from '../components/CustomCard';
 import { Divider } from '../components/CustomDivider';
 import { useCart } from '../context/CartContext';
+import { useTranslation } from 'react-i18next';
 
 // Define TypeScript interfaces
 interface MedicationAlternative {
@@ -55,6 +56,7 @@ const ErrorModal = ({
   const insets = useSafeAreaInsets();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
+  const { t } = useTranslation();
   
   useEffect(() => {
     if (visible) {

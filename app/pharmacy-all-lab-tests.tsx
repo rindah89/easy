@@ -23,6 +23,7 @@ import { Card } from '../components/CustomCard';
 import { Divider } from '../components/CustomDivider';
 import { Chip } from '../components/CustomChip';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width - 32; // Full width minus padding
@@ -59,6 +60,7 @@ const CustomSearchBar = ({
   style?: any;
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   
   return (
     <View style={[styles.searchBarContainer, style]}>
@@ -66,7 +68,7 @@ const CustomSearchBar = ({
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder={placeholder || "Search..."}
+        placeholder={placeholder || t('pharmacy.allLabTests.search')}
         style={styles.searchInput}
         placeholderTextColor={theme.colors.outline}
       />
@@ -91,21 +93,20 @@ const SortMenu = ({
   onSelect: (sort: 'price_low' | 'price_high' | 'turnaround' | 'popularity') => void;
   currentSort: 'price_low' | 'price_high' | 'turnaround' | 'popularity';
 }) => {
-  if (!visible) return null;
-  
   const theme = useTheme();
+  const { t } = useTranslation();
   
   return (
     <View style={styles.menuOverlay}>
       <TouchableOpacity style={styles.menuBackground} onPress={onDismiss} />
       <View style={styles.menuContainer}>
-        <CustomText variant="titleMedium" style={styles.menuTitle}>Sort By</CustomText>
+        <CustomText variant="titleMedium" style={styles.menuTitle}>{t('pharmacy.allLabTests.sort.title')}</CustomText>
         <TouchableOpacity 
           style={styles.menuItem} 
           onPress={() => { onSelect('popularity'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'popularity' ? styles.selectedMenuItem : null}>
-            Most Popular
+            {t('pharmacy.allLabTests.sort.popularity')}
           </CustomText>
           {currentSort === 'popularity' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -116,7 +117,7 @@ const SortMenu = ({
           onPress={() => { onSelect('price_low'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'price_low' ? styles.selectedMenuItem : null}>
-            Price: Low to High
+            {t('pharmacy.allLabTests.sort.priceLow')}
           </CustomText>
           {currentSort === 'price_low' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -127,7 +128,7 @@ const SortMenu = ({
           onPress={() => { onSelect('price_high'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'price_high' ? styles.selectedMenuItem : null}>
-            Price: High to Low
+            {t('pharmacy.allLabTests.sort.priceHigh')}
           </CustomText>
           {currentSort === 'price_high' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -138,7 +139,7 @@ const SortMenu = ({
           onPress={() => { onSelect('turnaround'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'turnaround' ? styles.selectedMenuItem : null}>
-            Fastest Results
+            {t('pharmacy.allLabTests.sort.turnaround')}
           </CustomText>
           {currentSort === 'turnaround' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -156,24 +157,32 @@ const EmptyListComponent = ({
 }: { 
   onClearFilters: () => void; 
   theme: MD3Theme;
-}) => (
-  <View style={styles.emptyContainer}>
-    <MaterialCommunityIcons name="test-tube" size={64} color={theme.colors.outline} />
-    <CustomText variant="titleMedium" style={styles.emptyTitle}>
-      No lab tests found
-    </CustomText>
-    <CustomText variant="bodyMedium" style={styles.emptyDescription}>
-      Try adjusting your search or filters
-    </CustomText>
-    <Button
-      mode="contained"
-      onPress={onClearFilters}
-      style={styles.clearButton}
-    >
-      Clear Filters
-    </Button>
-  </View>
-);
+}) => {
+  const { t } = useTranslation();
+  
+  return (
+    <View style={styles.emptyContainer}>
+      <MaterialCommunityIcons 
+        name="test-tube-empty" 
+        size={64} 
+        color={theme.colors.outlineVariant} 
+      />
+      <CustomText variant="titleLarge" style={styles.emptyTitle}>
+        {t('pharmacy.allLabTests.noTests.title')}
+      </CustomText>
+      <CustomText variant="bodyMedium" style={styles.emptyDescription}>
+        {t('pharmacy.allLabTests.noTests.subtitle')}
+      </CustomText>
+      <Button 
+        mode="outlined" 
+        onPress={onClearFilters}
+        style={styles.clearButton}
+      >
+        {t('pharmacy.allLabTests.noTests.clearFilters')}
+      </Button>
+    </View>
+  );
+};
 
 const PharmacyAllLabTestsScreen = () => {
   const theme = useTheme();

@@ -10,6 +10,7 @@ import { Card } from '../components/CustomCard';
 import { Chip } from '../components/CustomChip';
 import { Divider } from '../components/CustomDivider';
 import { Badge } from '../components/CustomBadge';
+import { useTranslation } from 'react-i18next';
 
 // Sample lab test data
 const LAB_TESTS = [
@@ -101,6 +102,7 @@ const LAB_TESTS = [
 
 const PharmacyLabTestScreen = () => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
   const { testId } = useLocalSearchParams();
   const [loading, setLoading] = useState(true);
   const [test, setTest] = useState(null);
@@ -126,7 +128,7 @@ const PharmacyLabTestScreen = () => {
       if (foundTest) {
         setTest(foundTest);
       } else {
-        Alert.alert('Error', 'Lab test not found', [
+        Alert.alert(t('common.errorOccurred'), t('pharmacy.labTestDetails.notFound.title'), [
           { text: 'OK', onPress: () => router.back() }
         ]);
       }
@@ -135,233 +137,240 @@ const PharmacyLabTestScreen = () => {
     }, 800);
     
     return () => clearTimeout(timer);
-  }, [testId]);
+  }, [testId, t]);
 
   const handleBookTest = () => {
     router.push('/pharmacy-book-sample-collection');
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'left', 'top']}>
-      <View style={styles.header}>
-        <Button 
-          mode="text" 
-          icon={() => <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />}
-          onPress={() => router.back()}
-          style={styles.backButton}
-        />
-        <CustomText variant="headlineSmall" style={styles.headerTitle}>Lab Test Details</CustomText>
-      </View>
-
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-          <CustomText variant="bodyMedium" style={styles.loadingText}>Loading test details...</CustomText>
+    <SafeAreaView style={styles.safeArea} edges={['right', 'left', 'top']}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Button 
+              mode="text" 
+              onPress={() => router.back()}
+              icon={() => <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />}
+              style={styles.backButton}
+            />
+            <CustomText variant="headlineSmall" style={styles.headerTitle}>{t('pharmacy.labTestDetails.title')}</CustomText>
+          </View>
         </View>
-      ) : test ? (
-        <ScrollView 
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Test Image */}
-          <Image 
-            source={{ uri: test.image }} 
-            style={styles.testImage}
-            resizeMode="cover"
-          />
 
-          {/* Basic Info */}
-          <View style={styles.infoContainer}>
-            <Chip 
-              style={styles.categoryChip}
-              textStyle={{ color: theme.colors.primary }}
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={theme.colors.primary} />
+            <CustomText variant="bodyMedium" style={styles.loadingText}>{t('pharmacy.labTestDetails.loading')}</CustomText>
+          </View>
+        ) : test === null ? (
+          // Error state
+          <View style={styles.errorContainer}>
+            <Ionicons name="alert-circle-outline" size={60} color={theme.colors.error} />
+            <CustomText variant="titleMedium">{t('pharmacy.labTestDetails.notFound.title')}</CustomText>
+            <Button 
+              mode="contained" 
+              onPress={() => router.back()} 
+              style={styles.backToPharmacyButton}
+              icon={() => <Ionicons name="arrow-back" size={20} color="white" />}
             >
-              {test.category}
-            </Chip>
+              {t('pharmacy.labTestDetails.notFound.backButton')}
+            </Button>
+          </View>
+        ) : (
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Test Image */}
+            <Image 
+              source={{ uri: test.image }} 
+              style={styles.testImage}
+              resizeMode="cover"
+            />
 
-            <CustomText variant="headlineMedium" style={styles.testName}>{test.name}</CustomText>
-            
-            <View style={styles.priceContainer}>
-              <CustomText variant="headlineSmall" style={styles.price}>${test.price.toFixed(2)}</CustomText>
-              <Badge style={styles.discountBadge} textColor="#4CAF50">10% OFF</Badge>
+            {/* Basic Info */}
+            <View style={styles.infoContainer}>
+              <Chip 
+                style={styles.categoryChip}
+                textStyle={{ color: theme.colors.primary }}
+              >
+                {test.category}
+              </Chip>
+
+              <CustomText variant="headlineMedium" style={styles.testName}>{test.name}</CustomText>
+              
+              <View style={styles.priceContainer}>
+                <CustomText variant="headlineSmall" style={styles.price}>${test.price.toFixed(2)}</CustomText>
+                <Badge style={styles.discountBadge} textColor="#4CAF50">{t('pharmacy.labTestDetails.discount', { discount: 10 })}</Badge>
+              </View>
+
+              <View style={styles.turnaroundContainer}>
+                <MaterialCommunityIcons name="clock-outline" size={20} color={theme.colors.primary} />
+                <CustomText variant="bodyMedium" style={dynamicStyles.turnaroundText}>
+                  {t('pharmacy.labTestDetails.resultsIn', { time: test.turnaround })}
+                </CustomText>
+              </View>
             </View>
 
-            <View style={styles.turnaroundContainer}>
-              <MaterialCommunityIcons name="clock-outline" size={20} color={theme.colors.primary} />
-              <CustomText variant="bodyMedium" style={dynamicStyles.turnaroundText}>
-                Results in: {test.turnaround}
+            {/* Book Button */}
+            <Button
+              mode="contained"
+              onPress={handleBookTest}
+              style={styles.bookButton}
+              icon={() => <MaterialCommunityIcons name="calendar-check" size={20} color={theme.colors.onPrimary} />}
+            >
+              {t('pharmacy.labTestDetails.bookButton')}
+            </Button>
+
+            <Divider style={styles.divider} />
+
+            {/* Description */}
+            <Card style={styles.card}>
+              <Card.Content>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.labTestDetails.about')}</CustomText>
+                <CustomText variant="bodyMedium" style={styles.descriptionText}>
+                  {test.longDescription}
+                </CustomText>
+              </Card.Content>
+            </Card>
+
+            {/* Test Requirements */}
+            <Card style={styles.card}>
+              <Card.Content>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.labTestDetails.preparation')}</CustomText>
+                <View style={styles.requirementsContainer}>
+                  {test.requirements.map((requirement, index) => (
+                    <View key={index} style={styles.requirementItem}>
+                      <MaterialCommunityIcons name="check-circle-outline" size={20} color="#4CAF50" />
+                      <CustomText variant="bodyMedium" style={styles.requirementText}>{requirement}</CustomText>
+                    </View>
+                  ))}
+                </View>
+              </Card.Content>
+            </Card>
+
+            {/* Recommended For */}
+            <Card style={styles.card}>
+              <Card.Content>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.labTestDetails.recommendedFor')}</CustomText>
+                <View style={styles.recommendationsContainer}>
+                  {test.recommendedFor.map((recommendation, index) => (
+                    <View key={index} style={styles.recommendationItem}>
+                      <MaterialCommunityIcons name="account-check" size={20} color={theme.colors.primary} />
+                      <CustomText variant="bodyMedium" style={styles.recommendationText}>{recommendation}</CustomText>
+                    </View>
+                  ))}
+                </View>
+              </Card.Content>
+            </Card>
+
+            {/* Collection Process */}
+            <Card style={styles.card}>
+              <Card.Content>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.labTestDetails.collectionProcess.title')}</CustomText>
+                <View style={styles.processContainer}>
+                  <View style={styles.processItem}>
+                    <View style={styles.processNumber}>
+                      <CustomText style={dynamicStyles.processNumberText}>1</CustomText>
+                    </View>
+                    <View style={styles.processContent}>
+                      <CustomText variant="bodyMedium" style={styles.processTitle}>{t('pharmacy.labTestDetails.collectionProcess.step1Title')}</CustomText>
+                      <CustomText variant="bodySmall">{t('pharmacy.labTestDetails.collectionProcess.step1Description')}</CustomText>
+                    </View>
+                  </View>
+
+                  <View style={styles.processItem}>
+                    <View style={styles.processNumber}>
+                      <CustomText style={dynamicStyles.processNumberText}>2</CustomText>
+                    </View>
+                    <View style={styles.processContent}>
+                      <CustomText variant="bodyMedium" style={styles.processTitle}>{t('pharmacy.labTestDetails.collectionProcess.step2Title')}</CustomText>
+                      <CustomText variant="bodySmall">{t('pharmacy.labTestDetails.collectionProcess.step2Description')}</CustomText>
+                    </View>
+                  </View>
+
+                  <View style={styles.processItem}>
+                    <View style={styles.processNumber}>
+                      <CustomText style={dynamicStyles.processNumberText}>3</CustomText>
+                    </View>
+                    <View style={styles.processContent}>
+                      <CustomText variant="bodyMedium" style={styles.processTitle}>{t('pharmacy.labTestDetails.collectionProcess.step3Title')}</CustomText>
+                      <CustomText variant="bodySmall">{t('pharmacy.labTestDetails.collectionProcess.step3Description')}</CustomText>
+                    </View>
+                  </View>
+
+                  <View style={styles.processItem}>
+                    <View style={styles.processNumber}>
+                      <CustomText style={dynamicStyles.processNumberText}>4</CustomText>
+                    </View>
+                    <View style={styles.processContent}>
+                      <CustomText variant="bodyMedium" style={styles.processTitle}>{t('pharmacy.labTestDetails.collectionProcess.step4Title')}</CustomText>
+                      <CustomText variant="bodySmall">{t('pharmacy.labTestDetails.collectionProcess.step4Description')}</CustomText>
+                    </View>
+                  </View>
+                </View>
+              </Card.Content>
+            </Card>
+
+            {/* FAQ */}
+            <Card style={styles.card}>
+              <Card.Content>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.labTestDetails.faq.title')}</CustomText>
+                
+                <View style={styles.faqItem}>
+                  <CustomText variant="bodyMedium" style={styles.faqQuestion}>
+                    {t('pharmacy.labTestDetails.faq.question1')}
+                  </CustomText>
+                  <CustomText variant="bodySmall" style={styles.faqAnswer}>
+                    {test.requirements[0].toLowerCase().includes('fast') 
+                      ? t('pharmacy.labTestDetails.faq.answer1Fast')
+                      : t('pharmacy.labTestDetails.faq.answer1NoFast')}
+                  </CustomText>
+                </View>
+                
+                <View style={styles.faqItem}>
+                  <CustomText variant="bodyMedium" style={styles.faqQuestion}>
+                    {t('pharmacy.labTestDetails.faq.question2')}
+                  </CustomText>
+                  <CustomText variant="bodySmall" style={styles.faqAnswer}>
+                    {t('pharmacy.labTestDetails.faq.answer2', { time: test.turnaround })}
+                  </CustomText>
+                </View>
+                
+                <View style={styles.faqItem}>
+                  <CustomText variant="bodyMedium" style={styles.faqQuestion}>
+                    {t('pharmacy.labTestDetails.faq.question3')}
+                  </CustomText>
+                  <CustomText variant="bodySmall" style={styles.faqAnswer}>
+                    {t('pharmacy.labTestDetails.faq.answer3')}
+                  </CustomText>
+                </View>
+              </Card.Content>
+            </Card>
+
+            {/* Book Again Button */}
+            <Button
+              mode="contained"
+              onPress={handleBookTest}
+              style={styles.bookAgainButton}
+              icon={() => <MaterialCommunityIcons name="calendar-check" size={20} color={theme.colors.onPrimary} />}
+            >
+              {t('pharmacy.labTestDetails.bookButton')}
+            </Button>
+
+            {/* Disclaimer */}
+            <View style={styles.disclaimerContainer}>
+              <MaterialCommunityIcons name="information-outline" size={20} color={theme.colors.outline} />
+              <CustomText variant="bodySmall" style={styles.disclaimerText}>
+                {t('pharmacy.labTestDetails.disclaimer')}
               </CustomText>
             </View>
-          </View>
-
-          {/* Book Button */}
-          <Button
-            mode="contained"
-            onPress={handleBookTest}
-            style={styles.bookButton}
-            icon={() => <MaterialCommunityIcons name="calendar-check" size={20} color={theme.colors.onPrimary} />}
-          >
-            Book Sample Collection
-          </Button>
-
-          <Divider style={styles.divider} />
-
-          {/* Description */}
-          <Card style={styles.card}>
-            <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>About This Test</CustomText>
-              <CustomText variant="bodyMedium" style={styles.descriptionText}>
-                {test.longDescription}
-              </CustomText>
-            </Card.Content>
-          </Card>
-
-          {/* Test Requirements */}
-          <Card style={styles.card}>
-            <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Preparation Requirements</CustomText>
-              <View style={styles.requirementsContainer}>
-                {test.requirements.map((requirement, index) => (
-                  <View key={index} style={styles.requirementItem}>
-                    <MaterialCommunityIcons name="check-circle-outline" size={20} color="#4CAF50" />
-                    <CustomText variant="bodyMedium" style={styles.requirementText}>{requirement}</CustomText>
-                  </View>
-                ))}
-              </View>
-            </Card.Content>
-          </Card>
-
-          {/* Recommended For */}
-          <Card style={styles.card}>
-            <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Recommended For</CustomText>
-              <View style={styles.recommendationsContainer}>
-                {test.recommendedFor.map((recommendation, index) => (
-                  <View key={index} style={styles.recommendationItem}>
-                    <MaterialCommunityIcons name="account-check" size={20} color={theme.colors.primary} />
-                    <CustomText variant="bodyMedium" style={styles.recommendationText}>{recommendation}</CustomText>
-                  </View>
-                ))}
-              </View>
-            </Card.Content>
-          </Card>
-
-          {/* Collection Process */}
-          <Card style={styles.card}>
-            <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Sample Collection Process</CustomText>
-              <View style={styles.processContainer}>
-                <View style={styles.processItem}>
-                  <View style={styles.processNumber}>
-                    <CustomText style={dynamicStyles.processNumberText}>1</CustomText>
-                  </View>
-                  <View style={styles.processContent}>
-                    <CustomText variant="bodyMedium" style={styles.processTitle}>Book Your Slot</CustomText>
-                    <CustomText variant="bodySmall">Schedule a convenient time for our phlebotomist to visit your home.</CustomText>
-                  </View>
-                </View>
-
-                <View style={styles.processItem}>
-                  <View style={styles.processNumber}>
-                    <CustomText style={dynamicStyles.processNumberText}>2</CustomText>
-                  </View>
-                  <View style={styles.processContent}>
-                    <CustomText variant="bodyMedium" style={styles.processTitle}>Sample Collection</CustomText>
-                    <CustomText variant="bodySmall">Our trained professional will collect your blood sample following all safety protocols.</CustomText>
-                  </View>
-                </View>
-
-                <View style={styles.processItem}>
-                  <View style={styles.processNumber}>
-                    <CustomText style={dynamicStyles.processNumberText}>3</CustomText>
-                  </View>
-                  <View style={styles.processContent}>
-                    <CustomText variant="bodyMedium" style={styles.processTitle}>Lab Processing</CustomText>
-                    <CustomText variant="bodySmall">Your sample is securely transported to our certified lab for testing.</CustomText>
-                  </View>
-                </View>
-
-                <View style={styles.processItem}>
-                  <View style={styles.processNumber}>
-                    <CustomText style={dynamicStyles.processNumberText}>4</CustomText>
-                  </View>
-                  <View style={styles.processContent}>
-                    <CustomText variant="bodyMedium" style={styles.processTitle}>Get Results</CustomText>
-                    <CustomText variant="bodySmall">Access your reports online or receive them via email within the specified turnaround time.</CustomText>
-                  </View>
-                </View>
-              </View>
-            </Card.Content>
-          </Card>
-
-          {/* FAQ */}
-          <Card style={styles.card}>
-            <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Frequently Asked Questions</CustomText>
-              
-              <View style={styles.faqItem}>
-                <CustomText variant="bodyMedium" style={styles.faqQuestion}>
-                  Is fasting required for this test?
-                </CustomText>
-                <CustomText variant="bodySmall" style={styles.faqAnswer}>
-                  {test.requirements[0].toLowerCase().includes('fast') 
-                    ? 'Yes, fasting is required as specified in the preparation requirements.' 
-                    : 'No, fasting is not required for this test, but follow any other preparation guidelines.'}
-                </CustomText>
-              </View>
-              
-              <View style={styles.faqItem}>
-                <CustomText variant="bodyMedium" style={styles.faqQuestion}>
-                  How long does it take to get the results?
-                </CustomText>
-                <CustomText variant="bodySmall" style={styles.faqAnswer}>
-                  Results will be available within {test.turnaround} after the sample is collected. You'll be notified via email or SMS.
-                </CustomText>
-              </View>
-              
-              <View style={styles.faqItem}>
-                <CustomText variant="bodyMedium" style={styles.faqQuestion}>
-                  Can I reschedule my sample collection appointment?
-                </CustomText>
-                <CustomText variant="bodySmall" style={styles.faqAnswer}>
-                  Yes, you can reschedule up to 4 hours before your scheduled appointment without any additional charges.
-                </CustomText>
-              </View>
-            </Card.Content>
-          </Card>
-
-          {/* Book Again Button */}
-          <Button
-            mode="contained"
-            onPress={handleBookTest}
-            style={styles.bookAgainButton}
-            icon={() => <MaterialCommunityIcons name="calendar-check" size={20} color={theme.colors.onPrimary} />}
-          >
-            Book Sample Collection
-          </Button>
-
-          {/* Disclaimer */}
-          <View style={styles.disclaimerContainer}>
-            <MaterialCommunityIcons name="information-outline" size={20} color={theme.colors.outline} />
-            <CustomText variant="bodySmall" style={styles.disclaimerText}>
-              The information provided is for educational purposes only. Always consult with a healthcare professional about your test results and medical conditions.
-            </CustomText>
-          </View>
-        </ScrollView>
-      ) : (
-        <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={60} color={theme.colors.error} />
-          <CustomText variant="titleMedium">Test not found</CustomText>
-          <Button 
-            mode="contained" 
-            onPress={() => router.back()}
-            style={styles.backToPharmacyButton}
-          >
-            Back to Pharmacy
-          </Button>
-        </View>
-      )}
+          </ScrollView>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };

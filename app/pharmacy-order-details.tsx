@@ -8,6 +8,7 @@ import { Button } from '../components/Button';
 import { Text as CustomText } from '../components/CustomText';
 import { Card } from '../components/CustomCard';
 import { Divider } from '../components/CustomDivider';
+import { useTranslation } from 'react-i18next';
 
 // Define TypeScript interfaces
 interface DeliveryAddress {
@@ -52,6 +53,7 @@ interface Order {
   paymentMethod: string;
   pharmacist: Pharmacist;
   timeline: TimelineEvent[];
+  tracking?: string;
 }
 
 // Reuse the OrderStatus and OrderStatusChip from pharmacy-orders.tsx
@@ -69,6 +71,7 @@ interface OrderStatusChipProps {
 
 const OrderStatusChip = ({ status }: OrderStatusChipProps) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   
   const getStatusColor = () => {
     switch (status) {
@@ -107,15 +110,15 @@ const OrderStatusChip = ({ status }: OrderStatusChipProps) => {
   const getStatusLabel = () => {
     switch (status) {
       case OrderStatus.PENDING:
-        return 'Pending Review';
+        return t('pharmacy.orders.status.pendingReview');
       case OrderStatus.PROCESSING:
-        return 'Processing';
+        return t('pharmacy.orders.status.processing');
       case OrderStatus.READY:
-        return 'Ready for Delivery';
+        return t('pharmacy.orders.status.readyForDelivery');
       case OrderStatus.DELIVERED:
-        return 'Delivered';
+        return t('pharmacy.orders.status.delivered');
       case OrderStatus.CANCELLED:
-        return 'Cancelled';
+        return t('pharmacy.orders.status.cancelled');
       default:
         return status;
     }
@@ -146,14 +149,15 @@ const OrderStatusChip = ({ status }: OrderStatusChipProps) => {
       ]}
     >
       <Ionicons name={getStatusIcon()} size={16} color={getStatusTextColor()} style={styles.statusIcon} />
-      <CustomText style={{ color: getStatusTextColor() }}>{getStatusLabel()}</CustomText>
+      <CustomText variant="bodySmall" style={{ color: getStatusTextColor() }}>{getStatusLabel()}</CustomText>
     </View>
   );
 };
 
 const PharmacyOrderDetailsScreen = () => {
   const theme = useTheme();
-  const { orderId } = useLocalSearchParams();
+  const { t, i18n } = useTranslation();
+  const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<Order | null>(null);
 
@@ -275,17 +279,27 @@ const PharmacyOrderDetailsScreen = () => {
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
 
   const formatDateWithTime = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
 
   const handleCallPharmacist = () => {
     if (order && order.pharmacist && order.pharmacist.phone) {
       Linking.openURL(`tel:${order.pharmacist.phone}`);
+    }
+  };
+
+  const trackDelivery = () => {
+    if (order?.tracking) {
+      // In a real app, this would open the tracking page or map view
+      Alert.alert(
+        "Track Delivery",
+        "You can track your order here once it's dispatched"
+      );
     }
   };
 
@@ -300,12 +314,12 @@ const PharmacyOrderDetailsScreen = () => {
         >
           {''}
         </Button>
-        <CustomText variant="headlineSmall" style={styles.headerTitle}>Order Details</CustomText>
+        <CustomText variant="headlineSmall" style={styles.headerTitle}>{t('pharmacy.orderDetails.title')}</CustomText>
       </View>
 
       {loading ? (
         <View style={styles.loadingContainer}>
-          <CustomText>Loading order details...</CustomText>
+          <CustomText>{t('common.loading')}</CustomText>
         </View>
       ) : order ? (
         <ScrollView 
@@ -329,7 +343,7 @@ const PharmacyOrderDetailsScreen = () => {
           {/* Order Timeline */}
           <Card style={styles.card}>
             <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Order Timeline</CustomText>
+              <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.orderDetails.status')}</CustomText>
               <View style={styles.timeline}>
                 {order.timeline.map((event, index) => (
                   <View key={index} style={styles.timelineItem}>
@@ -350,7 +364,7 @@ const PharmacyOrderDetailsScreen = () => {
           {order.prescriptionImage && (
             <Card style={styles.card}>
               <Card.Content>
-                <CustomText variant="titleMedium" style={styles.sectionTitle}>Prescription</CustomText>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.orderDetails.prescription')}</CustomText>
                 <Image 
                   source={{ uri: order.prescriptionImage }} 
                   style={styles.prescriptionImage}
@@ -364,7 +378,7 @@ const PharmacyOrderDetailsScreen = () => {
           {order.items.length > 0 ? (
             <Card style={styles.card}>
               <Card.Content>
-                <CustomText variant="titleMedium" style={styles.sectionTitle}>Medications</CustomText>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.orderDetails.items')}</CustomText>
                 {order.items.map((item, index) => (
                   <View key={index}>
                     <View style={styles.medicationHeader}>
@@ -373,11 +387,11 @@ const PharmacyOrderDetailsScreen = () => {
                     </View>
                     <View style={styles.medicationDetails}>
                       <View style={styles.medicationInfo}>
-                        <CustomText variant="bodySmall">Quantity: {item.quantity}</CustomText>
+                        <CustomText variant="bodySmall">{t('pharmacy.orderDetails.quantity')}: {item.quantity}</CustomText>
                       </View>
                       {item.instructions && (
                         <View style={styles.instructionsContainer}>
-                          <CustomText variant="bodySmall" style={styles.instructionsLabel}>Instructions:</CustomText>
+                          <CustomText variant="bodySmall" style={styles.instructionsLabel}>{t('pharmacy.orderDetails.instructions')}:</CustomText>
                           <CustomText variant="bodySmall" style={styles.instructions}>{item.instructions}</CustomText>
                         </View>
                       )}
@@ -390,9 +404,9 @@ const PharmacyOrderDetailsScreen = () => {
           ) : (
             <Card style={styles.card}>
               <Card.Content>
-                <CustomText variant="titleMedium" style={styles.sectionTitle}>Medications</CustomText>
+                <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.orderDetails.prescriptionOnly')}</CustomText>
                 <CustomText variant="bodyMedium" style={styles.emptyMessage}>
-                  Your prescription is being reviewed. The medications will be listed here once processed by the pharmacist.
+                  {t('pharmacy.orderDetails.prescriptionOnlyMessage')}
                 </CustomText>
               </Card.Content>
             </Card>
@@ -401,18 +415,18 @@ const PharmacyOrderDetailsScreen = () => {
           {/* Delivery Information */}
           <Card style={styles.card}>
             <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Delivery Information</CustomText>
+              <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.orderDetails.deliveryInfo')}</CustomText>
               
               <View style={styles.deliveryRow}>
                 <Ionicons name="location-outline" size={18} color={theme.colors.outline} style={styles.icon} />
                 <View style={styles.deliveryContent}>
-                  <CustomText variant="bodyMedium">Delivery Address</CustomText>
+                  <CustomText variant="bodyMedium">{t('pharmacy.orderDetails.deliveryAddress')}</CustomText>
                   <CustomText variant="bodySmall">
                     {order.deliveryAddress.street}, {order.deliveryAddress.city}, {order.deliveryAddress.state} {order.deliveryAddress.zip}
                   </CustomText>
                   {order.deliveryAddress.instructions && (
                     <CustomText variant="bodySmall" style={styles.deliveryInstructions}>
-                      Note: {order.deliveryAddress.instructions}
+                      {t('pharmacy.orderDetails.note')} {order.deliveryAddress.instructions}
                     </CustomText>
                   )}
                 </View>
@@ -423,15 +437,15 @@ const PharmacyOrderDetailsScreen = () => {
               <View style={styles.deliveryRow}>
                 <Ionicons name="calendar-outline" size={18} color={theme.colors.outline} style={styles.icon} />
                 <View style={styles.deliveryContent}>
-                  <CustomText variant="bodyMedium">Delivery Schedule</CustomText>
+                  <CustomText variant="bodyMedium">{t('pharmacy.orderDetails.estimatedDelivery')}</CustomText>
                   {order.estimatedDelivery ? (
                     <CustomText variant="bodySmall">Expected: {formatDate(order.estimatedDelivery)}</CustomText>
                   ) : (
-                    <CustomText variant="bodySmall">To be scheduled after review</CustomText>
+                    <CustomText variant="bodySmall">{t('pharmacy.orderDetails.toBeScheduled')}</CustomText>
                   )}
                   {order.deliveredDate && (
                     <CustomText variant="bodySmall" style={{ color: theme.colors.primary }}>
-                      Delivered: {formatDate(order.deliveredDate)}
+                      {t('pharmacy.orderDetails.delivered')} {formatDate(order.deliveredDate)}
                     </CustomText>
                   )}
                 </View>
@@ -442,7 +456,7 @@ const PharmacyOrderDetailsScreen = () => {
               <View style={styles.deliveryRow}>
                 <Ionicons name="card-outline" size={18} color={theme.colors.outline} style={styles.icon} />
                 <View style={styles.deliveryContent}>
-                  <CustomText variant="bodyMedium">Payment Method</CustomText>
+                  <CustomText variant="bodyMedium">{t('pharmacy.orderDetails.paymentMethod')}</CustomText>
                   <CustomText variant="bodySmall">{order.paymentMethod}</CustomText>
                 </View>
               </View>
@@ -452,21 +466,21 @@ const PharmacyOrderDetailsScreen = () => {
           {/* Pharmacist Notes */}
           <Card style={styles.card}>
             <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Pharmacist Notes</CustomText>
+              <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.orderDetails.pharmacistNotes')}</CustomText>
               <View style={styles.notesContainer}>
                 <MaterialCommunityIcons name="note-text-outline" size={20} color={theme.colors.primary} />
                 <CustomText variant="bodyMedium" style={styles.notes}>{order.pharmacistNotes}</CustomText>
               </View>
 
               <View style={styles.pharmacistInfoContainer}>
-                <CustomText variant="bodySmall">Assigned Pharmacist: {order.pharmacist.name}</CustomText>
+                <CustomText variant="bodySmall">{t('pharmacy.orderDetails.pharmacist')}: {order.pharmacist.name}</CustomText>
                 <Button
                   mode="outlined"
                   icon="phone"
                   onPress={handleCallPharmacist}
                   style={styles.callButton}
                 >
-                  Contact
+                  {t('pharmacy.orderDetails.callPharmacist')}
                 </Button>
               </View>
             </Card.Content>
@@ -475,22 +489,22 @@ const PharmacyOrderDetailsScreen = () => {
           {/* Order Summary */}
           <Card style={styles.card}>
             <Card.Content>
-              <CustomText variant="titleMedium" style={styles.sectionTitle}>Order Summary</CustomText>
+              <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.orderDetails.orderSummary')}</CustomText>
               
               <View style={styles.summaryRow}>
-                <CustomText variant="bodyMedium">Subtotal</CustomText>
+                <CustomText variant="bodyMedium">{t('pharmacy.orderDetails.subtotal')}</CustomText>
                 <CustomText variant="bodyMedium">XAF {order.subtotal.toLocaleString()}</CustomText>
               </View>
               
               <View style={styles.summaryRow}>
-                <CustomText variant="bodyMedium">Delivery Fee</CustomText>
+                <CustomText variant="bodyMedium">{t('pharmacy.orderDetails.deliveryFee')}</CustomText>
                 <CustomText variant="bodyMedium">XAF {order.deliveryFee.toLocaleString()}</CustomText>
               </View>
               
               <Divider style={styles.summaryDivider} />
               
               <View style={styles.summaryRow}>
-                <CustomText variant="titleMedium">Total</CustomText>
+                <CustomText variant="titleMedium">{t('pharmacy.orderDetails.total')}</CustomText>
                 <CustomText variant="titleMedium" style={{ color: theme.colors.primary }}>XAF {order.total.toLocaleString()}</CustomText>
               </View>
             </Card.Content>
@@ -503,19 +517,31 @@ const PharmacyOrderDetailsScreen = () => {
             onPress={() => router.push('/pharmacy-support' as any)}
             style={styles.supportButton}
           >
-            Contact Support
+            {t('pharmacy.orderDetails.contactSupport')}
           </Button>
+
+          {/* Track Delivery Button */}
+          {order.tracking && order.status !== 'delivered' && order.status !== 'cancelled' && (
+            <Button
+              mode="contained"
+              onPress={trackDelivery}
+              style={styles.trackButton}
+              icon="map-marker-path"
+            >
+              {t('pharmacy.orderDetails.trackDelivery')}
+            </Button>
+          )}
         </ScrollView>
       ) : (
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle-outline" size={60} color={theme.colors.error} />
-          <CustomText variant="titleMedium">Order not found</CustomText>
+          <CustomText variant="titleMedium">{t('pharmacy.orderDetails.notFound.title')}</CustomText>
           <Button 
             mode="contained" 
             onPress={() => router.back()}
             style={styles.backToOrdersButton}
           >
-            Back to Orders
+            {t('pharmacy.orderDetails.notFound.backButton')}
           </Button>
         </View>
       )}
@@ -712,6 +738,11 @@ const styles = StyleSheet.create({
   },
   statusIcon: {
     marginRight: 6,
+  },
+  trackButton: {
+    marginTop: 8,
+    marginBottom: 24,
+    borderRadius: 8,
   },
 });
 

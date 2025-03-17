@@ -10,6 +10,7 @@ import { Card } from '../components/CustomCard';
 import { Divider } from '../components/CustomDivider';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
@@ -43,39 +44,14 @@ interface Promotion {
   action: string;
 }
 
-// Promotional data for carousel
-const pharmacyPromotions: Promotion[] = [
-  {
-    id: '1',
-    title: 'Health Essentials',
-    description: 'Get 25% off on all vitamins and supplements',
-    image: { uri: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=600' },
-    action: 'Shop Now',
-  },
-  {
-    id: '2',
-    title: 'Diabetes Care',
-    description: 'Free glucose monitoring with any purchase over XAF 30,000',
-    image: { uri: 'https://images.unsplash.com/photo-1631815589068-dc4c4c204a30?q=80&w=600' },
-    action: 'Learn More',
-  },
-  {
-    id: '3',
-    title: 'Baby & Mother',
-    description: 'Special discounts on baby care products this week',
-    image: { uri: 'https://images.unsplash.com/photo-1515942400420-2b98fed1f515?q=80&w=600' },
-    action: 'View Offers',
-  },
-];
-
 // Component for section headers
 function SectionHeader({ title, actionText, onAction }: { title: string; actionText?: string; onAction?: () => void }) {
   return (
     <View style={styles.sectionHeader}>
-      <CustomText variant="titleLarge" style={styles.sectionTitle}>{title}</CustomText>
-      {actionText && (
+      <CustomText variant="titleMedium" style={styles.sectionTitle}>{title}</CustomText>
+      {actionText && onAction && (
         <TouchableOpacity onPress={onAction}>
-          <CustomText variant="bodyMedium" style={styles.sectionAction}>{actionText}</CustomText>
+          <CustomText variant="labelLarge" style={styles.actionText}>{actionText}</CustomText>
         </TouchableOpacity>
       )}
     </View>
@@ -85,6 +61,7 @@ function SectionHeader({ title, actionText, onAction }: { title: string; actionT
 // Component for featured carousel
 function FeaturedCarousel({ items }: { items: Promotion[] }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -160,6 +137,7 @@ const PrescriptionSuccessModal = ({
 }) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
   
@@ -229,7 +207,7 @@ const PrescriptionSuccessModal = ({
             </View>
             
             <CustomText variant="headlineSmall" style={prescriptionModalStyles.modalTitle}>
-              Prescription Received
+              {t('pharmacy.prescriptionUploadSuccess')}
             </CustomText>
             
             <View style={prescriptionModalStyles.prescriptionImageContainer}>
@@ -243,15 +221,15 @@ const PrescriptionSuccessModal = ({
             </View>
             
             <CustomText variant="bodyMedium" style={prescriptionModalStyles.modalDescription}>
-              Your prescription has been uploaded successfully. Our pharmacists will review it and contact you shortly to confirm your order.
+              {t('pharmacy.prescriptionUploadMessage')}
             </CustomText>
             
             <View style={prescriptionModalStyles.timelineContainer}>
               <View style={prescriptionModalStyles.timelineItem}>
                 <View style={[prescriptionModalStyles.timelinePoint, { backgroundColor: theme.colors.primary }]} />
                 <View style={prescriptionModalStyles.timelineContent}>
-                  <CustomText variant="bodyMedium" style={prescriptionModalStyles.timelineTitle}>Prescription Received</CustomText>
-                  <CustomText variant="bodySmall" style={prescriptionModalStyles.timelineDescription}>Just now</CustomText>
+                  <CustomText variant="bodyMedium" style={prescriptionModalStyles.timelineTitle}>{t('pharmacy.prescriptionDetails.received')}</CustomText>
+                  <CustomText variant="bodySmall" style={prescriptionModalStyles.timelineDescription}>{t('pharmacy.prescriptionDetails.receivedTime')}</CustomText>
                 </View>
               </View>
               
@@ -260,8 +238,8 @@ const PrescriptionSuccessModal = ({
               <View style={prescriptionModalStyles.timelineItem}>
                 <View style={[prescriptionModalStyles.timelinePoint, { backgroundColor: theme.colors.outlineVariant }]} />
                 <View style={prescriptionModalStyles.timelineContent}>
-                  <CustomText variant="bodyMedium" style={prescriptionModalStyles.timelineTitle}>Pharmacist Review</CustomText>
-                  <CustomText variant="bodySmall" style={prescriptionModalStyles.timelineDescription}>Within 30 minutes</CustomText>
+                  <CustomText variant="bodyMedium" style={prescriptionModalStyles.timelineTitle}>{t('pharmacy.prescriptionDetails.review')}</CustomText>
+                  <CustomText variant="bodySmall" style={prescriptionModalStyles.timelineDescription}>{t('pharmacy.prescriptionDetails.reviewTime')}</CustomText>
                 </View>
               </View>
               
@@ -270,8 +248,8 @@ const PrescriptionSuccessModal = ({
               <View style={prescriptionModalStyles.timelineItem}>
                 <View style={[prescriptionModalStyles.timelinePoint, { backgroundColor: theme.colors.outlineVariant }]} />
                 <View style={prescriptionModalStyles.timelineContent}>
-                  <CustomText variant="bodyMedium" style={prescriptionModalStyles.timelineTitle}>Delivery</CustomText>
-                  <CustomText variant="bodySmall" style={prescriptionModalStyles.timelineDescription}>Same day if ordered before 4 PM</CustomText>
+                  <CustomText variant="bodyMedium" style={prescriptionModalStyles.timelineTitle}>{t('pharmacy.prescriptionDetails.delivery')}</CustomText>
+                  <CustomText variant="bodySmall" style={prescriptionModalStyles.timelineDescription}>{t('pharmacy.prescriptionDetails.deliveryTime')}</CustomText>
                 </View>
               </View>
             </View>
@@ -283,7 +261,7 @@ const PrescriptionSuccessModal = ({
               onPress={onClose}
               style={prescriptionModalStyles.modalButton}
             >
-              Continue Shopping
+              {t('pharmacy.continueShopping')}
             </Button>
             
             <Button
@@ -292,7 +270,7 @@ const PrescriptionSuccessModal = ({
               style={prescriptionModalStyles.modalButton}
               icon="clipboard-text-outline"
             >
-              View Orders
+              {t('pharmacy.viewOrders')}
             </Button>
           </View>
         </Animated.View>
@@ -416,6 +394,7 @@ const prescriptionModalStyles = StyleSheet.create({
 // Promotional Card Component
 const PharmacyPromoCard = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   
   return (
     <View style={promoCardStyles.container}>
@@ -428,13 +407,13 @@ const PharmacyPromoCard = () => {
         <View style={promoCardStyles.contentContainer}>
           <View style={promoCardStyles.textContainer}>
             <CustomText variant="titleLarge" style={promoCardStyles.title}>
-              Health Check Package
+              {t('pharmacy.promoCard.title')}
             </CustomText>
             <CustomText variant="bodyLarge" style={promoCardStyles.description}>
-              Complete health screening at 30% OFF
+              {t('pharmacy.promoCard.description')}
             </CustomText>
             <CustomText variant="bodyMedium" style={promoCardStyles.subtitle}>
-              Includes blood work, vitals & consultation
+              {t('pharmacy.healthCheckIncluded')}
             </CustomText>
             
             <Button 
@@ -442,7 +421,7 @@ const PharmacyPromoCard = () => {
               onPress={() => console.log('Health package promo clicked')}
               style={promoCardStyles.button}
             >
-              Book Now
+              {t('pharmacy.promoCard.button')}
             </Button>
           </View>
           
@@ -530,58 +509,86 @@ const promoCardStyles = StyleSheet.create({
 
 const PharmacyScreen = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
   const [prescriptionModalVisible, setPrescriptionModalVisible] = useState(false);
   const [prescriptionImage, setPrescriptionImage] = useState<string | null>(null);
+  
+  // Prepare promotions with translations
+  const promotions: Promotion[] = [
+    {
+      id: '1',
+      title: t('pharmacy.promotions.healthEssentials.title'),
+      description: t('pharmacy.promotions.healthEssentials.description'),
+      image: { uri: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=600' },
+      action: t('pharmacy.promotions.shopNow'),
+    },
+    {
+      id: '2',
+      title: t('pharmacy.promotions.diabetesCare.title'),
+      description: t('pharmacy.promotions.diabetesCare.description'),
+      image: { uri: 'https://images.unsplash.com/photo-1631815589068-dc4c4c204a30?q=80&w=600' },
+      action: t('pharmacy.promotions.learnMore'),
+    },
+    {
+      id: '3',
+      title: t('pharmacy.promotions.babyMother.title'),
+      description: t('pharmacy.promotions.babyMother.description'),
+      image: { uri: 'https://images.unsplash.com/photo-1515942400420-2b98fed1f515?q=80&w=600' },
+      action: t('pharmacy.promotions.viewOffers'),
+    },
+  ];
+  
   const [featuredMedications, setFeaturedMedications] = useState<Medication[]>([
     {
       id: 1,
-      name: 'Paracetamol',
+      name: t('pharmacy.medications1.paracetamol.name'),
       price: 5500,
-      description: 'Pain reliever and fever reducer',
+      description: t('pharmacy.medications1.paracetamol.description'),
       image: 'https://placehold.co/200x200/png',
-      category: 'Pain Relief'
+      category: t('pharmacy.categories.painRelief')
     },
     {
       id: 2,
-      name: 'Vitamin C',
+      name: t('pharmacy.medications1.vitaminC.name'),
       price: 8000,
-      description: 'Immune system support',
+      description: t('pharmacy.medications1.vitaminC.description'),
       image: 'https://placehold.co/200x200/png',
-      category: 'Vitamins'
+      category: t('pharmacy.categories.vitamins')
     },
     {
       id: 3,
-      name: 'Allergy Relief',
+      name: t('pharmacy.medications1.allergyRelief.name'),
       price: 12500,
-      description: 'Fast-acting antihistamine',
+      description: t('pharmacy.medications1.allergyRelief.description'),
       image: 'https://placehold.co/200x200/png',
-      category: 'Allergy'
+      category: t('pharmacy.categories.allergy')
     },
     {
       id: 4,
-      name: 'First Aid Kit',
+      name: t('pharmacy.medications1.firstAidKit.name'),
       price: 25000,
-      description: 'Essential home first aid supplies',
+      description: t('pharmacy.medications1.firstAidKit.description'),
       image: 'https://placehold.co/200x200/png',
-      category: 'First Aid'
+      category: t('pharmacy.categories.firstAid')
     },
   ]);
 
   const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: 'Pain Relief', icon: 'pill' },
-    { id: 2, name: 'Cold & Flu', icon: 'virus' },
-    { id: 3, name: 'Vitamins', icon: 'pill' },
-    { id: 4, name: 'First Aid', icon: 'medical-bag' },
-    { id: 5, name: 'Skin Care', icon: 'lotion-plus' },
-    { id: 6, name: 'Digestion', icon: 'stomach' },
+    { id: 1, name: t('pharmacy.categories.painRelief'), icon: 'pill' },
+    { id: 2, name: t('pharmacy.categories.coldAndFlu'), icon: 'virus' },
+    { id: 3, name: t('pharmacy.categories.vitamins'), icon: 'pill' },
+    { id: 4, name: t('pharmacy.categories.firstAid'), icon: 'medical-bag' },
+    { id: 5, name: t('pharmacy.categories.skinCare'), icon: 'lotion-plus' },
+    { id: 6, name: t('pharmacy.categories.digestion'), icon: 'stomach' },
   ]);
 
   const [labTests, setLabTests] = useState<LabTest[]>([
-    { id: 1, name: 'Complete Blood Count', price: 35000, turnaround: '24 hours' },
-    { id: 2, name: 'Diabetes Screening', price: 45000, turnaround: '24 hours' },
-    { id: 3, name: 'Cholesterol Panel', price: 40000, turnaround: '24 hours' },
-    { id: 4, name: 'Thyroid Function', price: 70000, turnaround: '48 hours' },
+    { id: 1, name: t('pharmacy.labTests1.completeBloodCount'), price: 35000, turnaround: t('pharmacy.labTests1.turnaround.oneDay') },
+    { id: 2, name: t('pharmacy.labTests1.diabetesScreening'), price: 45000, turnaround: t('pharmacy.labTests1.turnaround.oneDay') },
+    { id: 3, name: t('pharmacy.labTests1.cholesterolPanel'), price: 40000, turnaround: t('pharmacy.labTests1.turnaround.oneDay') },
+    { id: 4, name: t('pharmacy.labTests1.thyroidFunction'), price: 70000, turnaround: t('pharmacy.labTests1.turnaround.twoDays') },
   ]);
 
   const pickPrescriptionImage = async () => {
@@ -591,7 +598,10 @@ const PharmacyScreen = () => {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
-          Alert.alert('Permission Denied', 'We need camera roll permissions to upload your prescription.');
+          Alert.alert(
+            t('common.permissionDenied'), 
+            t('pharmacy.permissionMessages.cameraRoll')
+          );
           setLoading(false);
           return;
         }
@@ -613,7 +623,10 @@ const PharmacyScreen = () => {
       }
     } catch (error) {
       console.error('Error picking image:', error);
-      Alert.alert('Error', 'There was an error uploading your prescription. Please try again.');
+      Alert.alert(
+        t('common.error'), 
+        t('pharmacy.permissionMessages.uploadError')
+      );
     }
     setLoading(false);
   };
@@ -678,7 +691,7 @@ const PharmacyScreen = () => {
             >
               <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
             </TouchableOpacity>
-            <CustomText variant="headlineMedium" style={styles.heading}>Pharmacy</CustomText>
+            <CustomText variant="headlineMedium" style={styles.heading}>{t('pharmacy.medications')}</CustomText>
             <View style={styles.headerIcons}>
               <TouchableOpacity style={styles.headerIcon}>
                 <MaterialCommunityIcons name="bell-outline" size={24} color={theme.colors.onSurface} />
@@ -699,7 +712,7 @@ const PharmacyScreen = () => {
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name="search" size={16} color={theme.colors.onPrimary} style={{ marginRight: 8 }} />
-                <CustomText style={{ color: theme.colors.onPrimary }}>Search medications...</CustomText>
+                <CustomText style={{ color: theme.colors.onPrimary }}>{t('pharmacy.findMedication')}</CustomText>
               </View>
             </Button>
             
@@ -709,36 +722,36 @@ const PharmacyScreen = () => {
               style={styles.prescriptionsButton}
               icon="file-document-outline"
             >
-              My Prescriptions
+              {t('pharmacy.prescription1')}
             </Button>
           </View>
         </View>
 
         {/* Promotions Carousel */}
-        <FeaturedCarousel items={pharmacyPromotions} />
+        <FeaturedCarousel items={promotions} />
 
         {/* Quick Actions */}
-        <SectionHeader title="Quick Services" />
+        <SectionHeader title={t('pharmacy.quickServices')} />
         <View style={styles.quickActions}>
           <Card style={styles.actionCard} onPress={pickPrescriptionImage}>
             <Card.Content style={styles.actionCardContent}>
               <FontAwesome5 name="prescription" size={32} color={theme.colors.primary} />
-              <CustomText variant="bodyLarge" style={styles.actionTitle}>Upload Prescription</CustomText>
-              <CustomText variant="bodySmall">Get your medicines delivered</CustomText>
+              <CustomText variant="bodyLarge" style={styles.actionTitle}>{t('pharmacy.uploadPrescription')}</CustomText>
+              <CustomText variant="bodySmall">{t('pharmacy.getMedicinesDelivered')}</CustomText>
             </Card.Content>
           </Card>
 
           <Card style={styles.actionCard} onPress={bookLabSampleCollection}>
             <Card.Content style={styles.actionCardContent}>
               <MaterialCommunityIcons name="test-tube" size={32} color={theme.colors.primary} />
-              <CustomText variant="bodyLarge" style={styles.actionTitle}>Book Lab Test</CustomText>
-              <CustomText variant="bodySmall">Home sample collection</CustomText>
+              <CustomText variant="bodyLarge" style={styles.actionTitle}>{t('pharmacy.bookLabTest')}</CustomText>
+              <CustomText variant="bodySmall">{t('pharmacy.homeSampleCollection')}</CustomText>
             </Card.Content>
           </Card>
         </View>
 
         {/* Categories Section */}
-        <SectionHeader title="Categories" />
+        <SectionHeader title={t('pharmacy.popularCategories')} />
         <View style={styles.categoriesScrollContainer}>
           <ScrollView 
             horizontal 
@@ -762,8 +775,8 @@ const PharmacyScreen = () => {
 
         {/* Featured Medications */}
         <SectionHeader 
-          title="Popular Medications" 
-          actionText="View All" 
+          title={t('pharmacy.popularMedications')} 
+          actionText={t('pharmacy.viewAll')} 
           onAction={navigateToAllMedications} 
         />
         <View style={styles.medicationsScrollContainer}>
@@ -787,13 +800,13 @@ const PharmacyScreen = () => {
                   <CustomText variant="bodySmall" numberOfLines={2} style={styles.medicationDescription}>
                     {medication.description}
                   </CustomText>
-                  <CustomText variant="titleMedium" style={styles.price}>XAF {medication.price.toLocaleString()}</CustomText>
+                  <CustomText variant="titleMedium" style={styles.price}>{t('common.currency', { price: medication.price.toLocaleString() })}</CustomText>
                   <Button 
                     mode="contained" 
                     onPress={() => navigateToMedication(medication)}
                     style={styles.addToCartButton}
                   >
-                    View Details
+                    {t('pharmacy.viewDetails')}
                   </Button>
                 </Card.Content>
               </Card>
@@ -806,8 +819,8 @@ const PharmacyScreen = () => {
 
         {/* Lab Tests Section */}
         <SectionHeader 
-          title="Lab Tests" 
-          actionText="View All" 
+          title={t('pharmacy.labTests')} 
+          actionText={t('pharmacy.viewAll')} 
           onAction={navigateToAllLabTests} 
         />
         <View style={styles.labTestsContainer}>
@@ -819,14 +832,14 @@ const PharmacyScreen = () => {
             >
               <Card.Content>
                 <View style={styles.labTestContent}>
-                  <View>
-                    <CustomText variant="titleMedium">{test.name}</CustomText>
-                    <CustomText variant="bodySmall">Results in: {test.turnaround}</CustomText>
+                  <View style={{ flex: 1, marginRight: 12 }}>
+                    <CustomText variant="titleMedium" numberOfLines={2} ellipsizeMode="tail" style={{ marginBottom: 4 }}>{test.name}</CustomText>
+                    <CustomText variant="bodySmall">{t('pharmacy.labTestDetails.resultsIn', { time: test.turnaround })}</CustomText>
                   </View>
-                  <View>
-                    <CustomText variant="titleMedium" style={styles.price}>XAF {test.price.toLocaleString()}</CustomText>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <CustomText variant="titleMedium" style={styles.price}>{t('common.currency', { price: test.price.toLocaleString() })}</CustomText>
                     <View style={styles.discountBadge}>
-                      <CustomText variant="bodySmall" style={{ color: 'white' }}>10% OFF</CustomText>
+                      <CustomText variant="bodySmall" style={{ color: 'white' }}>{t('pharmacy.labTestDetails.discount', { discount: 10 })}</CustomText>
                     </View>
                   </View>
                 </View>
@@ -843,7 +856,7 @@ const PharmacyScreen = () => {
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <MaterialCommunityIcons name="calendar-clock" size={20} color={theme.colors.onPrimary} style={{ marginRight: 8 }} />
-              <CustomText style={{ color: theme.colors.onPrimary }}>Book Sample Collection</CustomText>
+              <CustomText style={{ color: theme.colors.onPrimary }}>{t('pharmacy.bookSampleCollection')}</CustomText>
             </View>
           </Button>
         </View>
@@ -853,7 +866,7 @@ const PharmacyScreen = () => {
       {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
-          <CustomText style={styles.loadingText}>Processing...</CustomText>
+          <CustomText style={styles.loadingText}>{t('common.loading')}</CustomText>
         </View>
       )}
 
@@ -1021,7 +1034,7 @@ const styles = StyleSheet.create({
   labTestContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   discountBadge: {
     alignSelf: 'flex-end',
@@ -1093,6 +1106,33 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'white',
     marginHorizontal: 4,
+  },
+  title: {
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchBarPlaceholder: {
+    color: '#666',
+    flex: 1,
+  },
+  actionText: {
+    color: '#0066cc',
+    fontWeight: '500',
   },
 });
 

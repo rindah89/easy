@@ -8,6 +8,7 @@ import { Button } from '../components/Button';
 import { Text as CustomText } from '../components/CustomText';
 import { Card } from '../components/CustomCard';
 import { Divider } from '../components/CustomDivider';
+import { useTranslation } from 'react-i18next';
 
 interface OrderItem {
   name: string;
@@ -41,6 +42,7 @@ interface OrderStatusChipProps {
 
 const OrderStatusChip = ({ status }: OrderStatusChipProps) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   
   const getStatusColor = () => {
     switch (status) {
@@ -79,15 +81,15 @@ const OrderStatusChip = ({ status }: OrderStatusChipProps) => {
   const getStatusLabel = () => {
     switch (status) {
       case OrderStatus.PENDING:
-        return 'Pending Review';
+        return t('pharmacy.orders.status.pendingReview');
       case OrderStatus.PROCESSING:
-        return 'Processing';
+        return t('pharmacy.orders.status.processing');
       case OrderStatus.READY:
-        return 'Ready for Delivery';
+        return t('pharmacy.orders.status.readyForDelivery');
       case OrderStatus.DELIVERED:
-        return 'Delivered';
+        return t('pharmacy.orders.status.delivered');
       case OrderStatus.CANCELLED:
-        return 'Cancelled';
+        return t('pharmacy.orders.status.cancelled');
       default:
         return status;
     }
@@ -125,6 +127,7 @@ const OrderStatusChip = ({ status }: OrderStatusChipProps) => {
 
 const PharmacyOrdersScreen = () => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
   const [orders, setOrders] = useState<Order[]>([
     {
       id: 'RX-123456',
@@ -168,12 +171,12 @@ const PharmacyOrdersScreen = () => {
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
 
   const formatDateWithTime = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
 
   const navigateToUploadPrescription = () => {
@@ -197,7 +200,7 @@ const PharmacyOrdersScreen = () => {
           >
             <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
           </TouchableOpacity>
-          <CustomText variant="headlineSmall" style={styles.headerTitle}>My Prescriptions</CustomText>
+          <CustomText variant="headlineSmall" style={styles.headerTitle}>{t('pharmacy.orders.title')}</CustomText>
         </View>
         <Button 
           mode="contained" 
@@ -206,7 +209,7 @@ const PharmacyOrdersScreen = () => {
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name="file-document-outline" size={18} color={theme.colors.onPrimary} style={{ marginRight: 8 }} />
-            <CustomText style={{ color: theme.colors.onPrimary }}>Upload New Prescription</CustomText>
+            <CustomText style={{ color: theme.colors.onPrimary }}>{t('pharmacy.orders.uploadNew')}</CustomText>
           </View>
         </Button>
       </View>
@@ -214,9 +217,9 @@ const PharmacyOrdersScreen = () => {
       {orders.length === 0 ? (
         <View style={styles.emptyContainer}>
           <MaterialCommunityIcons name="prescription" size={80} color={theme.colors.outlineVariant} />
-          <CustomText variant="titleLarge" style={styles.emptyTitle}>No Prescriptions Yet</CustomText>
+          <CustomText variant="titleLarge" style={styles.emptyTitle}>{t('pharmacy.orders.emptyTitle')}</CustomText>
           <CustomText variant="bodyMedium" style={styles.emptyDescription}>
-            Upload a prescription and our pharmacists will process your order.
+            {t('pharmacy.orders.emptyDescription')}
           </CustomText>
           <Button 
             mode="contained" 
@@ -224,7 +227,7 @@ const PharmacyOrdersScreen = () => {
             style={styles.emptyButton}
             icon="file-document-outline"
           >
-            Upload Prescription
+            {t('pharmacy.orders.uploadButton')}
           </Button>
         </View>
       ) : (
@@ -260,7 +263,7 @@ const PharmacyOrdersScreen = () => {
                   <>
                     <Divider style={styles.divider} />
                     <View>
-                      <CustomText variant="titleSmall" style={styles.itemsTitle}>Medications</CustomText>
+                      <CustomText variant="titleSmall" style={styles.itemsTitle}>{t('pharmacy.orders.itemsTitle')}</CustomText>
                       {order.items.map((item, index) => (
                         <View key={index} style={styles.itemRow}>
                           <CustomText variant="bodyMedium">{item.name}</CustomText>
@@ -278,16 +281,16 @@ const PharmacyOrdersScreen = () => {
                 <View style={styles.orderFooter}>
                   {order.estimatedDelivery && (
                     <CustomText variant="bodySmall">
-                      Expected delivery: {order.estimatedDelivery}
+                      {t('pharmacy.orders.expectedDelivery')}: {order.estimatedDelivery}
                     </CustomText>
                   )}
                   {order.deliveredDate && (
                     <CustomText variant="bodySmall">
-                      Delivered on: {order.deliveredDate}
+                      {t('pharmacy.orders.deliveredOn')}: {order.deliveredDate}
                     </CustomText>
                   )}
                   <CustomText variant="bodyMedium" style={styles.totalPrice}>
-                    Total: XAF {order.total.toLocaleString()}
+                    {t('pharmacy.orders.total')}: XAF {order.total.toLocaleString()}
                   </CustomText>
                 </View>
 
@@ -296,7 +299,7 @@ const PharmacyOrdersScreen = () => {
                   onPress={() => navigateToOrderDetails(order.id)}
                   style={styles.viewDetailsButton}
                 >
-                  View Details
+                  {t('pharmacy.orders.viewDetails')}
                 </Button>
               </Card.Content>
             </Card>

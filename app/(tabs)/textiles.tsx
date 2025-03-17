@@ -23,6 +23,7 @@ import { Chip } from '../../components/CustomChip';
 import { Divider } from '../../components/CustomDivider';
 import { SearchBar } from '../../components/CustomSearchBar';
 import { textiles } from '../../data/textiles';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
@@ -78,6 +79,7 @@ function SectionHeader({ title, actionText, onAction }: { title: string; actionT
 function FeaturedCarousel({ items }: { items: any[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
+  const { t } = useTranslation();
 
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { x: scrollX } } }],
@@ -91,6 +93,29 @@ function FeaturedCarousel({ items }: { items: any[] }) {
     return () => clearInterval(intervalId);
   }, [items.length]);
 
+  const getLocalizedPromoContent = (item) => {
+    if (item.id === '1') {
+      return {
+        title: t('textiles.promotions.premiumFabrics.title'),
+        description: t('textiles.promotions.premiumFabrics.description'),
+        action: t('textiles.promotions.premiumFabrics.action')
+      };
+    } else if (item.id === '2') {
+      return {
+        title: t('textiles.promotions.customTailoring.title'),
+        description: t('textiles.promotions.customTailoring.description'),
+        action: t('textiles.promotions.customTailoring.action')
+      };
+    } else if (item.id === '3') {
+      return {
+        title: t('textiles.promotions.newCollection.title'),
+        description: t('textiles.promotions.newCollection.description'),
+        action: t('textiles.promotions.newCollection.action')
+      };
+    }
+    return item;
+  };
+
   return (
     <View style={styles.carouselContainer}>
       <Animated.FlatList
@@ -103,24 +128,27 @@ function FeaturedCarousel({ items }: { items: any[] }) {
           const newIndex = Math.round(e.nativeEvent.contentOffset.x / width);
           setActiveIndex(newIndex);
         }}
-        renderItem={({ item }) => (
-          <View style={[styles.carouselItem, { width }]}>
-            <Image source={item.image} style={styles.carouselImage} />
-            <View style={styles.carouselContent}>
-              <Text variant="headlineSmall" style={styles.carouselTitle}>{item.title}</Text>
-              <Text variant="bodyMedium" style={styles.carouselDescription}>{item.description}</Text>
-              <Button 
-                mode="contained" 
-                style={styles.carouselButton}
-                onPress={() => {
-                  console.log(`Action pressed: ${item.action}`);
-                }}
-              >
-                {item.action}
-              </Button>
+        renderItem={({ item }) => {
+          const localizedContent = getLocalizedPromoContent(item);
+          return (
+            <View style={[styles.carouselItem, { width }]}>
+              <Image source={item.image} style={styles.carouselImage} />
+              <View style={styles.carouselContent}>
+                <Text variant="headlineSmall" style={styles.carouselTitle}>{localizedContent.title}</Text>
+                <Text variant="bodyMedium" style={styles.carouselDescription}>{localizedContent.description}</Text>
+                <Button 
+                  mode="contained" 
+                  style={styles.carouselButton}
+                  onPress={() => {
+                    console.log(`Action pressed: ${localizedContent.action}`);
+                  }}
+                >
+                  {localizedContent.action}
+                </Button>
+              </View>
             </View>
-          </View>
-        )}
+          );
+        }}
         keyExtractor={(item) => item.id}
       />
       <View style={styles.paginationContainer}>
@@ -141,10 +169,21 @@ function FeaturedCarousel({ items }: { items: any[] }) {
 export default function TextilesScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTextile, setSelectedTextile] = useState(null);
+
+  // Get the localized fabric types
+  const localizedFabricTypes = [
+    { label: t('textiles.fabricTypes.all'), value: 'all' },
+    { label: t('textiles.fabricTypes.wool'), value: 'wool' },
+    { label: t('textiles.fabricTypes.cotton'), value: 'cotton' },
+    { label: t('textiles.fabricTypes.linen'), value: 'linen' },
+    { label: t('textiles.fabricTypes.silk'), value: 'silk' },
+    { label: t('textiles.fabricTypes.tweed'), value: 'tweed' },
+  ];
 
   // Get filtered textiles
   const filteredTextiles = textiles.filter(textile => {
@@ -275,7 +314,7 @@ export default function TextilesScreen() {
       
       {/* Header */}
       <View style={styles.header}>
-        <Text variant="titleLarge" style={styles.headerTitle}>Tailoring Textiles</Text>
+        <Text variant="titleLarge" style={styles.headerTitle}>{t('textiles.headerTitle')}</Text>
         <View style={styles.headerIcons}>
           <TouchableOpacity style={styles.headerIcon}>
             <MaterialCommunityIcons name="bell-outline" size={24} color={theme.colors.onSurface} />
@@ -291,7 +330,7 @@ export default function TextilesScreen() {
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholder="Search fabrics..."
+          placeholder={t('textiles.searchPlaceholder')}
           style={styles.searchBar}
         />
       </View>
@@ -301,10 +340,10 @@ export default function TextilesScreen() {
         <FeaturedCarousel items={promotions} />
         
         {/* Fabric Type Filters */}
-        <SectionHeader title="Browse by Fabric Type" />
+        <SectionHeader title={t('textiles.browseByFabricType')} />
         <View style={styles.filtersContainer}>
           <FlatList
-            data={fabricTypes}
+            data={localizedFabricTypes}
             renderItem={renderFilterChip}
             keyExtractor={(item) => item.value}
             horizontal
@@ -316,8 +355,8 @@ export default function TextilesScreen() {
         {featuredTextiles.length > 0 && (
           <>
             <SectionHeader 
-              title="Featured Fabrics" 
-              actionText="See All" 
+              title={t('textiles.featuredFabrics')} 
+              actionText={t('textiles.seeAll')} 
               onAction={() => console.log('See all featured fabrics')} 
             />
             <FlatList
@@ -333,8 +372,8 @@ export default function TextilesScreen() {
         
         {/* All Textiles */}
         <SectionHeader 
-          title="All Fabrics" 
-          actionText={filteredTextiles.length > 10 ? "See All" : undefined} 
+          title={t('textiles.allFabrics')} 
+          actionText={filteredTextiles.length > 10 ? t('textiles.seeAll') : undefined} 
           onAction={filteredTextiles.length > 10 ? () => console.log('See all fabrics') : undefined} 
         />
         
@@ -352,9 +391,9 @@ export default function TextilesScreen() {
         ) : (
           <View style={styles.emptyState}>
             <MaterialCommunityIcons name="text-search" size={64} color={theme.colors.outline} />
-            <Text variant="titleMedium" style={styles.emptyStateText}>No fabrics found</Text>
+            <Text variant="titleMedium" style={styles.emptyStateText}>{t('textiles.noFabricsFound')}</Text>
             <Text variant="bodyMedium" style={styles.emptyStateSubtext}>
-              Try adjusting your search or filters
+              {t('textiles.tryAdjusting')}
             </Text>
           </View>
         )}
@@ -406,17 +445,17 @@ export default function TextilesScreen() {
                     <Divider style={styles.modalDivider} />
                     
                     <View style={styles.fabricDetailsContainer}>
-                      <Text variant="titleMedium" style={styles.sectionTitle}>Fabric Details</Text>
+                      <Text variant="titleMedium" style={styles.sectionTitle}>{t('textiles.fabricDetails')}</Text>
                       <View style={styles.specRow}>
-                        <Text variant="bodyMedium">Fabric Weight:</Text>
+                        <Text variant="bodyMedium">{t('textiles.fabricWeight')}:</Text>
                         <Text variant="bodyMedium">{selectedTextile.fabricWeight}</Text>
                       </View>
                       <View style={styles.specRow}>
-                        <Text variant="bodyMedium">Fabric Width:</Text>
+                        <Text variant="bodyMedium">{t('textiles.fabricWidth')}:</Text>
                         <Text variant="bodyMedium">{selectedTextile.fabricWidth}</Text>
                       </View>
                       <View style={styles.specRow}>
-                        <Text variant="bodyMedium">Minimum Order:</Text>
+                        <Text variant="bodyMedium">{t('textiles.minimumOrder')}:</Text>
                         <Text variant="bodyMedium">{selectedTextile.minimumOrder}</Text>
                       </View>
                     </View>
@@ -425,7 +464,7 @@ export default function TextilesScreen() {
                       {selectedTextile.description}
                     </Text>
                     
-                    <Text variant="titleMedium" style={styles.colorTitle}>Available Colors</Text>
+                    <Text variant="titleMedium" style={styles.colorTitle}>{t('textiles.availableColors')}</Text>
                     <View style={styles.colorsContainer}>
                       {selectedTextile.colors && selectedTextile.colors.map((color, index) => (
                         <View key={index} style={styles.colorItem}>
@@ -447,7 +486,7 @@ export default function TextilesScreen() {
                         style={styles.actionButton}
                         icon="gesture-tap"
                       >
-                        Request Sample
+                        {t('textiles.requestSample')}
                       </Button>
                       
                       <Button 
@@ -456,7 +495,7 @@ export default function TextilesScreen() {
                         style={styles.actionButton}
                         icon="cart-plus"
                       >
-                        Add to Cart
+                        {t('textiles.addToCart')}
                       </Button>
                     </View>
                     
@@ -466,7 +505,7 @@ export default function TextilesScreen() {
                       style={styles.consultButton}
                       icon="calendar-clock"
                     >
-                      Schedule Tailor Consultation
+                      {t('textiles.scheduleTailorConsultation')}
                     </Button>
                   </View>
                 </>

@@ -13,8 +13,25 @@ import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import CustomHeader from '../../components/CustomHeader';
 
+// Define types for the order item and order
+interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  orderNumber: string;
+  date: string;
+  totalAmount: number;
+  status: string;
+  items: OrderItem[];
+  type: string;
+}
+
 // Mock data for orders
-const mockOrders = [
+const mockOrders: Order[] = [
   {
     id: '1',
     orderNumber: 'ORD-2023-001',
@@ -95,7 +112,7 @@ const mockOrders = [
 ];
 
 // Function to get icon based on order type
-const getOrderTypeIcon = (type) => {
+const getOrderTypeIcon = (type: string): keyof typeof MaterialCommunityIcons.glyphMap => {
   switch (type) {
     case 'Furniture':
       return 'sofa';
@@ -117,7 +134,7 @@ const getOrderTypeIcon = (type) => {
 };
 
 // Function to get status chip color
-const getStatusColor = (status, theme) => {
+const getStatusColor = (status: string, theme: any): string => {
   switch (status) {
     case 'Delivered':
     case 'Completed':
@@ -149,7 +166,7 @@ export default function OrdersScreen() {
     ? mockOrders 
     : mockOrders.filter(order => order.status === activeTab);
 
-  const renderOrderCard = ({ item }) => (
+  const renderOrderCard = ({ item }: { item: Order }) => (
     <Card 
       style={styles.orderCard} 
       onPress={() => {
@@ -166,31 +183,31 @@ export default function OrdersScreen() {
               size={24} 
               color={theme.colors.primary} 
             />
-            <Text variant="titleSmall" style={styles.orderType}>{item.type}</Text>
+            <Text variant="bodyLarge" style={styles.orderType}>{t(`orders.types.${item.type.toLowerCase()}`)}</Text>
           </View>
           <Chip 
             selected={true}
             selectedColor={getStatusColor(item.status, theme)}
           >
-            {item.status}
+            {t(`orders.status.${item.status.replace(/\s+/g, '').toLowerCase()}`)}
           </Chip>
         </View>
 
         <Divider style={styles.divider} />
 
         <View style={styles.orderDetails}>
-          <Text variant="bodyMedium" style={styles.orderLabel}>Order #:</Text>
+          <Text variant="bodyMedium" style={styles.orderLabel}>{t('orders.orderNumber')}:</Text>
           <Text variant="bodyMedium" style={styles.orderValue}>{item.orderNumber}</Text>
         </View>
 
         <View style={styles.orderDetails}>
-          <Text variant="bodyMedium" style={styles.orderLabel}>Date:</Text>
+          <Text variant="bodyMedium" style={styles.orderLabel}>{t('orders.date')}:</Text>
           <Text variant="bodyMedium" style={styles.orderValue}>{item.date}</Text>
         </View>
 
         <View style={styles.itemContainer}>
-          <Text variant="bodyMedium" style={styles.itemsLabel}>Items:</Text>
-          {item.items.map((orderItem, index) => (
+          <Text variant="bodyMedium" style={styles.itemsLabel}>{t('orders.items')}:</Text>
+          {item.items.map((orderItem: OrderItem, index: number) => (
             <View key={index} style={styles.itemRow}>
               <Text variant="bodyMedium" style={styles.itemName}>{orderItem.name}</Text>
               <Text variant="bodyMedium" style={styles.quantity}>x{orderItem.quantity}</Text>
@@ -199,7 +216,7 @@ export default function OrdersScreen() {
         </View>
 
         <View style={styles.totalContainer}>
-          <Text variant="bodyLarge" style={styles.totalLabel}>Total Amount:</Text>
+          <Text variant="bodyLarge" style={styles.totalLabel}>{t('orders.totalAmount')}:</Text>
           <Text variant="bodyLarge" style={styles.totalAmount}>XAF {Math.round(item.totalAmount).toLocaleString()}</Text>
         </View>
       </Card.Content>
@@ -211,7 +228,7 @@ export default function OrdersScreen() {
       <StatusBar style="dark" />
       
       <CustomHeader 
-        title="Orders" 
+        title={t('orders.title')} 
         showBackButton={false}
         showAvatar={true}
       />
@@ -228,7 +245,7 @@ export default function OrdersScreen() {
               onPress={() => setActiveTab(item)}
               style={styles.filterChip}
             >
-              {item}
+              {item === 'All' ? t('orders.filter.all') : t(`orders.status.${item.replace(/\s+/g, '').toLowerCase()}`)}
             </Chip>
           )}
           showsHorizontalScrollIndicator={false}
@@ -248,13 +265,18 @@ export default function OrdersScreen() {
           renderItem={renderOrderCard}
           contentContainerStyle={styles.ordersList}
           showsVerticalScrollIndicator={false}
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true);
+            // In a real app, you would fetch orders here
+            setTimeout(() => setRefreshing(false), 1000);
+          }}
         />
       ) : (
         <View style={styles.emptyContainer}>
-          <MaterialCommunityIcons name="package-variant" size={80} color={theme.colors.outline} />
-          <Text variant="titleMedium" style={styles.emptyText}>No orders found</Text>
-          <Text variant="bodyMedium" style={styles.emptySubtext}>
-            Your orders will appear here once you make a purchase
+          <MaterialCommunityIcons name="package-variant" size={80} color={theme.colors.outlineVariant} />
+          <Text variant="bodyLarge" style={[styles.emptyText, { color: theme.colors.onSurfaceVariant }]}>
+            {t('orders.noOrders')}
           </Text>
         </View>
       )}

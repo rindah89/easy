@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
@@ -111,6 +112,18 @@ const carOptions: CarOption[] = [
   }
 ];
 
+// Helper function to translate categories
+const translateCategory = (category: string, t: any): string => {
+  switch (category.toLowerCase()) {
+    case 'all': return t('carRental.categories.all');
+    case 'sedan': return t('carRental.categories.sedan');
+    case 'suv': return t('carRental.categories.suv');
+    case 'pickup': return t('carRental.categories.pickup');
+    case 'luxury': return t('carRental.categories.luxury');
+    default: return category;
+  }
+};
+
 const categories = ['All', 'Sedan', 'SUV', 'Pickup', 'Luxury'];
 
 // Featured promotions
@@ -158,6 +171,7 @@ function SectionHeader({ title, actionText, onAction }: { title: string; actionT
 function FeaturedCarousel({ items }: { items: Promotion[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
+  const { t } = useTranslation();
 
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { x: scrollX } } }],
@@ -171,6 +185,29 @@ function FeaturedCarousel({ items }: { items: Promotion[] }) {
     return () => clearInterval(intervalId);
   }, [items.length]);
 
+  // Helper function to get translated promo content
+  const getTranslatedPromoContent = (item: Promotion) => {
+    if (item.id === '1') {
+      return {
+        title: t('carRental.featured.weekendSpecial.title'),
+        description: t('carRental.featured.weekendSpecial.description'),
+        action: t('carRental.featured.weekendSpecial.action')
+      };
+    } else if (item.id === '2') {
+      return {
+        title: t('carRental.featured.premiumSUVs.title'),
+        description: t('carRental.featured.premiumSUVs.description'),
+        action: t('carRental.featured.premiumSUVs.action')
+      };
+    } else {
+      return {
+        title: t('carRental.featured.extendedRentals.title'),
+        description: t('carRental.featured.extendedRentals.description'),
+        action: t('carRental.featured.extendedRentals.action')
+      };
+    }
+  };
+
   return (
     <View style={styles.carouselContainer}>
       <Animated.FlatList
@@ -183,24 +220,27 @@ function FeaturedCarousel({ items }: { items: Promotion[] }) {
           const newIndex = Math.round(e.nativeEvent.contentOffset.x / width);
           setActiveIndex(newIndex);
         }}
-        renderItem={({ item }) => (
-          <View style={[styles.carouselItem, { width }]}>
-            <Image source={{ uri: item.image }} style={styles.carouselImage} />
-            <View style={styles.carouselContent}>
-              <Text variant="headlineSmall" style={styles.carouselTitle}>{item.title}</Text>
-              <Text variant="bodyMedium" style={styles.carouselDescription}>{item.description}</Text>
-              <Button 
-                mode="contained" 
-                style={styles.carouselButton}
-                onPress={() => {
-                  console.log(`Action pressed: ${item.action}`);
-                }}
-              >
-                {item.action}
-              </Button>
+        renderItem={({ item }) => {
+          const translatedContent = getTranslatedPromoContent(item);
+          return (
+            <View style={[styles.carouselItem, { width }]}>
+              <Image source={{ uri: item.image }} style={styles.carouselImage} />
+              <View style={styles.carouselContent}>
+                <Text variant="headlineSmall" style={styles.carouselTitle}>{translatedContent.title}</Text>
+                <Text variant="bodyMedium" style={styles.carouselDescription}>{translatedContent.description}</Text>
+                <Button 
+                  mode="contained" 
+                  style={styles.carouselButton}
+                  onPress={() => {
+                    console.log(`Action pressed: ${translatedContent.action}`);
+                  }}
+                >
+                  {translatedContent.action}
+                </Button>
+              </View>
             </View>
-          </View>
-        )}
+          );
+        }}
         keyExtractor={(item) => item.id}
       />
       <View style={styles.paginationContainer}>
@@ -230,6 +270,7 @@ const CustomSearchBar = ({
 }) => {
   const theme = useTheme();
   const [isFocused, setIsFocused] = useState(false);
+  const { t } = useTranslation();
   
   return (
     <View 
@@ -247,7 +288,7 @@ const CustomSearchBar = ({
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder={placeholder || "Search for cars..."}
+        placeholder={placeholder || t('carRental.search')}
         style={styles.searchInput}
         placeholderTextColor={theme.colors.outline}
         onFocus={() => setIsFocused(true)}
@@ -265,6 +306,8 @@ const CustomSearchBar = ({
 
 // Component for popular cars row
 function PopularCarsRow({ cars, onSelect }: { cars: CarOption[]; onSelect: (car: CarOption) => void }) {
+  const { t } = useTranslation();
+  
   return (
     <ScrollView 
       horizontal 
@@ -277,9 +320,13 @@ function PopularCarsRow({ cars, onSelect }: { cars: CarOption[]; onSelect: (car:
           <Card.Cover source={{ uri: car.image }} style={styles.popularCarImage} />
           <Card.Content style={styles.popularCarContent}>
             <Text variant="titleSmall" numberOfLines={1} style={styles.popularCarName}>{car.name}</Text>
-            <Text variant="bodySmall" style={styles.popularCarCategory}>{car.category}</Text>
+            <Text variant="bodySmall" style={styles.popularCarCategory}>
+              {translateCategory(car.category, t)}
+            </Text>
             <View style={styles.popularCarFooter}>
-              <Text variant="titleMedium" style={styles.popularCarPrice}>{car.price.toLocaleString()} XAF/day</Text>
+              <Text variant="titleMedium" style={styles.popularCarPrice}>
+                {car.price.toLocaleString()} XAF/{t('carRental.car.day')}
+              </Text>
               <View style={styles.popularCarStatus}>
                 <View 
                   style={[
@@ -287,7 +334,9 @@ function PopularCarsRow({ cars, onSelect }: { cars: CarOption[]; onSelect: (car:
                     { backgroundColor: car.available ? '#4CAF50' : '#F44336' }
                   ]} 
                 />
-                <Text variant="bodySmall">{car.available ? 'Available' : 'Unavailable'}</Text>
+                <Text variant="bodySmall">
+                  {car.available ? t('carRental.car.available') : t('carRental.car.unavailable')}
+                </Text>
               </View>
             </View>
           </Card.Content>
@@ -310,6 +359,7 @@ function CarDetailModal({
   onBookNow: (car: CarOption) => void;
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   
   if (!car) return null;
   
@@ -338,9 +388,9 @@ function CarDetailModal({
             <View style={styles.modalDetailsSection}>
               <View style={styles.modalHeaderDetails}>
                 <Text variant="headlineSmall" style={styles.modalPrice}>
-                  {car.price.toLocaleString()} XAF/day
+                  {car.price.toLocaleString()} XAF/{t('carRental.car.day')}
                 </Text>
-                <Chip style={styles.categoryChip}>{car.category}</Chip>
+                <Chip style={styles.categoryChip}>{translateCategory(car.category, t)}</Chip>
               </View>
               
               <View style={styles.availabilityCard}>
@@ -351,7 +401,7 @@ function CarDetailModal({
                     color={car.available ? theme.colors.primary : theme.colors.error} 
                   />
                   <Text variant="bodyLarge" style={{ marginLeft: 8, fontWeight: '500' }}>
-                    {car.available ? 'Available Now' : 'Currently Unavailable'}
+                    {car.available ? t('carRental.car.available') : t('carRental.car.unavailable')}
                   </Text>
                 </View>
                 <Text variant="bodySmall" style={{ marginTop: 4, opacity: 0.7 }}>
@@ -363,12 +413,12 @@ function CarDetailModal({
               
               <Divider style={styles.divider} />
               
-              <Text variant="titleMedium" style={styles.sectionTitle}>Specifications</Text>
+              <Text variant="titleMedium" style={styles.sectionTitle}>{t('carRental.car.specifications')}</Text>
               <View style={styles.specificationsContainer}>
                 <View style={styles.specItem}>
                   <MaterialCommunityIcons name="car-seat" size={24} color={theme.colors.primary} />
                   <Text variant="titleSmall" style={styles.specValue}>{car.seats}</Text>
-                  <Text variant="bodySmall" style={styles.specLabel}>Seats</Text>
+                  <Text variant="bodySmall" style={styles.specLabel}>{t('carRental.car.seats')}</Text>
                 </View>
                 <View style={styles.specItem}>
                   <MaterialCommunityIcons 
@@ -377,18 +427,18 @@ function CarDetailModal({
                     color={theme.colors.primary} 
                   />
                   <Text variant="titleSmall" style={styles.specValue}>{car.transmission}</Text>
-                  <Text variant="bodySmall" style={styles.specLabel}>Transmission</Text>
+                  <Text variant="bodySmall" style={styles.specLabel}>{t('carRental.car.transmission')}</Text>
                 </View>
                 <View style={styles.specItem}>
                   <MaterialCommunityIcons name="gas-station" size={24} color={theme.colors.primary} />
                   <Text variant="titleSmall" style={styles.specValue}>{car.fuelType}</Text>
-                  <Text variant="bodySmall" style={styles.specLabel}>Fuel Type</Text>
+                  <Text variant="bodySmall" style={styles.specLabel}>{t('carRental.car.fuelType')}</Text>
                 </View>
               </View>
               
               <Divider style={styles.divider} />
               
-              <Text variant="titleMedium" style={styles.sectionTitle}>Features</Text>
+              <Text variant="titleMedium" style={styles.sectionTitle}>{t('carRental.car.features')}</Text>
               <View style={styles.featuresContainer}>
                 {car.features.map((feature, index) => (
                   <View key={index} style={styles.featureItemDetailed}>
@@ -407,7 +457,7 @@ function CarDetailModal({
               disabled={!car.available}
               style={[styles.modalButton, { opacity: car.available ? 1 : 0.7 }]}
             >
-              {car.available ? 'Book Now' : 'Not Available'}
+              {car.available ? t('carRental.bookNow') : t('carRental.car.notAvailable')}
             </Button>
           </View>
         </View>
@@ -419,6 +469,7 @@ function CarDetailModal({
 // Promotional Card Component
 function PromoCard() {
   const theme = useTheme();
+  const { t } = useTranslation();
   
   return (
     <View style={styles.promoCardContainer}>
@@ -430,11 +481,11 @@ function PromoCard() {
       >
         <View style={styles.promoContent}>
           <View style={styles.promoTextContent}>
-            <Text variant="titleLarge" style={styles.promoTitle}>Special Offer!</Text>
+            <Text variant="titleLarge" style={styles.promoTitle}>{t('carRental.promo.title')}</Text>
             <Text variant="bodyMedium" style={styles.promoDescription}>
-              Get 15% off on weekly rentals when you book through our app
+              {t('carRental.promo.description')}
             </Text>
-            <Text variant="labelLarge" style={styles.promoCode}>Use code: DRIVE15</Text>
+            <Text variant="labelLarge" style={styles.promoCode}>{t('carRental.promo.code')}</Text>
           </View>
           
           <View style={styles.promoImageContainer}>
@@ -449,7 +500,7 @@ function PromoCard() {
           buttonColor="#FFFFFF"
           textColor="#4A6FFF"
         >
-          Apply Now
+          {t('carRental.promo.action')}
         </Button>
       </LinearGradient>
     </View>
@@ -463,6 +514,7 @@ export default function CarRentalScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedCar, setSelectedCar] = useState<CarOption | null>(null);
+  const { t } = useTranslation();
 
   // Filter cars based on search query and selected category
   const filteredCars = carOptions.filter((car) => {
@@ -507,7 +559,7 @@ export default function CarRentalScreen() {
           size={24}
           onPress={() => router.back()}
         />
-        <Text variant="titleLarge" style={styles.headerTitle}>Car Rental</Text>
+        <Text variant="titleLarge" style={styles.headerTitle}>{t('carRental.title')}</Text>
         <IconButton
           icon="heart-outline"
           size={24}
@@ -519,7 +571,7 @@ export default function CarRentalScreen() {
         <CustomSearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholder="Search for cars, categories, features..."
+          placeholder={t('carRental.search')}
         />
       </View>
       
@@ -531,7 +583,7 @@ export default function CarRentalScreen() {
         <FeaturedCarousel items={promotions} />
         
         {/* Categories */}
-        <SectionHeader title="Browse by Category" />
+        <SectionHeader title={t('carRental.browseByCategory')} />
         <ScrollView 
           horizontal 
           showsHorizontalScrollIndicator={false}
@@ -545,15 +597,15 @@ export default function CarRentalScreen() {
               style={styles.categoryChip}
               selectedColor={theme.colors.primary}
             >
-              {category}
+              {translateCategory(category, t)}
             </Chip>
           ))}
         </ScrollView>
         
         {/* Popular Cars */}
         <SectionHeader 
-          title="Popular Cars" 
-          actionText="See All" 
+          title={t('carRental.popularCars')} 
+          actionText={t('carRental.seeAll')} 
           onAction={() => console.log('See all popular cars')} 
         />
         <PopularCarsRow cars={popularCars} onSelect={handleSelectCar} />
@@ -562,14 +614,14 @@ export default function CarRentalScreen() {
         <PromoCard />
         
         {/* Available Cars */}
-        <SectionHeader title={`${selectedCategory} Cars`} />
+        <SectionHeader title={`${translateCategory(selectedCategory, t)} ${t('carRental.allCars')}`} />
         <View style={styles.carsGrid}>
           {filteredCars.length === 0 ? (
             <View style={styles.noResultsContainer}>
               <MaterialCommunityIcons name="car-off" size={64} color={theme.colors.outline} />
-              <Text variant="titleMedium" style={styles.noResultsText}>No cars found</Text>
+              <Text variant="titleMedium" style={styles.noResultsText}>{t('carRental.noResults.title')}</Text>
               <Text variant="bodyMedium" style={styles.noResultsSubtext}>
-                Try adjusting your search or category filter
+                {t('carRental.noResults.subtitle')}
               </Text>
             </View>
           ) : (
@@ -583,16 +635,16 @@ export default function CarRentalScreen() {
                 <Card.Content style={styles.carContent}>
                   <View style={styles.carHeader}>
                     <Text variant="titleMedium" style={styles.carName}>{car.name}</Text>
-                    <Chip size={20} style={styles.carCategoryChip}>{car.category}</Chip>
+                    <Chip size={20} style={styles.carCategoryChip}>{translateCategory(car.category, t)}</Chip>
                   </View>
                   <Text variant="titleMedium" style={[styles.carPrice, { color: theme.colors.primary }]}>
-                    {car.price.toLocaleString()} XAF/day
+                    {car.price.toLocaleString()} XAF/{t('carRental.car.day')}
                   </Text>
                   
                   <View style={styles.carFeatures}>
                     <View style={styles.featureItem}>
                       <MaterialCommunityIcons name="car-seat" size={16} color={theme.colors.primary} />
-                      <Text variant="bodySmall" style={styles.featureText}>{car.seats} seats</Text>
+                      <Text variant="bodySmall" style={styles.featureText}>{car.seats} {t('carRental.car.seats')}</Text>
                     </View>
                     <View style={styles.featureItem}>
                       <MaterialCommunityIcons 
@@ -612,7 +664,7 @@ export default function CarRentalScreen() {
                       ]} 
                     />
                     <Text variant="bodySmall" style={styles.availabilityText}>
-                      {car.available ? 'Available Now' : 'Currently Unavailable'}
+                      {car.available ? t('carRental.car.available') : t('carRental.car.unavailable')}
                     </Text>
                   </View>
                 </Card.Content>
@@ -623,7 +675,7 @@ export default function CarRentalScreen() {
                     disabled={!car.available}
                     fullWidth
                   >
-                    {car.available ? 'View Details' : 'Not Available'}
+                    {car.available ? t('carRental.car.viewDetails') : t('carRental.car.notAvailable')}
                   </Button>
                 </Card.Actions>
               </Card>

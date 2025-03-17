@@ -13,6 +13,7 @@ import { Divider } from '../components/CustomDivider';
 import { textiles, Textile } from '../data/textiles';
 import { useCart } from '../context/CartContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 // Define CartItem type
 interface CartItem {
@@ -50,6 +51,7 @@ const CartAddedModal = ({
 }) => {
   const theme = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const scaleAnim = React.useRef(new Animated.Value(0.9)).current;
   const insets = useSafeAreaInsets();
@@ -117,7 +119,7 @@ const CartAddedModal = ({
             </View>
             
             <Text variant="headlineSmall" style={cartModalStyles.modalTitle}>
-              Added to Cart
+              {t('textiles.cart.modalTitle')}
             </Text>
             
             <View style={cartModalStyles.modalDetails}>
@@ -126,15 +128,15 @@ const CartAddedModal = ({
               </Text>
               
               <Text variant="bodyMedium" style={cartModalStyles.modalDetailText}>
-                Quantity: {totalQuantity} pieces
+                {t('textiles.cart.modalQuantity')}: {totalQuantity} {totalQuantity === 1 ? t('textiles.cart.piece') : t('textiles.cart.pieces')}
               </Text>
               
               <Text variant="bodyMedium" style={cartModalStyles.modalDetailText}>
-                Total: {totalPrice.toFixed(2)} meters
+                {t('textiles.cart.totalFabric')}: {totalPrice.toFixed(2)} {t('textiles.cart.metersTotal')}
               </Text>
               
               <Text variant="bodyMedium" style={cartModalStyles.modalDetailText}>
-                Selected colors:
+                {t('textiles.cart.modalSelectedColors')}:
               </Text>
               
               <Text variant="bodyMedium" style={cartModalStyles.colorMessage}>
@@ -153,7 +155,7 @@ const CartAddedModal = ({
               onPress={onClose}
               style={cartModalStyles.modalButton}
             >
-              Continue Shopping
+              {t('textiles.cart.continueShopping')}
             </Button>
             
             <Button
@@ -165,7 +167,7 @@ const CartAddedModal = ({
               style={cartModalStyles.modalButton}
               icon="cart"
             >
-              View Cart
+              {t('textiles.cart.viewCart')}
             </Button>
           </View>
         </Animated.View>
@@ -253,6 +255,7 @@ export default function TextileCartScreen() {
   const { textileId } = params;
   const { addToCart } = useCart();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   
   // State
   const [loading, setLoading] = useState<boolean>(true);
@@ -398,7 +401,7 @@ export default function TextileCartScreen() {
     
     // Check if colors are selected
     if (selectedColors.length === 0) {
-      newErrors.colors = 'Please select at least one color';
+      newErrors.colors = t('textiles.cart.minimumOrderError', { length: textile?.minimumOrder || '1' });
     }
     
     // Validate each color's length
@@ -408,10 +411,10 @@ export default function TextileCartScreen() {
       const lengthValue = parseLength(color.length);
       
       if (lengthValue <= 0) {
-        newErrors.colorLengths[color.value] = 'Please enter a valid length';
+        newErrors.colorLengths[color.value] = t('textiles.cart.enterValidLength');
         hasLengthErrors = true;
       } else if (textile?.minimumOrder && lengthValue < parseLength(textile.minimumOrder)) {
-        newErrors.colorLengths[color.value] = `Minimum order is ${textile.minimumOrder} meters`;
+        newErrors.colorLengths[color.value] = t('textiles.cart.minimumOrderError', { length: textile.minimumOrder });
         hasLengthErrors = true;
       }
     });
@@ -523,12 +526,12 @@ export default function TextileCartScreen() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <MaterialCommunityIcons name="arrow-left" size={24} color={theme.colors.onBackground} />
           </TouchableOpacity>
-          <Text variant="titleLarge" style={styles.headerTitle}>Add to Cart</Text>
+          <Text variant="titleLarge" style={styles.headerTitle}>{t('textiles.cart.title')}</Text>
           <View style={{ width: 24 }} />
         </View>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text variant="bodyLarge" style={{ marginTop: 16 }}>Loading textile information...</Text>
+          <Text variant="bodyLarge" style={{ marginTop: 16 }}>{t('textiles.cart.loading')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -543,7 +546,7 @@ export default function TextileCartScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={theme.colors.onBackground} />
         </TouchableOpacity>
-        <Text variant="titleLarge" style={styles.headerTitle}>Add to Cart</Text>
+        <Text variant="titleLarge" style={styles.headerTitle}>{t('textiles.cart.title')}</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -564,11 +567,11 @@ export default function TextileCartScreen() {
               {textile?.name || 'Fabric'}
             </Text>
             <Text variant="bodyMedium" style={styles.productPrice}>
-              {textile ? `${textile.currency} ${textile.price.toLocaleString()} per meter` : 'Price information not available'}
+              {textile ? `${textile.currency} ${textile.price.toLocaleString()} ${t('textiles.cart.pricePerMeter')}` : 'Price information not available'}
             </Text>
             {textile?.minimumOrder && (
               <Text variant="bodySmall" style={styles.minOrderText}>
-                Minimum order: {textile.minimumOrder} meters
+                {t('textiles.minimumOrder')}: {textile.minimumOrder}
               </Text>
             )}
           </View>
@@ -577,17 +580,17 @@ export default function TextileCartScreen() {
           
           {/* Order Form */}
           <View style={styles.formContainer}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Order Details</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('textiles.cart.orderDetails')}</Text>
             
             <View style={styles.prefilledNotice}>
               <MaterialCommunityIcons name="information-outline" size={16} color={theme.colors.primary} />
               <Text variant="bodySmall" style={styles.prefilledText}>
-                Select colors and specify quantities and lengths for each.
+                {t('textiles.cart.prefilledText')}
               </Text>
             </View>
             
             <View style={styles.colorSelectorWrapper}>
-              <Text variant="titleSmall" style={styles.colorSectionTitle}>Select Colors with Quantities and Lengths</Text>
+              <Text variant="titleSmall" style={styles.colorSectionTitle}>{t('textiles.cart.selectColorsTitle')}</Text>
               
               <View style={styles.colorsContainer}>
                 {colorOptions.map((color) => {
@@ -637,7 +640,7 @@ export default function TextileCartScreen() {
                       {isSelected && selectedColor && (
                         <View style={styles.colorOptionsContainer}>
                           <View style={styles.colorLengthContainer}>
-                            <Text style={styles.colorInputLabel}>Length (m):</Text>
+                            <Text style={styles.colorInputLabel}>{t('textiles.cart.length')}:</Text>
                             <View style={[
                               styles.colorLengthInputContainer,
                               errorText && { borderColor: theme.colors.error }
@@ -647,9 +650,9 @@ export default function TextileCartScreen() {
                                 value={selectedColor.length}
                                 onChangeText={(text) => updateColorLength(color.value, text)}
                                 keyboardType="numeric"
-                                placeholder="Length"
+                                placeholder={t('textiles.cart.length')}
                               />
-                              <Text style={styles.lengthUnit}>m</Text>
+                              <Text style={styles.lengthUnit}>{t('textiles.cart.lengthUnit')}</Text>
                             </View>
                           </View>
                           
@@ -660,7 +663,7 @@ export default function TextileCartScreen() {
                           )}
                           
                           <View style={styles.colorQuantityContainer}>
-                            <Text style={styles.colorInputLabel}>Quantity:</Text>
+                            <Text style={styles.colorInputLabel}>{t('textiles.cart.quantity')}:</Text>
                             <View style={styles.quantityControls}>
                               <TouchableOpacity
                                 style={[styles.quantityButton, { backgroundColor: theme.colors.surface }]}
@@ -711,10 +714,10 @@ export default function TextileCartScreen() {
             ) : null}
             
             <SimpleFormInput
-              label="Additional Notes (Optional)"
+              label={t('textiles.cart.notes')}
               value={notes}
               onChangeText={setNotes}
-              placeholder="Any special requirements or instructions"
+              placeholder={t('textiles.cart.notesPlaceholder')}
               multiline
               numberOfLines={3}
               icon="note-text"
@@ -725,20 +728,20 @@ export default function TextileCartScreen() {
           
           {/* Order Summary */}
           <View style={styles.summaryContainer}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Order Summary</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('textiles.cart.orderSummary')}</Text>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Product:</Text>
+              <Text variant="bodyMedium">{t('textiles.cart.product')}:</Text>
               <Text variant="bodyMedium">{textile?.name || 'Fabric'}</Text>
             </View>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Price per meter:</Text>
+              <Text variant="bodyMedium">{t('textiles.cart.pricePerMeter')}:</Text>
               <Text variant="bodyMedium">{textile ? `${textile.currency} ${textile.price.toLocaleString()}` : 'N/A'}</Text>
             </View>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Selected Colors:</Text>
+              <Text variant="bodyMedium">{t('textiles.cart.selectedColors')}:</Text>
               <View style={{ flex: 1, alignItems: 'flex-end' }}>
                 {selectedColors.length > 0 ? (
                   selectedColors.map((selectedColor, index) => {
@@ -764,25 +767,25 @@ export default function TextileCartScreen() {
                     );
                   })
                 ) : (
-                  <Text variant="bodyMedium">None selected</Text>
+                  <Text variant="bodyMedium">{t('textiles.cart.noneSelected')}</Text>
                 )}
               </View>
             </View>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Total Pieces:</Text>
-              <Text variant="bodyMedium">{getTotalQuantity()} {getTotalQuantity() === 1 ? 'piece' : 'pieces'}</Text>
+              <Text variant="bodyMedium">{t('textiles.cart.totalPieces')}:</Text>
+              <Text variant="bodyMedium">{getTotalQuantity()} {getTotalQuantity() === 1 ? t('textiles.cart.piece') : t('textiles.cart.pieces')}</Text>
             </View>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Total Fabric:</Text>
+              <Text variant="bodyMedium">{t('textiles.cart.totalFabric')}:</Text>
               <Text variant="bodyMedium">
-                {getTotalMeters().toFixed(2)} meters total
+                {getTotalMeters().toFixed(2)} {t('textiles.cart.metersTotal')}
               </Text>
             </View>
             
             <View style={[styles.summaryRow, styles.totalRow]}>
-              <Text variant="titleMedium">Total Price:</Text>
+              <Text variant="titleMedium">{t('textiles.cart.totalPrice')}:</Text>
               <Text variant="titleMedium">
                 {textile ? `${textile.currency} ${calculateTotal().toLocaleString()}` : 'N/A'}
               </Text>
@@ -796,7 +799,7 @@ export default function TextileCartScreen() {
             fullWidth
             icon="cart-plus"
           >
-            Add to Cart
+            {t('textiles.cart.continueButton')}
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>

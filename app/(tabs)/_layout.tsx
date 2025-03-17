@@ -125,8 +125,10 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          href: null,
-          // Profile screen won't appear in the tab bar but will be part of the tabs navigation
+          title: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen

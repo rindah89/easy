@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { Text, useTheme, Avatar, Divider, List, Portal, Dialog, Button as PaperButton } from 'react-native-paper';
+import { StyleSheet, View, ScrollView, TouchableOpacity, Alert, Image } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { useAuth } from '../../context/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../../lib/supabase';
-import { Tables } from '../../database.types';
 import { useRouter } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
 import LanguageButton from '../../components/LanguageButton';
+import { Text } from '../../components/CustomText';
+import { Divider } from '../../components/CustomDivider';
+import { ListItem } from '../../components/CustomListItem';
+import { Button } from '../../components/Button';
+import { Modal } from '../../components/CustomModal';
+import ProfileAvatar from '../../components/ProfileAvatar';
 
 export default function ProfileScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { user, signOut, uploadAvatar, updateUserProfile } = useAuth();
-  const [profile, setProfile] = useState<Tables<'user_profiles'> | null>(null);
+  const { user, signOut } = useAuth();
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const { t } = useTranslation();
 
@@ -54,90 +57,6 @@ export default function ProfileScreen() {
     return user?.email?.charAt(0).toUpperCase() || 'U';
   };
 
-  const pickImage = async () => {
-    try {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      
-      if (status !== 'granted') {
-        console.error('Permission to access media library is required');
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        await updateProfileAvatar(result.assets[0].uri);
-      }
-    } catch (err) {
-      console.error('Error picking image:', err);
-    }
-  };
-
-  const updateProfileAvatar = async (uri: string) => {
-    if (!uri) return;
-
-    setUploadingImage(true);
-    try {
-      const { url, error } = await uploadAvatar(uri);
-      
-      if (error) {
-        console.error('Error uploading avatar:', error);
-        
-        // Check if the error is related to storage bucket permissions
-        if (error.toString().includes('bucket') || 
-            error.toString().includes('storage') || 
-            error.toString().includes('row-level security')) {
-          showStoragePermissionError();
-        } else {
-          Alert.alert(
-            "Upload Error",
-            "Failed to upload profile picture. Please try again later.",
-            [{ text: "OK" }]
-          );
-        }
-      } else if (url) {
-        // Avatar URL is already updated in the profile by the uploadAvatar function
-        // Refresh the profile data
-        const { data } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('id', user?.id || '')
-          .single();
-          
-        if (data) {
-          setProfile(data);
-        }
-      }
-    } catch (err) {
-      console.error('Error updating avatar:', err);
-      Alert.alert(
-        "Error",
-        "An unexpected error occurred while updating your profile picture.",
-        [{ text: "OK" }]
-      );
-    } finally {
-      setUploadingImage(false);
-    }
-  };
-
-  const showStoragePermissionError = () => {
-    Alert.alert(
-      "Storage Permission Error",
-      "There's an issue with the storage permissions in your Supabase project. Please contact the administrator to fix the storage bucket permissions.",
-      [{ text: "OK" }]
-    );
-  };
-
-  const navigateToEditProfile = () => {
-    // Navigate to edit profile screen
-    router.push('/edit-profile');
-  };
-
   const handleSignOut = () => {
     setShowLogoutDialog(true);
   };
@@ -150,7 +69,7 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.header}>
-        <Text variant="headlineMedium" style={{ color: theme.colors.primary }}>
+        <Text variant="headlineMedium" color={theme.colors.primary}>
           {t('profile.title')}
         </Text>
         <LanguageButton style={styles.languageButton} />
@@ -158,79 +77,76 @@ export default function ProfileScreen() {
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.profileSection}>
-          <TouchableOpacity onPress={pickImage} disabled={uploadingImage}>
+          <TouchableOpacity disabled={true}>
             {profile?.avatar_url ? (
-              <Avatar.Image 
-                size={100} 
+              <Image 
                 source={{ uri: profile.avatar_url }} 
-                style={styles.avatar} 
+                style={styles.avatar}
               />
             ) : (
-              <Avatar.Text 
-                size={100} 
-                label={getInitials()} 
-                style={styles.avatar} 
-              />
-            )}
-            {uploadingImage ? (
-              <Text style={styles.uploadingText}>{t('profile.uploading')}</Text>
-            ) : (
-              <Text style={styles.changePhotoText}>{t('profile.changePhoto')}</Text>
+              <View style={[styles.avatarFallback, { backgroundColor: theme.colors.primary }]}>
+                <Text variant="headlineLarge" color="white">
+                  {getInitials()}
+                </Text>
+              </View>
             )}
           </TouchableOpacity>
 
           <Text variant="titleLarge" style={styles.nameText}>
             {profile?.full_name || t('profile.noName')}
           </Text>
-          <Text variant="bodyLarge" style={styles.emailText}>
+          <Text variant="bodyLarge" style={styles.emailText} color={theme.colors.onSurfaceVariant}>
             {user?.email}
           </Text>
         </View>
 
         <Divider />
 
-        <List.Section>
-          <List.Item
+        <View style={styles.listSection}>
+          <ListItem
             title={t('profile.editProfile')}
-            left={props => <List.Icon {...props} icon="account-edit" />}
-            onPress={navigateToEditProfile}
+            icon="account-edit"
+            onPress={() => router.push('/edit-profile')}
           />
-          <List.Item
+          <ListItem
             title={t('profile.changePassword')}
-            left={props => <List.Icon {...props} icon="lock-reset" />}
+            icon="lock-reset"
             onPress={() => router.push('/change-password')}
           />
-          <List.Item
+          <ListItem
             title={t('profile.notificationSettings')}
-            left={props => <List.Icon {...props} icon="bell-outline" />}
+            icon="bell-outline"
             onPress={() => router.push('/notifications-settings')}
           />
-          <List.Item
+          <ListItem
             title={t('profile.privacySettings')}
-            left={props => <List.Icon {...props} icon="shield-account" />}
+            icon="shield-account"
             onPress={() => router.push('/privacy-settings')}
           />
-          <List.Item
+          <ListItem
             title={t('common.logout')}
-            left={props => <List.Icon {...props} icon="logout" color={theme.colors.error} />}
-            onPress={handleSignOut}
+            icon="logout"
+            iconColor={theme.colors.error}
             titleStyle={{ color: theme.colors.error }}
+            onPress={handleSignOut}
           />
-        </List.Section>
+        </View>
       </ScrollView>
 
-      <Portal>
-        <Dialog visible={showLogoutDialog} onDismiss={() => setShowLogoutDialog(false)}>
-          <Dialog.Title>{t('profile.logoutConfirmTitle')}</Dialog.Title>
-          <Dialog.Content>
-            <Text variant="bodyMedium">{t('profile.logoutConfirmMessage')}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <PaperButton onPress={() => setShowLogoutDialog(false)}>{t('common.cancel')}</PaperButton>
-            <PaperButton onPress={confirmSignOut}>{t('common.logout')}</PaperButton>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <Modal visible={showLogoutDialog} onDismiss={() => setShowLogoutDialog(false)}>
+        <Modal.Title>{t('profile.logoutConfirmTitle')}</Modal.Title>
+        <Modal.Content>
+          <Text variant="bodyMedium">{t('profile.logoutConfirmMessage')}</Text>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button mode="text" onPress={() => setShowLogoutDialog(false)}>
+            {t('common.cancel')}
+          </Button>
+          <Button mode="text" onPress={confirmSignOut} style={{ marginLeft: 8 }}>
+            {t('common.logout')}
+          </Button>
+        </Modal.Actions>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -248,32 +164,38 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   languageButton: {
-    marginLeft: 'auto',
+    marginLeft: 10,
   },
   scrollView: {
     flex: 1,
   },
   profileSection: {
     alignItems: 'center',
-    padding: 24,
+    padding: 20,
   },
   avatar: {
-    marginBottom: 16,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  avatarFallback: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   nameText: {
+    marginTop: 10,
     fontWeight: 'bold',
-    marginBottom: 4,
   },
   emailText: {
-    color: theme.colors.onSurfaceVariant,
+    marginTop: 5,
+    opacity: 0.7,
   },
-  uploadingText: {
-    color: theme.colors.onSurfaceVariant,
-  },
-  changePhotoText: {
-    color: theme.colors.onSurfaceVariant,
-  },
-  divider: {
-    marginVertical: 16,
+  listSection: {
+    paddingTop: 8,
   },
 }); 

@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import ProfileAvatar from './ProfileAvatar';
+import { Text } from './CustomText';
 
 interface CustomHeaderProps {
   title: string;
@@ -61,14 +62,14 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
         )}
         <View>
           <Text 
-            variant="titleMedium" 
+            variant="bold" 
             style={[styles.title, { color: theme.colors.onSurface }]}
           >
             {title}
           </Text>
           {subtitle && (
             <Text 
-              variant="bodySmall" 
+              variant="regular" 
               style={[styles.subtitle, { color: theme.colors.onSurfaceVariant }]}
             >
               {subtitle}
@@ -107,10 +108,11 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   title: {
-    fontWeight: 'bold',
+    fontSize: 18,
   },
   subtitle: {
     marginTop: 2,
+    fontSize: 14,
   },
   avatar: {
     marginLeft: 12,

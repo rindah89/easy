@@ -12,6 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import LottieView from 'lottie-react-native';
+import { useTranslation } from 'react-i18next';
 
 interface BookingFormData {
   pickupDate: Date;
@@ -23,11 +24,24 @@ interface BookingFormData {
   paymentMethod: 'credit_card' | 'mobile_money' | 'cash';
 }
 
+// Helper function to translate categories (similar to car-rental.tsx)
+const translateCategory = (category: string, t: any): string => {
+  switch (category.toLowerCase()) {
+    case 'all': return t('carRental.categories.all');
+    case 'sedan': return t('carRental.categories.sedan');
+    case 'suv': return t('carRental.categories.suv');
+    case 'pickup': return t('carRental.categories.pickup');
+    case 'luxury': return t('carRental.categories.luxury');
+    default: return category;
+  }
+};
+
 export default function CarBookingScreen() {
   const theme = useTheme();
   const router = useRouter();
   const params = useLocalSearchParams();
   const animationRef = useRef<LottieView>(null);
+  const { t, i18n } = useTranslation();
   
   // Animation value for custom toast
   const toastAnim = useRef(new Animated.Value(0)).current;
@@ -192,7 +206,7 @@ export default function CarBookingScreen() {
           size={24}
           onPress={() => router.back()}
         />
-        <Text variant="titleLarge" style={styles.headerTitle}>Book Your Car</Text>
+        <Text variant="titleLarge" style={styles.headerTitle}>{t('carBooking.title')}</Text>
         <View style={{ width: 40 }} />
       </View>
       
@@ -206,9 +220,9 @@ export default function CarBookingScreen() {
             />
             <View style={styles.carSummaryDetails}>
               <Text variant="titleMedium" style={styles.carName}>{carName}</Text>
-              <Text variant="bodyMedium" style={styles.carCategory}>{carCategory}</Text>
+              <Text variant="bodyMedium" style={styles.carCategory}>{translateCategory(carCategory, t)}</Text>
               <Text variant="titleSmall" style={styles.carPrice}>
-                {carPrice.toLocaleString()} XAF/day
+                {carPrice.toLocaleString()} XAF/{t('carRental.car.day')}
               </Text>
             </View>
           </View>
@@ -216,18 +230,18 @@ export default function CarBookingScreen() {
         
         <Card style={styles.bookingCard}>
           <Card.Content>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Rental Period</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('carBooking.rentalPeriod')}</Text>
             
             <View style={styles.datePickerRow}>
               <View style={styles.datePickerContainer}>
-                <Text variant="bodyMedium" style={styles.dateLabel}>Pickup Date</Text>
+                <Text variant="bodyMedium" style={styles.dateLabel}>{t('carBooking.pickupDate')}</Text>
                 <TouchableOpacity 
                   style={[styles.datePickerButton, { borderColor: theme.colors.primary + '40' }]}
                   onPress={() => setShowPickupDatePicker(true)}
                 >
                   <MaterialCommunityIcons name="calendar" size={20} color={theme.colors.primary} />
                   <Text variant="bodyMedium" style={styles.dateText}>
-                    {bookingForm.pickupDate.toLocaleDateString()}
+                    {bookingForm.pickupDate.toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
                   </Text>
                 </TouchableOpacity>
                 {showPickupDatePicker && (
@@ -239,19 +253,20 @@ export default function CarBookingScreen() {
                     minimumDate={new Date()}
                     accentColor="#FF0000"
                     themeVariant={theme.dark ? 'dark' : 'light'}
+                    locale={i18n.language}
                   />
                 )}
               </View>
               
               <View style={styles.datePickerContainer}>
-                <Text variant="bodyMedium" style={styles.dateLabel}>Pickup Time</Text>
+                <Text variant="bodyMedium" style={styles.dateLabel}>{t('carBooking.pickupTime')}</Text>
                 <TouchableOpacity 
                   style={[styles.datePickerButton, { borderColor: theme.colors.primary + '40' }]}
                   onPress={() => setShowPickupTimePicker(true)}
                 >
                   <MaterialCommunityIcons name="clock" size={20} color={theme.colors.primary} />
                   <Text variant="bodyMedium" style={styles.dateText}>
-                    {bookingForm.pickupDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {bookingForm.pickupDate.toLocaleTimeString(i18n.language === 'fr' ? 'fr-FR' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
                   </Text>
                 </TouchableOpacity>
                 {showPickupTimePicker && (
@@ -262,6 +277,7 @@ export default function CarBookingScreen() {
                     onChange={onPickupTimeChange}
                     accentColor="#FF0000"
                     themeVariant={theme.dark ? 'dark' : 'light'}
+                    locale={i18n.language}
                   />
                 )}
               </View>
@@ -269,14 +285,14 @@ export default function CarBookingScreen() {
             
             <View style={styles.datePickerRow}>
               <View style={styles.datePickerContainer}>
-                <Text variant="bodyMedium" style={styles.dateLabel}>Return Date</Text>
+                <Text variant="bodyMedium" style={styles.dateLabel}>{t('carBooking.returnDate')}</Text>
                 <TouchableOpacity 
                   style={[styles.datePickerButton, { borderColor: theme.colors.primary + '40' }]}
                   onPress={() => setShowReturnDatePicker(true)}
                 >
                   <MaterialCommunityIcons name="calendar" size={20} color={theme.colors.primary} />
                   <Text variant="bodyMedium" style={styles.dateText}>
-                    {bookingForm.returnDate.toLocaleDateString()}
+                    {bookingForm.returnDate.toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
                   </Text>
                 </TouchableOpacity>
                 {showReturnDatePicker && (
@@ -288,6 +304,7 @@ export default function CarBookingScreen() {
                     minimumDate={new Date(bookingForm.pickupDate.getTime() + 24 * 60 * 60 * 1000)}
                     accentColor="#FF0000"
                     themeVariant={theme.dark ? 'dark' : 'light'}
+                    locale={i18n.language}
                   />
                 )}
               </View>
@@ -298,9 +315,9 @@ export default function CarBookingScreen() {
             </View>
             
             <View style={styles.durationContainer}>
-              <Text variant="bodyMedium">Duration:</Text>
+              <Text variant="bodyMedium">{t('carBooking.duration')}:</Text>
               <Text variant="bodyMedium" style={styles.durationText}>
-                {rentalDays} {rentalDays === 1 ? 'day' : 'days'}
+                {rentalDays} {rentalDays === 1 ? t('carBooking.day') : t('carBooking.days')}
               </Text>
             </View>
           </Card.Content>
@@ -308,10 +325,10 @@ export default function CarBookingScreen() {
         
         <Card style={styles.bookingCard}>
           <Card.Content>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Driver Information</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('carBooking.driverInfo')}</Text>
             
             <View style={styles.inputContainer}>
-              <Text variant="bodyMedium" style={styles.inputLabel}>Full Name</Text>
+              <Text variant="bodyMedium" style={styles.inputLabel}>{t('carBooking.fullName')}</Text>
               <View style={styles.textInputContainer}>
                 <MaterialCommunityIcons name="account" size={20} color={theme.colors.primary} />
                 <Text variant="bodyMedium" style={styles.inputText}>John Doe</Text>
@@ -319,7 +336,7 @@ export default function CarBookingScreen() {
             </View>
             
             <View style={styles.inputContainer}>
-              <Text variant="bodyMedium" style={styles.inputLabel}>Phone Number</Text>
+              <Text variant="bodyMedium" style={styles.inputLabel}>{t('carBooking.phoneNumber')}</Text>
               <View style={styles.textInputContainer}>
                 <MaterialCommunityIcons name="phone" size={20} color={theme.colors.primary} />
                 <Text variant="bodyMedium" style={styles.inputText}>+237 6XX XXX XXX</Text>
@@ -327,7 +344,7 @@ export default function CarBookingScreen() {
             </View>
             
             <View style={styles.inputContainer}>
-              <Text variant="bodyMedium" style={styles.inputLabel}>Email Address</Text>
+              <Text variant="bodyMedium" style={styles.inputLabel}>{t('carBooking.emailAddress')}</Text>
               <View style={styles.textInputContainer}>
                 <MaterialCommunityIcons name="email" size={20} color={theme.colors.primary} />
                 <Text variant="bodyMedium" style={styles.inputText}>example@email.com</Text>
@@ -335,7 +352,7 @@ export default function CarBookingScreen() {
             </View>
             
             <View style={styles.inputContainer}>
-              <Text variant="bodyMedium" style={styles.inputLabel}>Driver's License</Text>
+              <Text variant="bodyMedium" style={styles.inputLabel}>{t('carBooking.driversLicense')}</Text>
               <View style={styles.textInputContainer}>
                 <MaterialCommunityIcons name="card-account-details" size={20} color={theme.colors.primary} />
                 <Text variant="bodyMedium" style={styles.inputText}>DL-XXXXXXXX</Text>
@@ -346,7 +363,7 @@ export default function CarBookingScreen() {
         
         <Card style={styles.bookingCard}>
           <Card.Content>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Payment Method</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('carBooking.paymentMethod.title')}</Text>
             
             <TouchableOpacity 
               style={[
@@ -367,7 +384,7 @@ export default function CarBookingScreen() {
                   bookingForm.paymentMethod === 'mobile_money' && { color: theme.colors.primary }
                 ]}
               >
-                Mobile Money
+                {t('carBooking.paymentMethod.mobileMoney')}
               </Text>
             </TouchableOpacity>
             
@@ -390,7 +407,7 @@ export default function CarBookingScreen() {
                   bookingForm.paymentMethod === 'credit_card' && { color: theme.colors.primary }
                 ]}
               >
-                Credit Card
+                {t('carBooking.paymentMethod.creditCard')}
               </Text>
             </TouchableOpacity>
             
@@ -413,7 +430,7 @@ export default function CarBookingScreen() {
                   bookingForm.paymentMethod === 'cash' && { color: theme.colors.primary }
                 ]}
               >
-                Cash on Pickup
+                {t('carBooking.paymentMethod.cashOnPickup')}
               </Text>
             </TouchableOpacity>
           </Card.Content>
@@ -421,32 +438,34 @@ export default function CarBookingScreen() {
         
         <Card style={styles.bookingCard}>
           <Card.Content>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Booking Summary</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('carBooking.bookingSummary.title')}</Text>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Car Rental ({rentalDays} {rentalDays === 1 ? 'day' : 'days'})</Text>
+              <Text variant="bodyMedium">
+                {t('carBooking.bookingSummary.carRental')} ({rentalDays} {rentalDays === 1 ? t('carBooking.day') : t('carBooking.days')})
+              </Text>
               <Text variant="bodyMedium">{carPrice.toLocaleString()} XAF × {rentalDays}</Text>
             </View>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Insurance</Text>
-              <Text variant="bodyMedium">Included</Text>
+              <Text variant="bodyMedium">{t('carBooking.bookingSummary.insurance')}</Text>
+              <Text variant="bodyMedium">{t('carBooking.bookingSummary.included')}</Text>
             </View>
             
             <View style={styles.summaryRow}>
-              <Text variant="bodyMedium">Security Deposit (Caution)</Text>
+              <Text variant="bodyMedium">{t('carBooking.bookingSummary.securityDeposit')}</Text>
               <Text variant="bodyMedium">100,000 XAF</Text>
             </View>
             
             <Divider style={styles.divider} />
             
             <View style={styles.totalRow}>
-              <Text variant="titleMedium" style={styles.totalLabel}>Total</Text>
+              <Text variant="titleMedium" style={styles.totalLabel}>{t('carBooking.bookingSummary.total')}</Text>
               <Text variant="titleMedium" style={styles.totalAmount}>{totalPrice.toLocaleString()} XAF</Text>
             </View>
             
             <View style={styles.totalRow}>
-              <Text variant="bodyMedium" style={styles.cautionLabel}>Caution Required</Text>
+              <Text variant="bodyMedium" style={styles.cautionLabel}>{t('carBooking.bookingSummary.cautionRequired')}</Text>
               <Text variant="bodyMedium" style={styles.cautionAmount}>100,000 XAF</Text>
             </View>
           </Card.Content>
@@ -460,7 +479,7 @@ export default function CarBookingScreen() {
               fullWidth
               style={styles.confirmButton}
             >
-              Confirm Booking
+              {t('carBooking.confirmBooking')}
             </Button>
             
             <Button
@@ -469,7 +488,7 @@ export default function CarBookingScreen() {
               fullWidth
               style={styles.cancelButton}
             >
-              Cancel
+              {t('carBooking.cancel')}
             </Button>
           </View>
         )}
@@ -496,14 +515,13 @@ export default function CarBookingScreen() {
               }}
             />
             <Text variant="headlineMedium" style={[styles.successText, { color: theme.colors.primary }]}>
-              Booking Successful!
+              {t('carBooking.success.title')}
             </Text>
             <Text variant="bodyLarge" style={styles.successSubtext}>
-              Your car rental request has been submitted.
+              {t('carBooking.success.subtitle')}
             </Text>
             <Text variant="bodyMedium" style={styles.successNotice}>
-              You will receive email and SMS confirmations 
-              once your booking is approved.
+              {t('carBooking.success.notice')}
             </Text>
             
             <Button
@@ -512,7 +530,7 @@ export default function CarBookingScreen() {
               style={styles.confirmDialogButton}
               fullWidth
             >
-              Confirm
+              {t('carBooking.success.confirm')}
             </Button>
           </Dialog.Content>
         </Dialog>
@@ -542,7 +560,7 @@ export default function CarBookingScreen() {
                 style={styles.toastIcon}
               />
               <Text variant="bodyMedium" style={styles.toastText}>
-                Booking successful! Your car rental has been confirmed.
+                {t('carBooking.success.toast')}
               </Text>
             </Card.Content>
           </Card>

@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 interface DeliveryAgent {
   id: string;
@@ -26,6 +27,7 @@ export default function DeliveryAgentsScreen() {
   const theme = useTheme();
   const router = useRouter();
   const params = useLocalSearchParams();
+  const { t, i18n } = useTranslation();
   
   // Extract booking details from params
   const packageType = params.packageType as string;
@@ -134,6 +136,11 @@ export default function DeliveryAgentsScreen() {
     }, 3000);
   };
 
+  // Get the selected agent details
+  const getSelectedAgent = () => {
+    return agents.find(agent => agent.id === selectedAgent);
+  };
+
   const renderAgentItem = ({ item }: { item: DeliveryAgent }) => (
     <TouchableOpacity
       onPress={() => item.isAvailable && handleSelectAgent(item.id)}
@@ -152,15 +159,21 @@ export default function DeliveryAgentsScreen() {
             <Text variant="titleMedium">{item.name}</Text>
             <View style={styles.ratingContainer}>
               <MaterialCommunityIcons name="star" size={16} color="#FFD700" />
-              <Text variant="bodyMedium" style={styles.ratingText}>{item.rating} ({item.numberOfDeliveries} deliveries)</Text>
+              <Text variant="bodyMedium" style={styles.ratingText}>
+                {item.rating} ({item.numberOfDeliveries} {t('package.deliveryAgents.details.deliveries')})
+              </Text>
             </View>
             <View style={styles.infoRow}>
               <MaterialCommunityIcons name="map-marker-distance" size={16} color={theme.colors.onSurfaceVariant} />
-              <Text variant="bodyMedium" style={styles.infoText}>{item.distance} away</Text>
+              <Text variant="bodyMedium" style={styles.infoText}>
+                {t('package.deliveryAgents.agent.distanceAway', { distance: item.distance.split(' ')[0] })}
+              </Text>
             </View>
             <View style={styles.infoRow}>
               <MaterialCommunityIcons name="clock-outline" size={16} color={theme.colors.onSurfaceVariant} />
-              <Text variant="bodyMedium" style={styles.infoText}>ETA: {item.estimatedTime}</Text>
+              <Text variant="bodyMedium" style={styles.infoText}>
+                {t('package.deliveryAgents.agent.deliveryTime', { time: item.estimatedTime })}
+              </Text>
             </View>
           </View>
           {item.isAvailable ? (
@@ -170,7 +183,9 @@ export default function DeliveryAgentsScreen() {
               color={selectedAgent === item.id ? theme.colors.primary : theme.colors.onSurfaceVariant} 
             />
           ) : (
-            <Text variant="labelMedium" style={styles.unavailableText}>Unavailable</Text>
+            <Text variant="labelMedium" style={styles.unavailableText}>
+              {t('package.deliveryAgents.agent.unavailable')}
+            </Text>
           )}
         </View>
       </Card>
@@ -188,14 +203,18 @@ export default function DeliveryAgentsScreen() {
           color={theme.colors.onSurface}
           onPress={() => router.back()}
         />
-        <Text variant="titleLarge" style={styles.headerTitle}>Select Delivery Agent</Text>
+        <Text variant="titleLarge" style={styles.headerTitle}>
+          {t('package.deliveryAgents.title')}
+        </Text>
         <View style={{ width: 40 }} />
       </View>
       
       <Card style={styles.bookingSummary}>
         <View style={styles.summaryHeader}>
           <MaterialCommunityIcons name="clipboard-text-outline" size={24} color={theme.colors.primary} />
-          <Text variant="titleMedium" style={styles.summaryTitle}>Booking Summary</Text>
+          <Text variant="titleMedium" style={styles.summaryTitle}>
+            {t('package.deliveryAgents.confirmation.details')}
+          </Text>
         </View>
         
         <Divider style={styles.summaryDivider} />
@@ -208,10 +227,10 @@ export default function DeliveryAgentsScreen() {
               color={theme.colors.onSurfaceVariant} 
               style={styles.summaryIcon} 
             />
-            <Text variant="bodyMedium">Package Type:</Text>
+            <Text variant="bodyMedium">{t('package.deliveryAgents.confirmation.package')}:</Text>
           </View>
           <Text variant="bodyMedium" style={[styles.summaryValue, styles.summaryHighlight, { color: theme.colors.primary }]}>
-            {packageType?.charAt(0).toUpperCase() + packageType?.slice(1)}
+            {t(`package.packageType.${packageType}`)}
           </Text>
         </View>
         
@@ -223,7 +242,7 @@ export default function DeliveryAgentsScreen() {
               color={theme.colors.onSurfaceVariant} 
               style={styles.summaryIcon} 
             />
-            <Text variant="bodyMedium">From:</Text>
+            <Text variant="bodyMedium">{t('package.confirmation.from')}</Text>
           </View>
           <Text variant="bodyMedium" style={styles.summaryValue} numberOfLines={1}>{pickupAddress}</Text>
         </View>
@@ -236,7 +255,7 @@ export default function DeliveryAgentsScreen() {
               color={theme.colors.onSurfaceVariant} 
               style={styles.summaryIcon} 
             />
-            <Text variant="bodyMedium">To:</Text>
+            <Text variant="bodyMedium">{t('package.confirmation.to')}</Text>
           </View>
           <Text variant="bodyMedium" style={styles.summaryValue} numberOfLines={1}>{deliveryAddress}</Text>
         </View>
@@ -251,62 +270,72 @@ export default function DeliveryAgentsScreen() {
               color={theme.colors.onSurfaceVariant} 
               style={styles.summaryIcon} 
             />
-            <Text variant="bodyMedium">Price:</Text>
+            <Text variant="bodyMedium">{t('package.deliveryAgents.agent.price')}:</Text>
           </View>
-          <Text variant="titleMedium" style={[styles.priceValue, { color: theme.colors.primary }]}>{price} XAF</Text>
+          <Text variant="titleSmall" style={[styles.summaryValue, { color: theme.colors.primary }]}>
+            {price} XAF
+          </Text>
         </View>
       </Card>
       
-      <Text variant="titleMedium" style={styles.sectionTitle}>Delivery Agents Nearby</Text>
+      <View style={styles.contentContainer}>
+        <Text variant="titleMedium" style={styles.sectionTitle}>
+          {t('package.deliveryAgents.subtitle')}
+        </Text>
+        
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={theme.colors.primary} />
+            <Text variant="bodyMedium" style={styles.loadingText}>{t('common.loading')}</Text>
+          </View>
+        ) : agents.length === 0 ? (
+          <View style={styles.emptyStateContainer}>
+            <MaterialCommunityIcons 
+              name="account-search" 
+              size={48} 
+              color={theme.colors.onSurfaceVariant} 
+            />
+            <Text variant="bodyLarge" style={styles.emptyStateText}>
+              {t('package.deliveryAgents.noAgents')}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={agents}
+            renderItem={renderAgentItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.agentsList}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
       
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text variant="bodyMedium" style={styles.loadingText}>Finding nearby delivery agents...</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={agents}
-          renderItem={renderAgentItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.agentsList}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <MaterialCommunityIcons name="account-search" size={64} color={theme.colors.onSurfaceVariant} />
-              <Text variant="bodyLarge" style={styles.emptyText}>No delivery agents available in your area</Text>
-            </View>
-          }
-        />
-      )}
-      
-      <View style={styles.bottomContainer}>
+      <View style={styles.footer}>
         <Button 
           mode="contained" 
           onPress={handleConfirmAgent}
-          style={styles.confirmButton}
           disabled={!selectedAgent}
+          style={[styles.confirmButton, !selectedAgent && { opacity: 0.5 }]}
         >
-          <Text variant="labelLarge" style={{ color: 'white' }}>Confirm Agent</Text>
+          {t('package.deliveryAgents.agent.select')}
         </Button>
       </View>
       
-      {/* Success Dialog */}
       {showSuccessDialog && (
-        <View style={styles.successDialogOverlay}>
+        <View style={styles.successOverlay}>
           <Card style={styles.successDialog}>
-            <MaterialCommunityIcons
-              name="check-circle"
-              size={64}
-              color={theme.colors.primary}
-              style={{ marginBottom: 16 }}
-            />
-            <Text variant="titleMedium" style={{ textAlign: 'center', marginBottom: 8 }}>
-              Booking Successful!
+            <View style={styles.successIconContainer}>
+              <MaterialCommunityIcons 
+                name="check-circle-outline" 
+                size={64} 
+                color={theme.colors.primary} 
+              />
+            </View>
+            <Text variant="titleLarge" style={styles.successTitle}>
+              {t('package.deliveryAgents.confirmation.title')}
             </Text>
-            <Text variant="bodyMedium" style={{ textAlign: 'center' }}>
-              Your package delivery has been scheduled.
-              The agent will pick up your package soon.
+            <Text variant="bodyMedium" style={styles.successText}>
+              {t('package.deliveryAgents.confirmation.message', { agentName: getSelectedAgent()?.name })}
             </Text>
           </Card>
         </View>
@@ -324,71 +353,85 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 12,
   },
   headerTitle: {
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   bookingSummary: {
-    marginHorizontal: 16,
-    marginVertical: 12,
+    margin: 16,
+    marginTop: 0,
+    padding: 16,
     borderRadius: 12,
-    elevation: 4,
-    overflow: 'hidden',
   },
   summaryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.02)',
+    marginBottom: 12,
   },
   summaryTitle: {
     marginLeft: 8,
     fontWeight: '600',
   },
   summaryDivider: {
-    marginVertical: 8,
+    marginBottom: 12,
   },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    marginBottom: 12,
   },
   summaryLabelContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '40%',
+    flex: 1,
   },
   summaryIcon: {
     marginRight: 8,
   },
   summaryValue: {
-    fontWeight: '500',
-    maxWidth: '60%',
+    flex: 2,
     textAlign: 'right',
   },
   summaryHighlight: {
     fontWeight: '600',
   },
-  priceValue: {
-    fontWeight: '700',
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
   sectionTitle: {
-    marginTop: 16,
-    marginBottom: 8,
-    marginHorizontal: 16,
+    marginBottom: 16,
     fontWeight: '600',
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 12,
+    opacity: 0.7,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    marginTop: 16,
+    opacity: 0.7,
+    textAlign: 'center',
+  },
   agentsList: {
-    padding: 16,
+    paddingBottom: 80,
   },
   agentCard: {
     marginBottom: 12,
-    padding: 12,
+    borderRadius: 12,
+    padding: 16,
   },
   agentInfo: {
     flexDirection: 'row',
@@ -401,7 +444,7 @@ const styles = StyleSheet.create({
   },
   agentDetails: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 16,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -418,39 +461,28 @@ const styles = StyleSheet.create({
   },
   infoText: {
     marginLeft: 4,
+    fontSize: 13,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  unavailableText: {
+    color: 'red',
   },
-  loadingText: {
-    marginTop: 16,
-    color: '#757575',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 32,
-  },
-  emptyText: {
-    marginTop: 16,
-    textAlign: 'center',
-    color: '#757575',
-  },
-  bottomContainer: {
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: '#eee',
   },
   confirmButton: {
-    marginTop: 8,
+    marginTop: 0,
+    borderRadius: 12,
   },
-  successDialogOverlay: {
+  successOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
@@ -458,9 +490,19 @@ const styles = StyleSheet.create({
   successDialog: {
     width: '80%',
     padding: 24,
+    borderRadius: 16,
     alignItems: 'center',
   },
-  unavailableText: {
-    color: '#B00020',
+  successIconContainer: {
+    marginBottom: 16,
+  },
+  successTitle: {
+    fontWeight: 'bold',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  successText: {
+    textAlign: 'center',
+    opacity: 0.8,
   },
 }); 

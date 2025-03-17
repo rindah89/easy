@@ -10,6 +10,7 @@ import { Text as CustomText } from '../components/CustomText';
 import { Card } from '../components/CustomCard';
 import { Divider } from '../components/CustomDivider';
 import { SimpleFormInput as TextInput } from '../components/FormInput';
+import { useTranslation } from 'react-i18next';
 
 const availableTimeSlots = [
   { id: '1', time: '09:00 AM - 10:00 AM' },
@@ -35,6 +36,7 @@ const availableTests = [
 
 const PharmacyBookSampleCollectionScreen = () => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(false);
   
   // Form state
@@ -178,7 +180,7 @@ const PharmacyBookSampleCollectionScreen = () => {
   // Format date for display
   const formatDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(i18n.language, options);
   };
 
   return (
@@ -192,7 +194,7 @@ const PharmacyBookSampleCollectionScreen = () => {
         >
           {''}
         </Button>
-        <CustomText variant="headlineSmall" style={styles.headerTitle}>Book Lab Test</CustomText>
+        <CustomText variant="headlineSmall" style={styles.headerTitle}>{t('pharmacy.bookSampleCollection.title')}</CustomText>
       </View>
 
       <ScrollView 
@@ -211,25 +213,25 @@ const PharmacyBookSampleCollectionScreen = () => {
               <View style={styles.instructionNumber}>
                 <CustomText style={styles.instructionNumberText}>1</CustomText>
               </View>
-              <CustomText variant="bodyMedium">Select your preferred tests</CustomText>
+              <CustomText variant="bodyMedium">Schedule a convenient time for sample collection</CustomText>
             </View>
             <View style={styles.instructionItem}>
               <View style={styles.instructionNumber}>
                 <CustomText style={styles.instructionNumberText}>2</CustomText>
               </View>
-              <CustomText variant="bodyMedium">Choose a date and time slot</CustomText>
+              <CustomText variant="bodyMedium">Our technician will visit your home to collect samples</CustomText>
             </View>
             <View style={styles.instructionItem}>
               <View style={styles.instructionNumber}>
                 <CustomText style={styles.instructionNumberText}>3</CustomText>
               </View>
-              <CustomText variant="bodyMedium">Our phlebotomist will visit your home</CustomText>
+              <CustomText variant="bodyMedium">Samples are tested in our certified laboratory</CustomText>
             </View>
             <View style={styles.instructionItem}>
               <View style={styles.instructionNumber}>
                 <CustomText style={styles.instructionNumberText}>4</CustomText>
               </View>
-              <CustomText variant="bodyMedium">Get results within 24-48 hours via email</CustomText>
+              <CustomText variant="bodyMedium">Results are securely delivered to you within the specified time</CustomText>
             </View>
           </Card.Content>
         </Card>
@@ -237,7 +239,7 @@ const PharmacyBookSampleCollectionScreen = () => {
         {/* Select Tests */}
         <Card style={styles.card}>
           <Card.Content>
-            <CustomText variant="titleMedium" style={styles.sectionTitle}>Select Tests</CustomText>
+            <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.bookSampleCollection.selectTests')}</CustomText>
             {testsError ? (
               <CustomText variant="bodySmall" style={{ color: theme.colors.error }}>
                 {testsError}
@@ -267,7 +269,7 @@ const PharmacyBookSampleCollectionScreen = () => {
             <Divider style={styles.divider} />
             
             <View style={styles.totalContainer}>
-              <CustomText variant="titleMedium">Total</CustomText>
+              <CustomText variant="titleMedium">{t('pharmacy.bookSampleCollection.total')}</CustomText>
               <CustomText variant="titleMedium" style={styles.totalPrice}>
                 XAF {calculateTotal().toLocaleString()}
               </CustomText>
@@ -277,7 +279,7 @@ const PharmacyBookSampleCollectionScreen = () => {
               <View style={styles.discountContainer}>
                 <MaterialCommunityIcons name="tag" size={16} color={theme.colors.primary} />
                 <CustomText variant="bodySmall" style={styles.discountText}>
-                  10% discount applied on your first booking in Douala
+                  {t('pharmacy.bookSampleCollection.discount')}
                 </CustomText>
               </View>
             )}
@@ -287,11 +289,11 @@ const PharmacyBookSampleCollectionScreen = () => {
         {/* Schedule */}
         <Card style={styles.card}>
           <Card.Content>
-            <CustomText variant="titleMedium" style={styles.sectionTitle}>Schedule Appointment</CustomText>
+            <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.bookSampleCollection.scheduleAppointment')}</CustomText>
             
             {/* Date Picker */}
             <View style={styles.dateContainer}>
-              <CustomText variant="bodyMedium" style={styles.inputLabel}>Select Date</CustomText>
+              <CustomText variant="bodyMedium" style={styles.inputLabel}>{t('pharmacy.bookSampleCollection.selectDate')}</CustomText>
               <Button
                 mode="outlined"
                 onPress={showDatepicker}
@@ -314,38 +316,36 @@ const PharmacyBookSampleCollectionScreen = () => {
             </View>
             
             {/* Time Slots */}
-            <CustomText variant="bodyMedium" style={[styles.inputLabel, styles.slotLabel]}>Select Time Slot</CustomText>
+            <CustomText variant="bodyMedium" style={[styles.inputLabel, styles.slotLabel]}>{t('pharmacy.bookSampleCollection.selectTime')}</CustomText>
             {slotError ? (
               <CustomText variant="bodySmall" style={{ color: theme.colors.error }}>
                 {slotError}
               </CustomText>
             ) : null}
             
-            <View style={styles.slotsContainer}>
-              <View>
-                {availableTimeSlots.map((slot) => (
-                  <Card 
-                    key={slot.id} 
-                    style={[
-                      styles.slotCard, 
-                      selectedSlot === slot.id && styles.selectedSlotCard
-                    ]}
-                    onPress={() => setSelectedSlot(slot.id)}
-                  >
-                    <Card.Content style={styles.slotCardContent}>
-                      <View style={[
-                        styles.radioButton, 
-                        { borderColor: theme.colors.primary }
-                      ]}>
-                        {selectedSlot === slot.id && (
-                          <View style={[styles.radioButtonInner, { backgroundColor: theme.colors.primary }]} />
-                        )}
-                      </View>
-                      <CustomText variant="bodyMedium" style={styles.slotTime}>{slot.time}</CustomText>
-                    </Card.Content>
-                  </Card>
-                ))}
-              </View>
+            <View style={styles.slotsGrid}>
+              {availableTimeSlots.map((slot) => (
+                <Card 
+                  key={slot.id} 
+                  style={[
+                    styles.slotCard, 
+                    selectedSlot === slot.id && styles.selectedSlotCard
+                  ]}
+                  onPress={() => setSelectedSlot(slot.id)}
+                >
+                  <Card.Content style={styles.slotCardContent}>
+                    <View style={[
+                      styles.radioButton, 
+                      { borderColor: theme.colors.primary }
+                    ]}>
+                      {selectedSlot === slot.id && (
+                        <View style={[styles.radioButtonInner, { backgroundColor: theme.colors.primary }]} />
+                      )}
+                    </View>
+                    <CustomText variant="bodyMedium" style={styles.slotTime}>{slot.time}</CustomText>
+                  </Card.Content>
+                </Card>
+              ))}
             </View>
           </Card.Content>
         </Card>
@@ -353,11 +353,11 @@ const PharmacyBookSampleCollectionScreen = () => {
         {/* Contact Information */}
         <Card style={styles.card}>
           <Card.Content>
-            <CustomText variant="titleMedium" style={styles.sectionTitle}>Contact Information</CustomText>
+            <CustomText variant="titleMedium" style={styles.sectionTitle}>{t('pharmacy.bookSampleCollection.contactInformation')}</CustomText>
             
             <View style={styles.inputContainer}>
               <TextInput
-                label="Full Name"
+                label={t('pharmacy.bookSampleCollection.fullName')}
                 value={name}
                 onChangeText={setName}
                 errorText={nameError}
@@ -367,7 +367,7 @@ const PharmacyBookSampleCollectionScreen = () => {
             
             <View style={styles.inputContainer}>
               <TextInput
-                label="Phone Number (e.g. 6XXXXXXXX)"
+                label={t('pharmacy.bookSampleCollection.phoneNumber')}
                 value={phone}
                 onChangeText={setPhone}
                 keyboardType="phone-pad"
@@ -378,7 +378,7 @@ const PharmacyBookSampleCollectionScreen = () => {
             
             <View style={styles.inputContainer}>
               <TextInput
-                label="Email (Optional)"
+                label={t('pharmacy.bookSampleCollection.emailAddress')}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -389,7 +389,7 @@ const PharmacyBookSampleCollectionScreen = () => {
             
             <View style={styles.inputContainer}>
               <TextInput
-                label="Address for Sample Collection in Douala"
+                label={t('pharmacy.bookSampleCollection.address')}
                 value={address}
                 onChangeText={setAddress}
                 multiline
@@ -401,7 +401,7 @@ const PharmacyBookSampleCollectionScreen = () => {
             
             <View style={styles.inputContainer}>
               <TextInput
-                label="Special Instructions (Optional)"
+                label={t('pharmacy.bookSampleCollection.specialInstructions')}
                 value={specialInstructions}
                 onChangeText={setSpecialInstructions}
                 multiline
@@ -420,11 +420,11 @@ const PharmacyBookSampleCollectionScreen = () => {
           disabled={loading}
           style={styles.bookButton}
         >
-          Confirm Booking
+          {t('pharmacy.bookSampleCollection.confirmBooking')}
         </Button>
         
         <CustomText variant="bodySmall" style={styles.disclaimer}>
-          By booking, you agree to our terms and conditions. You can cancel or reschedule up to 4 hours before your appointment.
+          {t('pharmacy.bookSampleCollection.disclaimer')}
         </CustomText>
       </ScrollView>
     </SafeAreaView>
@@ -549,10 +549,11 @@ const styles = StyleSheet.create({
   slotLabel: {
     marginTop: 8,
   },
-  slotsContainer: {
+  slotsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    marginTop: 8,
   },
   slotCard: {
     width: '48%',

@@ -1,6 +1,6 @@
 {
   "common": {
-    "welcome": "Bienvenue sur EasyD",
+    "welcome": "Bienvenue à EasyD",
     "home": "Accueil",
     "profile": "Profil",
     "settings": "Paramètres",
@@ -17,13 +17,25 @@
     "next": "Suivant",
     "submit": "Soumettre",
     "loading": "Chargement...",
-    "errorOccurred": "Une erreur est survenue",
+    "errorOccurred": "Une erreur s'est produite",
     "tryAgain": "Réessayer",
     "noResults": "Aucun résultat trouvé",
     "selectLanguage": "Sélectionner la langue",
     "english": "Anglais",
     "french": "Français",
-    "selectService": "Que souhaitez-vous faire aujourd'hui ?"
+    "selectService": "Que souhaitez-vous faire aujourd'hui?",
+    "getStarted": "Commencer",
+    "continue": "Continuer",
+    "done": "Terminé",
+    "ok": "OK",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "clear": "Effacer",
+    "apply": "Appliquer",
+    "notifications": "Notifications",
+    "currency": "XAF {{price}}",
+    "error": "Erreur",
+    "permissionDenied": "Permission Refusée"
   },
   "auth": {
     "email": "E-mail",
@@ -33,7 +45,15 @@
     "createAccount": "Créer un nouveau compte",
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
     "resetPassword": "Réinitialiser le mot de passe",
-    "resetInstructions": "Entrez votre e-mail pour recevoir les instructions de réinitialisation"
+    "resetInstructions": "Entrez votre e-mail pour recevoir les instructions de réinitialisation",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "confirmPassword": "Confirmer le mot de passe",
+    "name": "Nom",
+    "phoneNumber": "Numéro de téléphone",
+    "termsConditions": "Conditions générales",
+    "privacyPolicy": "Politique de confidentialité",
+    "dontHaveAccount": "Vous n'avez pas de compte ?"
   },
   "profile": {
     "title": "Profil",
@@ -48,7 +68,13 @@
     "changePhoto": "Changer la photo",
     "noName": "Utilisateur",
     "logoutConfirmTitle": "Déconnexion",
-    "logoutConfirmMessage": "Êtes-vous sûr de vouloir vous déconnecter ?"
+    "logoutConfirmMessage": "Êtes-vous sûr de vouloir vous déconnecter ?",
+    "personalInfo": "Informations personnelles",
+    "addresses": "Adresses",
+    "paymentMethods": "Méthodes de paiement",
+    "orders": "Commandes",
+    "support": "Support",
+    "language": "Langue"
   },
   "rides": {
     "findRide": "Trouver un trajet",
@@ -74,17 +100,450 @@
   "pharmacy": {
     "medications": "Médicaments",
     "labTests": "Tests de laboratoire",
-    "orders": "Commandes",
-    "prescription": "Ordonnance",
-    "bookSampleCollection": "Réserver un prélèvement d'échantillon",
-    "allMedications": "Tous les médicaments",
-    "allLabTests": "Tous les tests de laboratoire"
+    "orders1": "Commandes",
+    "prescription1": "Ordonnance",
+    "findMedication": "Rechercher un médicament",
+    "quickServices": "Services rapides",
+    "uploadPrescription": "Télécharger une ordonnance",
+    "getMedicinesDelivered": "Recevoir les médicaments chez vous",
+    "bookLabTest": "Réserver un test de laboratoire",
+    "homeSampleCollection": "Prélèvement à domicile",
+    "popularCategories": "Catégories populaires",
+    "popularMedications": "Médicaments populaires",
+    "viewAll": "Voir tout",
+    "viewDetails": "Voir les détails",
+    "bookSampleCollection": "Réserver un prélèvement",
+    "prescriptionUploadSuccess": "Ordonnance téléchargée avec succès",
+    "prescriptionUploadMessage": "Votre ordonnance a été téléchargée avec succès. Nos pharmaciens la vérifieront et vous contacteront rapidement.",
+    "continueShopping": "Continuer vos achats",
+    "viewOrders": "Voir les commandes",
+    "healthCheckIncluded": "Bilan de santé inclus",
+    "permissionMessages": {
+      "cameraRoll": "Nous avons besoin de l'autorisation d'accéder à votre galerie pour télécharger des ordonnances",
+      "uploadError": "Une erreur s'est produite lors du téléchargement de l'image. Veuillez réessayer."
+    },
+    "categories": {
+      "painRelief": "Anti-douleurs",
+      "coldAndFlu": "Rhume et grippe",
+      "vitamins": "Vitamines",
+      "firstAid": "Premiers secours",
+      "skinCare": "Soins de la peau",
+      "digestion": "Digestion",
+      "allergy": "Allergies"
+    },
+    "medications1": {
+      "paracetamol": {
+        "name": "Paracétamol",
+        "description": "Soulage la douleur et réduit la fièvre"
+      },
+      "vitaminC": {
+        "name": "Vitamine C",
+        "description": "Renforce le système immunitaire"
+      },
+      "allergyRelief": {
+        "name": "Anti-allergique",
+        "description": "Soulage les symptômes d'allergie"
+      },
+      "firstAidKit": {
+        "name": "Kit de premiers secours",
+        "description": "Ensemble complet pour les urgences mineures"
+      }
+    },
+    "labTests1": {
+      "completeBloodCount": "Numération formule sanguine",
+      "diabetesScreening": "Dépistage du diabète",
+      "cholesterolPanel": "Bilan lipidique",
+      "thyroidFunction": "Fonction thyroïdienne",
+      "turnaround": {
+        "oneDay": "1 jour",
+        "twoDays": "2 jours"
+      }
+    },
+    "labTestDetails": {
+      "title": "Détails du test de laboratoire",
+      "loading": "Chargement des détails du test...",
+      "about": "À propos de ce test",
+      "preparation": "Exigences de préparation",
+      "recommendedFor": "Recommandé pour",
+      "collectionProcess": {
+        "title": "Processus de prélèvement d'échantillon",
+        "step1Title": "Réservez votre créneau",
+        "step1Description": "Planifiez un moment pratique pour que notre préleveur visite votre domicile.",
+        "step2Title": "Prélèvement d'échantillon",
+        "step2Description": "Notre professionnel formé prélèvera votre échantillon de sang en suivant tous les protocoles de sécurité.",
+        "step3Title": "Traitement en laboratoire",
+        "step3Description": "Votre échantillon est transporté en toute sécurité vers notre laboratoire certifié pour analyse.",
+        "step4Title": "Obtenir les résultats",
+        "step4Description": "Accédez à vos rapports en ligne ou recevez-les par e-mail dans les délais indiqués."
+      },
+      "faq": {
+        "title": "Questions fréquemment posées",
+        "question1": "Le jeûne est-il requis pour ce test ?",
+        "answer1Fast": "Oui, le jeûne est requis comme spécifié dans les exigences de préparation.",
+        "answer1NoFast": "Non, le jeûne n'est pas requis pour ce test, mais suivez toutes les autres directives de préparation.",
+        "question2": "Combien de temps faut-il pour obtenir les résultats ?",
+        "answer2": "Les résultats seront disponibles dans les {{time}} après le prélèvement de l'échantillon. Vous serez notifié par e-mail ou SMS.",
+        "question3": "Puis-je reprogrammer mon rendez-vous de prélèvement d'échantillon ?",
+        "answer3": "Oui, vous pouvez reprogrammer jusqu'à 4 heures avant votre rendez-vous sans frais supplémentaires."
+      },
+      "bookButton": "Réserver un prélèvement d'échantillon",
+      "discount": "{{discount}}% DE RÉDUCTION",
+      "resultsIn": "Résultats dans : {{time}}",
+      "disclaimer": "Les informations fournies sont uniquement à des fins éducatives. Consultez toujours un professionnel de la santé concernant vos résultats de test et vos conditions médicales.",
+      "notFound": {
+        "title": "Test non trouvé",
+        "backButton": "Retour à la pharmacie"
+      }
+    },
+    "bookSampleCollectionDetails": {
+      "title": "Réserver un prélèvement d'échantillon",
+      "personalInfo": "Informations personnelles",
+      "fullName": "Nom complet",
+      "phoneNumber": "Numéro de téléphone",
+      "emailAddress": "Adresse e-mail",
+      "address": "Adresse du domicile",
+      "selectDate": "Sélectionner une date",
+      "selectTime": "Sélectionner une heure",
+      "tests": "Sélectionner les tests",
+      "testsSubtitle": "Choisissez les tests que vous souhaitez réserver",
+      "paymentMethod": "Méthode de paiement",
+      "cashOnCollection": "Paiement à la collecte",
+      "mobileMoney": "Mobile Money",
+      "creditCard": "Carte de crédit",
+      "specialInstructions": "Instructions spéciales (facultatif)",
+      "disclaimer": "En confirmant cette réservation, vous vous engagez à être disponible à l'adresse indiquée pendant le créneau horaire sélectionné. Les annulations doivent être effectuées au moins 4 heures avant le rendez-vous.",
+      "summary": {
+        "title": "Résumé de la réservation",
+        "selectedTests": "Tests sélectionnés",
+        "collectionFee": "Frais de prélèvement à domicile",
+        "total": "Total",
+        "freeCollection": "Gratuit"
+      },
+      "confirmBooking": "Confirmer la réservation",
+      "success": {
+        "title": "Réservation réussie",
+        "message": "Votre prélèvement d'échantillon a été programmé pour le {{date}} à {{time}}",
+        "labRepresentative": "Un représentant du laboratoire vous contactera pour confirmer le rendez-vous.",
+        "viewBookings": "Voir mes réservations",
+        "backToHome": "Retour à l'accueil"
+      },
+      "howItWorks": "Comment ça marche",
+      "howItWorks.step1": "Planifiez un moment pratique pour le prélèvement d'échantillon",
+      "howItWorks.step2": "Notre technicien se rendra à votre domicile pour prélever les échantillons",
+      "howItWorks.step3": "Les échantillons sont analysés dans notre laboratoire certifié",
+      "howItWorks.step4": "Les résultats vous sont livrés en toute sécurité dans le délai indiqué",
+      "selectTests": "Sélectionner les tests",
+      "scheduleAppointment": "Planifier un rendez-vous",
+      "contactInformation": "Informations de contact",
+      "total": "Total",
+      "discount": "Frais de prélèvement supprimés pour les commandes supérieures à 50 000 XAF"
+    },
+    "prescriptionDetails": {
+      "received": "Ordonnance reçue",
+      "receivedTime": "À l'instant",
+      "review": "Examen par le pharmacien",
+      "reviewTime": "Dans les 30 minutes",
+      "delivery": "Livraison",
+      "deliveryTime": "Le jour même si commandé avant 16h"
+    },
+    "orderDetails": {
+      "title": "Détails de la commande",
+      "orderNumber": "Numéro de commande",
+      "orderDate": "Date de commande",
+      "orderStatus": "Statut de la commande",
+      "orderItems": "Articles commandés",
+      "deliveryAddress": "Adresse de livraison",
+      "paymentMethod": "Méthode de paiement",
+      "contactPharmacist": "Contacter le pharmacien",
+      "subtotal": "Sous-total",
+      "deliveryFee": "Frais de livraison",
+      "orderTotal": "Total de la commande",
+      "pharmacistNotes": "Notes du pharmacien",
+      "timeline": {
+        "title": "Chronologie de la commande",
+        "orderPlaced": "Commande passée",
+        "orderProcessing": "Commande en traitement",
+        "orderReady": "Commande prête",
+        "orderDelivered": "Commande livrée"
+      },
+      "tracking": {
+        "title": "Suivre la livraison",
+        "message": "Vous pourrez suivre votre commande ici une fois expédiée"
+      },
+      "status": "Statut de la commande",
+      "prescription": "Ordonnance",
+      "items": "Articles commandés",
+      "quantity": "Quantité",
+      "instructions": "Instructions spéciales",
+      "prescriptionOnly": "Commande sur ordonnance uniquement",
+      "prescriptionOnlyMessage": "Cette commande est basée sur l'ordonnance que vous avez téléchargée. Notre pharmacien l'a traitée selon les instructions de votre médecin.",
+      "deliveryInfo": "Informations de livraison",
+      "note": "Note :",
+      "estimatedDelivery": "Livraison estimée",
+      "toBeScheduled": "À programmer",
+      "delivered": "Livré le",
+      "pharmacist": "Pharmacien",
+      "callPharmacist": "Appeler le pharmacien",
+      "orderSummary": "Résumé de la commande",
+      "total": "Total",
+      "contactSupport": "Contacter le support",
+      "trackDelivery": "Suivre la livraison",
+      "notFound": {
+        "title": "Commande non trouvée",
+        "backButton": "Retour aux commandes"
+      }
+    },
+    "medication": {
+      "addToCart": "Ajouter au panier",
+      "description": "Description",
+      "dosage": "Dosage",
+      "form": "Forme",
+      "manufacturer": "Fabricant",
+      "sideEffects": "Effets secondaires",
+      "requiresPrescription": "Nécessite une ordonnance",
+      "quantity": "Quantité",
+      "alternatives": "Médicaments alternatifs",
+      "rating": "Évaluation",
+      "reviews": "Avis",
+      "inStock": "En stock",
+      "outOfStock": "Rupture de stock",
+      "back": "Retour à la pharmacie",
+      "pricePerUnit": "Prix par unité",
+      "yes": "Oui",
+      "no": "Non",
+      "prescriptionRequired": {
+        "title": "Ordonnance requise",
+        "message": "Ce médicament nécessite une ordonnance valide. Voulez-vous télécharger une ordonnance maintenant ?",
+        "uploadNow": "Télécharger maintenant",
+        "cancel": "Annuler"
+      },
+      "addedToCart": {
+        "title": "Ajouté au panier",
+        "message": "{{quantity}} x {{name}} a été ajouté à votre panier",
+        "totalPrice": "Total : XAF {{price}}",
+        "viewCart": "Voir le panier",
+        "continueShopping": "Continuer vos achats"
+      }
+    },
+    "allMedications": {
+      "title": "Tous les médicaments",
+      "search": "Rechercher des médicaments...",
+      "sort": {
+        "title": "Trier par",
+        "priceLow": "Prix : Croissant",
+        "priceHigh": "Prix : Décroissant",
+        "rating": "Évaluation",
+        "popularity": "Popularité"
+      },
+      "filter": {
+        "title": "Filtrer",
+        "category": "Catégorie",
+        "priceRange": "Fourchette de prix",
+        "availability": "Disponibilité",
+        "apply": "Appliquer les filtres",
+        "clear": "Tout effacer",
+        "inStock": "En stock"
+      },
+      "noMedications": {
+        "title": "Aucun médicament trouvé",
+        "subtitle": "Essayez d'ajuster votre recherche ou vos filtres",
+        "clearFilters": "Effacer les filtres"
+      },
+      "itemsFound": "{{count}} articles trouvés"
+    },
+    "labTest": {
+      "title": "Détails du test de laboratoire",
+      "loading": "Chargement des détails du test...",
+      "about": "À propos de ce test",
+      "preparation": "Exigences de préparation",
+      "recommendedFor": "Recommandé pour",
+      "collectionProcess": {
+        "title": "Processus de prélèvement d'échantillon",
+        "step1Title": "Réservez votre créneau",
+        "step1Description": "Planifiez un moment pratique pour que notre préleveur visite votre domicile.",
+        "step2Title": "Prélèvement d'échantillon",
+        "step2Description": "Notre professionnel formé prélèvera votre échantillon de sang en suivant tous les protocoles de sécurité.",
+        "step3Title": "Traitement en laboratoire",
+        "step3Description": "Votre échantillon est transporté en toute sécurité vers notre laboratoire certifié pour analyse.",
+        "step4Title": "Obtenir les résultats",
+        "step4Description": "Accédez à vos rapports en ligne ou recevez-les par e-mail dans les délais indiqués."
+      },
+      "faq": {
+        "title": "Questions fréquemment posées",
+        "question1": "Le jeûne est-il requis pour ce test ?",
+        "answer1Fast": "Oui, le jeûne est requis comme spécifié dans les exigences de préparation.",
+        "answer1NoFast": "Non, le jeûne n'est pas requis pour ce test, mais suivez toutes les autres directives de préparation.",
+        "question2": "Combien de temps faut-il pour obtenir les résultats ?",
+        "answer2": "Les résultats seront disponibles dans les {{time}} après le prélèvement de l'échantillon. Vous serez notifié par e-mail ou SMS.",
+        "question3": "Puis-je reprogrammer mon rendez-vous de prélèvement d'échantillon ?",
+        "answer3": "Oui, vous pouvez reprogrammer jusqu'à 4 heures avant votre rendez-vous sans frais supplémentaires."
+      },
+      "bookButton": "Réserver un prélèvement d'échantillon",
+      "discount": "{{discount}}% DE RÉDUCTION",
+      "resultsIn": "Résultats dans : {{time}}",
+      "disclaimer": "Les informations fournies sont uniquement à des fins éducatives. Consultez toujours un professionnel de la santé concernant vos résultats de test et vos conditions médicales.",
+      "notFound": {
+        "title": "Test non trouvé",
+        "backButton": "Retour à la pharmacie"
+      }
+    },
+    "allLabTests": {
+      "title": "Tous les tests de laboratoire",
+      "search": "Rechercher des tests de laboratoire...",
+      "sort": {
+        "title": "Trier par",
+        "priceLow": "Prix : Croissant",
+        "priceHigh": "Prix : Décroissant",
+        "turnaround": "Résultats les plus rapides",
+        "popularity": "Popularité"
+      },
+      "filter": {
+        "title": "Filtrer",
+        "category": "Catégorie",
+        "priceRange": "Fourchette de prix",
+        "apply": "Appliquer les filtres",
+        "clear": "Tout effacer"
+      },
+      "noTests": {
+        "title": "Aucun test de laboratoire trouvé",
+        "subtitle": "Essayez d'ajuster votre recherche ou vos filtres",
+        "clearFilters": "Effacer les filtres"
+      },
+      "results": "Résultats dans : {{time}}",
+      "preparation": "Préparation : {{prep}}",
+      "itemsFound": "{{count}} tests trouvés",
+      "bookTest": "Réserver un test"
+    },
+    "promotions": {
+      "healthEssentials": {
+        "title": "Essentiels de santé",
+        "description": "Obtenez 25% de réduction sur toutes les vitamines et suppléments"
+      },
+      "diabetesCare": {
+        "title": "Soins du diabète",
+        "description": "Surveillance gratuite de la glycémie pour tout achat supérieur à 30 000 XAF"
+      },
+      "babyMother": {
+        "title": "Bébé et maman",
+        "description": "Réductions spéciales sur les produits pour bébés cette semaine"
+      },
+      "shopNow": "Acheter maintenant",
+      "learnMore": "En savoir plus",
+      "viewOffers": "Voir les offres"
+    },
+    "prescription": {
+      "received": "Ordonnance reçue",
+      "receivedTime": "À l'instant",
+      "review": "Examen par le pharmacien",
+      "reviewTime": "Dans les 30 minutes",
+      "delivery": "Livraison",
+      "deliveryTime": "Le jour même si commandé avant 16h"
+    },
+    "promoCard": {
+      "title": "Besoin de vos médicaments livrés ?",
+      "description": "Téléchargez votre ordonnance et recevez vos médicaments directement chez vous",
+      "button": "Télécharger maintenant"
+    },
+    "orders": {
+      "title": "Mes Ordonnances",
+      "uploadNew": "Télécharger une nouvelle ordonnance",
+      "emptyTitle": "Pas encore d'ordonnances",
+      "emptyDescription": "Téléchargez une ordonnance et nos pharmaciens traiteront votre commande.",
+      "uploadButton": "Télécharger une ordonnance",
+      "itemsTitle": "Médicaments",
+      "viewDetails": "Voir les détails",
+      "expectedDelivery": "Livraison prévue",
+      "deliveredOn": "Livré le",
+      "total": "Total",
+      "status": {
+        "pendingReview": "En attente d'examen",
+        "processing": "En cours de traitement",
+        "readyForDelivery": "Prêt pour la livraison",
+        "delivered": "Livré",
+        "cancelled": "Annulé"
+      }
+    }
   },
   "furniture": {
     "allItems": "Tous les articles",
     "categories": "Catégories",
     "topPicks": "Meilleures sélections",
     "featured": "Articles en vedette"
+  },
+  "textiles": {
+    "headerTitle": "Textiles de Couture",
+    "searchPlaceholder": "Rechercher des tissus...",
+    "browseByFabricType": "Parcourir par type de tissu",
+    "fabricTypes": {
+      "all": "Tous",
+      "wool": "Laine",
+      "cotton": "Coton",
+      "linen": "Lin",
+      "silk": "Soie",
+      "tweed": "Tweed"
+    },
+    "featuredFabrics": "Tissus en vedette",
+    "allFabrics": "Tous les tissus",
+    "seeAll": "Voir tout",
+    "noFabricsFound": "Aucun tissu trouvé",
+    "tryAdjusting": "Essayez d'ajuster votre recherche ou vos filtres",
+    "fabricDetails": "Détails du tissu",
+    "fabricWeight": "Poids du tissu",
+    "fabricWidth": "Largeur du tissu",
+    "minimumOrder": "Commande minimale",
+    "availableColors": "Couleurs disponibles",
+    "requestSample": "Demander un échantillon",
+    "addToCart": "Ajouter au panier",
+    "scheduleTailorConsultation": "Planifier une consultation avec un tailleur",
+    "cart": {
+      "title": "Ajouter au panier",
+      "loading": "Chargement des informations sur le textile...",
+      "orderDetails": "Détails de la commande",
+      "selectColorsTitle": "Sélectionner les couleurs avec quantités et longueurs",
+      "prefilledText": "Sélectionnez les couleurs et spécifiez les quantités et longueurs pour chacune.",
+      "notes": "Notes additionnelles (Optionnel)",
+      "notesPlaceholder": "Besoins spéciaux ou instructions particulières",
+      "orderSummary": "Résumé de la commande",
+      "product": "Produit",
+      "pricePerMeter": "Prix par mètre",
+      "selectedColors": "Couleurs sélectionnées",
+      "noneSelected": "Aucune sélectionnée",
+      "totalPieces": "Total des pièces",
+      "piece": "pièce",
+      "pieces": "pièces",
+      "totalFabric": "Total du tissu",
+      "metersTotal": "mètres au total",
+      "totalPrice": "Prix total",
+      "length": "Longueur (m)",
+      "lengthUnit": "m",
+      "quantity": "Quantité",
+      "minimumOrderError": "La commande minimale est de {{length}} mètres",
+      "enterValidLength": "Veuillez entrer une longueur valide",
+      "continueButton": "Ajouter au panier",
+      "modalTitle": "Ajouté au panier",
+      "modalQuantity": "Quantité",
+      "modalTotal": "Total",
+      "modalSelectedColors": "Couleurs sélectionnées",
+      "continueShopping": "Continuer vos achats",
+      "viewCart": "Voir le panier"
+    },
+    "promotions": {
+      "premiumFabrics": {
+        "title": "Tissus Premium",
+        "description": "Profitez de 20% de réduction sur tous les tissus premium cette semaine",
+        "action": "Acheter maintenant"
+      },
+      "customTailoring": {
+        "title": "Couture sur mesure",
+        "description": "Consultation gratuite avec notre maître tailleur",
+        "action": "Réserver maintenant"
+      },
+      "newCollection": {
+        "title": "Nouvelle collection",
+        "description": "Explorez notre nouvelle collection saisonnière de tissus de luxe",
+        "action": "Voir la collection"
+      }
+    }
   },
   "chat": {
     "messages": "Messages",
@@ -99,5 +558,329 @@
     "passwordLength": "Le mot de passe doit comporter au moins 8 caractères",
     "networkError": "Erreur réseau. Veuillez vérifier votre connexion",
     "unknownError": "Quelque chose s'est mal passé. Veuillez réessayer"
+  },
+  "orders": {
+    "title": "Commandes",
+    "orderNumber": "Commande n°",
+    "date": "Date",
+    "items": "Articles",
+    "totalAmount": "Montant total",
+    "noOrders": "Vous n'avez pas encore de commandes",
+    "filter": {
+      "all": "Tous"
+    },
+    "status": {
+      "delivered": "Livré",
+      "intransit": "En transit",
+      "processing": "En cours",
+      "booked": "Réservé",
+      "readyforpickup": "Prêt à récupérer",
+      "completed": "Terminé"
+    },
+    "types": {
+      "furniture": "Meubles",
+      "pharmacy": "Pharmacie",
+      "grocery": "Épicerie",
+      "restaurant": "Restaurant",
+      "ride": "Trajet",
+      "car rental": "Location de voiture",
+      "textiles": "Textiles"
+    }
+  },
+  "home": {
+    "greeting": "Bonjour, {{name}}",
+    "whereToday": "Où allez-vous aujourd'hui ?",
+    "currentLocation": "Position actuelle",
+    "whereTo": "Où aller ?",
+    "recentPlaces": "Lieux récents",
+    "locations": {
+      "home": "Domicile",
+      "work": "Travail",
+      "gym": "Salle de sport"
+    },
+    "services": {
+      "ride": "Trajet",
+      "package": "Colis",
+      "pharmacy": "Pharmacie",
+      "grocery": "Épicerie",
+      "carRental": "Location de voiture",
+      "homeDecor": "Maison & Déco",
+      "textiles": "Textiles",
+      "food": "Nourriture"
+    },
+    "actions": {
+      "requestRide": "Demander un trajet",
+      "continueToSelectRide": "Continuer vers la sélection",
+      "browseCars": "Parcourir les voitures",
+      "sendPackage": "Envoyer un colis",
+      "browseTextiles": "Parcourir les textiles",
+      "browsePharmacy": "Parcourir la pharmacie",
+      "browseHomeDecor": "Parcourir maison & déco",
+      "browseGrocery": "Parcourir l'épicerie",
+      "browseRestaurants": "Parcourir les restaurants"
+    }
+  },
+  "carRental": {
+    "title": "Location de voiture",
+    "search": "Rechercher des voitures, catégories, caractéristiques...",
+    "browseByCategory": "Parcourir par catégorie",
+    "popularCars": "Voitures populaires",
+    "seeAll": "Voir tout",
+    "allCars": "Toutes les voitures",
+    "noResults": {
+      "title": "Aucune voiture trouvée",
+      "subtitle": "Essayez d'ajuster votre recherche ou votre filtre de catégorie"
+    },
+    "categories": {
+      "all": "Toutes",
+      "sedan": "Berline",
+      "suv": "SUV",
+      "pickup": "Pickup",
+      "luxury": "Luxe"
+    },
+    "car": {
+      "available": "Disponible",
+      "unavailable": "Indisponible",
+      "seats": "sièges",
+      "viewDetails": "Voir les détails",
+      "notAvailable": "Non disponible",
+      "features": "Caractéristiques",
+      "specifications": "Spécifications",
+      "day": "jour",
+      "transmission": "Transmission",
+      "fuelType": "Type de carburant"
+    },
+    "bookNow": "Réserver maintenant",
+    "promo": {
+      "title": "Offre spéciale !",
+      "description": "Obtenez 15% de réduction sur les locations hebdomadaires en réservant via notre application",
+      "code": "Utilisez le code : DRIVE15",
+      "action": "Appliquer maintenant"
+    },
+    "featured": {
+      "weekendSpecial": {
+        "title": "Spécial week-end !",
+        "description": "Obtenez 20% de réduction sur toutes les locations de week-end",
+        "action": "Réserver maintenant"
+      },
+      "premiumSUVs": {
+        "title": "SUVs Premium",
+        "description": "SUVs de luxe maintenant disponibles à des tarifs spéciaux",
+        "action": "Voir les options"
+      },
+      "extendedRentals": {
+        "title": "Locations prolongées",
+        "description": "Tarifs réduits pour les locations de plus de 7 jours",
+        "action": "En savoir plus"
+      }
+    }
+  },
+  "carBooking": {
+    "title": "Réserver votre voiture",
+    "rentalPeriod": "Période de location",
+    "pickupDate": "Date de prise en charge",
+    "pickupTime": "Heure de prise en charge",
+    "returnDate": "Date de retour",
+    "duration": "Durée",
+    "day": "jour",
+    "days": "jours",
+    "driverInfo": "Informations du conducteur",
+    "fullName": "Nom complet",
+    "phoneNumber": "Numéro de téléphone",
+    "emailAddress": "Adresse e-mail",
+    "driversLicense": "Permis de conduire",
+    "paymentMethod": {
+      "title": "Méthode de paiement",
+      "mobileMoney": "Mobile Money",
+      "creditCard": "Carte de crédit",
+      "cashOnPickup": "Paiement à la prise en charge"
+    },
+    "bookingSummary": {
+      "title": "Résumé de la réservation",
+      "carRental": "Location de voiture",
+      "insurance": "Assurance",
+      "included": "Incluse",
+      "securityDeposit": "Dépôt de garantie (Caution)",
+      "total": "Total",
+      "cautionRequired": "Caution requise"
+    },
+    "confirmBooking": "Confirmer la réservation",
+    "cancel": "Annuler",
+    "success": {
+      "title": "Réservation réussie !",
+      "subtitle": "Votre demande de location de voiture a été soumise.",
+      "notice": "Vous recevrez des confirmations par e-mail et SMS une fois votre réservation approuvée.",
+      "confirm": "Confirmer",
+      "toast": "Réservation réussie ! Votre location de voiture a été confirmée."
+    }
+  },
+  "package": {
+    "title": "Livraison de Colis",
+    "progress": {
+      "complete": "Complétez tous les champs pour continuer",
+      "ready": "Prêt à réserver !"
+    },
+    "promo": {
+      "title": "Livraison Rapide !",
+      "description": "Obtenez 20% de réduction sur votre première livraison avec le code FIRST20"
+    },
+    "packageType": {
+      "title": "Sélectionner le Type de Colis",
+      "document": "Document",
+      "small": "Petit Colis",
+      "medium": "Colis Moyen",
+      "large": "Grand Colis",
+      "documentDescription": "Lettres, documents - Tarif minimum",
+      "smallDescription": "Petits articles jusqu'à 3kg - Tarif minimum",
+      "mediumDescription": "Articles moyens jusqu'à 10kg - Tarif minimum",
+      "largeDescription": "Grands articles jusqu'à 30kg - Tarif minimum"
+    },
+    "pickup": {
+      "title": "Détails de la Collecte",
+      "date": "Date de Collecte",
+      "time": "Heure de Collecte",
+      "address": "Adresse de Collecte",
+      "addressPlaceholder": "Entrez l'adresse de collecte"
+    },
+    "packageInfo": {
+      "title": "Informations sur le Colis",
+      "details": "Détails du Colis",
+      "detailsPlaceholder": "Entrez la description du colis",
+      "weight": "Poids du Colis (kg)",
+      "weightPlaceholder": "Entrez le poids du colis",
+      "weightSurcharge": "Supplément de poids ({{weight}} kg au-dessus de 5kg)"
+    },
+    "delivery": {
+      "title": "Informations de Livraison",
+      "address": "Adresse de Livraison",
+      "addressPlaceholder": "Entrez l'adresse de livraison",
+      "recipientName": "Nom du Destinataire",
+      "recipientNamePlaceholder": "Entrez le nom complet du destinataire",
+      "recipientPhone": "Téléphone du Destinataire",
+      "recipientPhonePlaceholder": "Entrez le numéro de téléphone du destinataire"
+    },
+    "payment": {
+      "title": "Méthode de Paiement",
+      "creditCard": "Carte de Crédit",
+      "mobileMoney": "Mobile Money",
+      "cash": "Espèces"
+    },
+    "summary": {
+      "title": "Résumé des Prix",
+      "basePrice": "Prix de Base ({{type}})",
+      "total": "Total"
+    },
+    "action": {
+      "book": "Réserver la Livraison"
+    },
+    "confirmation": {
+      "title": "Confirmer la Réservation",
+      "message": "Vous êtes sur le point de réserver une livraison de colis pour {{price}} XAF.",
+      "packageType": "Type de Colis :",
+      "pickup": "Collecte :",
+      "from": "De :",
+      "to": "À :",
+      "notSpecified": "Non spécifié",
+      "cancel": "Annuler",
+      "confirm": "Confirmer la Réservation"
+    },
+    "success": {
+      "title": "Réservation Réussie !",
+      "message": "Votre livraison de colis a été planifiée. Vous recevrez un e-mail de confirmation sous peu."
+    },
+    "deliveryAgents": {
+      "title": "Sélectionner un Livreur",
+      "subtitle": "Choisissez un livreur pour votre colis",
+      "searchPlaceholder": "Rechercher des livreurs...",
+      "noAgents": "Aucun livreur disponible pour le moment",
+      "filter": {
+        "title": "Filtrer les Livreurs",
+        "all": "Tous les Livreurs",
+        "topRated": "Mieux Notés",
+        "nearest": "Plus Proches",
+        "fastestDelivery": "Livraison Rapide",
+        "apply": "Appliquer les Filtres"
+      },
+      "agent": {
+        "rating": "Évaluation",
+        "distanceAway": "À {{distance}} km",
+        "deliveryTime": "Livraison dans {{time}}",
+        "pickupTime": "Collecte dans {{time}}",
+        "price": "Frais de Livraison",
+        "availability": "Disponible",
+        "unavailable": "Indisponible",
+        "reviews": "Avis",
+        "viewDetails": "Voir les Détails",
+        "select": "Sélectionner"
+      },
+      "details": {
+        "title": "Détails du Livreur",
+        "about": "À propos",
+        "languages": "Langues",
+        "vehicle": "Véhicule",
+        "experience": "Expérience",
+        "deliveries": "Livraisons Effectuées",
+        "recentReviews": "Avis Récents",
+        "noReviews": "Pas encore d'avis"
+      },
+      "confirmation": {
+        "title": "Réservation Confirmée",
+        "message": "Votre livraison a été programmée avec {{agentName}}",
+        "details": "Détails de la Livraison",
+        "package": "Type de Colis",
+        "pickupTime": "Heure de Collecte",
+        "agentArrival": "Le livreur arrivera au point de collecte dans",
+        "deliveryEstimate": "Heure estimée de livraison",
+        "trackDelivery": "Suivre la Livraison",
+        "contactAgent": "Contacter le Livreur",
+        "close": "Terminé"
+      }
+    }
+  },
+  "delivery-agents": {
+    "title": "Choisir un Livreur",
+    "selectAgent": "Sélectionnez un livreur pour livrer votre colis",
+    "selectButton": "Sélectionner",
+    "selected": "Sélectionné",
+    "rating": "Évaluation",
+    "distance": "Distance",
+    "estimatedTime": "Heure d'arrivée estimée",
+    "available": "Disponible",
+    "vehicleType": "Type de Véhicule",
+    "bookingSummary": "Résumé de la Réservation",
+    "packageType": "Type de Colis",
+    "pickupAddress": "Adresse de Collecte",
+    "deliveryAddress": "Adresse de Livraison",
+    "selectedPickupTime": "Heure de Collecte Sélectionnée",
+    "confirmButton": "Confirmer",
+    "viewDetails": "Voir les Détails",
+    "close": "Fermer",
+    "success": {
+      "title": "Réservation Confirmée !",
+      "subtitle": "Votre livreur a été assigné",
+      "message": "{{name}} arrivera au lieu de collecte sous peu",
+      "trackDelivery": "Suivre la Livraison"
+    },
+    "details": {
+      "title": "Détails du Livreur",
+      "languages": "Langues",
+      "vehicle": "Véhicule",
+      "experience": "Expérience",
+      "deliveries": "Livraisons Effectuées",
+      "recentReviews": "Avis Récents",
+      "noReviews": "Pas encore d'avis"
+    },
+    "confirmation": {
+      "title": "Réservation Confirmée",
+      "message": "Votre livraison a été programmée avec {{agentName}}",
+      "details": "Détails de la Livraison",
+      "package": "Type de Colis",
+      "pickupTime": "Heure de Collecte",
+      "agentArrival": "Le livreur arrivera au point de collecte dans",
+      "deliveryEstimate": "Heure estimée de livraison",
+      "trackDelivery": "Suivre la Livraison",
+      "contactAgent": "Contacter le Livreur",
+      "close": "Terminé"
+    }
   }
 } 

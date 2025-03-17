@@ -14,6 +14,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { SimpleFormInput } from '../../components/FormInput';
 import LottieView from 'lottie-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 
 interface PackageBookingFormData {
   pickupDate: Date;
@@ -31,6 +32,7 @@ export default function PackageScreen() {
   const theme = useTheme();
   const router = useRouter();
   const animationRef = useRef<LottieView>(null);
+  const { t, i18n } = useTranslation();
   
   // Animation value for custom toast
   const toastAnim = useRef(new Animated.Value(0)).current;
@@ -169,29 +171,29 @@ export default function PackageScreen() {
     { 
       type: 'document', 
       icon: 'file-document-outline', 
-      label: 'Document', 
-      description: 'Letters, documents - Minimum fare',
+      label: t('package.packageType.document'), 
+      description: t('package.packageType.documentDescription'),
       basePrice: 500 
     },
     { 
       type: 'small', 
       icon: 'package-variant-closed', 
-      label: 'Small Package', 
-      description: 'Small items up to 3kg - Minimum fare',
+      label: t('package.packageType.small'), 
+      description: t('package.packageType.smallDescription'),
       basePrice: 1000 
     },
     { 
       type: 'medium', 
       icon: 'package-variant', 
-      label: 'Medium Package', 
-      description: 'Medium items up to 10kg - Minimum fare',
+      label: t('package.packageType.medium'), 
+      description: t('package.packageType.mediumDescription'),
       basePrice: 1500 
     },
     { 
       type: 'large', 
       icon: 'package', 
-      label: 'Large Package', 
-      description: 'Large items up to 30kg - Minimum fare',
+      label: t('package.packageType.large'), 
+      description: t('package.packageType.largeDescription'),
       basePrice: 2500 
     },
   ];
@@ -207,7 +209,7 @@ export default function PackageScreen() {
           color={theme.colors.onSurface}
           onPress={() => router.back()}
         />
-        <Text variant="titleLarge" style={styles.headerTitle}>Package Delivery</Text>
+        <Text variant="titleLarge" style={styles.headerTitle}>{t('package.title')}</Text>
         <IconButton
           icon="information-outline"
           size={24}
@@ -220,7 +222,7 @@ export default function PackageScreen() {
       <View style={styles.progressContainer}>
         <ProgressBar progress={formProgress / 100} color={theme.colors.primary} style={styles.progressBar} />
         <Text variant="bodySmall" style={styles.progressText}>
-          {formProgress < 100 ? "Complete all fields to continue" : "Ready to book!"}
+          {formProgress < 100 ? t('package.progress.complete') : t('package.progress.ready')}
         </Text>
       </View>
       
@@ -235,9 +237,9 @@ export default function PackageScreen() {
           >
             <View style={styles.promoBannerContent}>
               <View style={styles.promoBannerTextContent}>
-                <Text variant="titleMedium" style={styles.promoBannerTitle}>Fast Delivery!</Text>
+                <Text variant="titleMedium" style={styles.promoBannerTitle}>{t('package.promo.title')}</Text>
                 <Text variant="bodyMedium" style={styles.promoBannerDescription}>
-                  Get 20% off your first delivery with code FIRST20
+                  {t('package.promo.description')}
                 </Text>
               </View>
               <View style={styles.promoBannerIconContainer}>
@@ -249,7 +251,7 @@ export default function PackageScreen() {
         
         {/* Package Type Selection */}
         <Card style={styles.card}>
-          <Text variant="titleMedium" style={styles.sectionTitle}>Select Package Type</Text>
+          <Text variant="titleMedium" style={styles.sectionTitle}>{t('package.packageType.title')}</Text>
           
           <View style={styles.packageTypesGrid}>
             {packageOptions.map((option) => (
@@ -319,42 +321,42 @@ export default function PackageScreen() {
         <Card style={styles.card}>
           <View style={styles.cardHeaderRow}>
             <MaterialCommunityIcons name="map-marker" size={22} color={theme.colors.primary} />
-            <Text variant="titleMedium" style={styles.sectionTitle}>Pickup Details</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('package.pickup.title')}</Text>
           </View>
           
           <View style={styles.formRow}>
             <View style={styles.dateContainer}>
-              <Text variant="bodyMedium" style={styles.label}>Pickup Date</Text>
+              <Text variant="bodyMedium" style={styles.label}>{t('package.pickup.date')}</Text>
               <TouchableOpacity
                 style={[styles.datePicker, { borderColor: theme.colors.outline }]}
                 onPress={() => setShowPickupDatePicker(true)}
               >
                 <MaterialCommunityIcons name="calendar" size={20} color={theme.colors.primary} />
                 <Text variant="bodyMedium" style={{ marginLeft: 8 }}>
-                  {bookingForm.pickupDate.toLocaleDateString()}
+                  {bookingForm.pickupDate.toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
                 </Text>
               </TouchableOpacity>
             </View>
             
             <View style={styles.dateContainer}>
-              <Text variant="bodyMedium" style={styles.label}>Pickup Time</Text>
+              <Text variant="bodyMedium" style={styles.label}>{t('package.pickup.time')}</Text>
               <TouchableOpacity
                 style={[styles.datePicker, { borderColor: theme.colors.outline }]}
                 onPress={() => setShowPickupTimePicker(true)}
               >
                 <MaterialCommunityIcons name="clock-outline" size={20} color={theme.colors.primary} />
                 <Text variant="bodyMedium" style={{ marginLeft: 8 }}>
-                  {bookingForm.pickupTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {bookingForm.pickupTime.toLocaleTimeString(i18n.language === 'fr' ? 'fr-FR' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
           
           <SimpleFormInput
-            label="Pickup Address"
+            label={t('package.pickup.address')}
             value={bookingForm.pickupAddress}
             onChangeText={(text) => handleInputChange('pickupAddress', text)}
-            placeholder="Enter pickup address"
+            placeholder={t('package.pickup.addressPlaceholder')}
             containerStyle={{ marginTop: 16 }}
             icon="map-marker"
           />
@@ -364,14 +366,14 @@ export default function PackageScreen() {
         <Card style={styles.card}>
           <View style={styles.cardHeaderRow}>
             <MaterialCommunityIcons name="package-variant" size={22} color={theme.colors.primary} />
-            <Text variant="titleMedium" style={styles.sectionTitle}>Package Information</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('package.packageInfo.title')}</Text>
           </View>
           
           <SimpleFormInput
-            label="Package Details"
+            label={t('package.packageInfo.details')}
             value={bookingForm.packageDetails}
             onChangeText={(text) => handleInputChange('packageDetails', text)}
-            placeholder="Enter package description"
+            placeholder={t('package.packageInfo.detailsPlaceholder')}
             multiline
             numberOfLines={3}
             containerStyle={{ marginTop: 8 }}
@@ -379,10 +381,10 @@ export default function PackageScreen() {
           />
           
           <SimpleFormInput
-            label="Package Weight (kg)"
+            label={t('package.packageInfo.weight')}
             value={bookingForm.packageWeight}
             onChangeText={(text) => handleInputChange('packageWeight', text)}
-            placeholder="Enter package weight"
+            placeholder={t('package.packageInfo.weightPlaceholder')}
             containerStyle={{ marginTop: 16 }}
             keyboardType="numeric"
             icon="weight-kilogram"
@@ -393,32 +395,32 @@ export default function PackageScreen() {
         <Card style={styles.card}>
           <View style={styles.cardHeaderRow}>
             <MaterialCommunityIcons name="map-marker-radius" size={22} color={theme.colors.primary} />
-            <Text variant="titleMedium" style={styles.sectionTitle}>Delivery Information</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('package.delivery.title')}</Text>
           </View>
           
           <SimpleFormInput
-            label="Delivery Address"
+            label={t('package.delivery.address')}
             value={bookingForm.deliveryAddress}
             onChangeText={(text) => handleInputChange('deliveryAddress', text)}
-            placeholder="Enter delivery address"
+            placeholder={t('package.delivery.addressPlaceholder')}
             containerStyle={{ marginTop: 8 }}
             icon="map-marker-radius"
           />
           
           <SimpleFormInput
-            label="Recipient Name"
+            label={t('package.delivery.recipientName')}
             value={bookingForm.recipientName}
             onChangeText={(text) => handleInputChange('recipientName', text)}
-            placeholder="Enter recipient's full name"
+            placeholder={t('package.delivery.recipientNamePlaceholder')}
             containerStyle={{ marginTop: 16 }}
             icon="account"
           />
           
           <SimpleFormInput
-            label="Recipient Phone"
+            label={t('package.delivery.recipientPhone')}
             value={bookingForm.recipientPhone}
             onChangeText={(text) => handleInputChange('recipientPhone', text)}
-            placeholder="Enter recipient's phone number"
+            placeholder={t('package.delivery.recipientPhonePlaceholder')}
             containerStyle={{ marginTop: 16 }}
             keyboardType="phone-pad"
             icon="phone"
@@ -429,7 +431,7 @@ export default function PackageScreen() {
         <Card style={styles.card}>
           <View style={styles.cardHeaderRow}>
             <MaterialCommunityIcons name="wallet" size={22} color={theme.colors.primary} />
-            <Text variant="titleMedium" style={styles.sectionTitle}>Payment Method</Text>
+            <Text variant="titleMedium" style={styles.sectionTitle}>{t('package.payment.title')}</Text>
           </View>
           
           <View style={styles.paymentOptions}>
@@ -463,7 +465,7 @@ export default function PackageScreen() {
                   color: bookingForm.paymentMethod === 'credit_card' ? theme.colors.primary : theme.colors.onSurface,
                 }}
               >
-                Credit Card
+                {t('package.payment.creditCard')}
               </Text>
             </TouchableOpacity>
             
@@ -497,7 +499,7 @@ export default function PackageScreen() {
                   color: bookingForm.paymentMethod === 'mobile_money' ? theme.colors.primary : theme.colors.onSurface,
                 }}
               >
-                Mobile Money
+                {t('package.payment.mobileMoney')}
               </Text>
             </TouchableOpacity>
             
@@ -531,7 +533,7 @@ export default function PackageScreen() {
                   color: bookingForm.paymentMethod === 'cash' ? theme.colors.primary : theme.colors.onSurface,
                 }}
               >
-                Cash
+                {t('package.payment.cash')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -547,17 +549,21 @@ export default function PackageScreen() {
           >
             <View style={styles.cardHeaderRow}>
               <MaterialCommunityIcons name="receipt" size={22} color={theme.colors.primary} />
-              <Text variant="titleMedium" style={styles.sectionTitle}>Price Summary</Text>
+              <Text variant="titleMedium" style={styles.sectionTitle}>{t('package.summary.title')}</Text>
             </View>
             
             <View style={styles.priceSummaryRow}>
-              <Text variant="bodyMedium">Base Price ({packageType})</Text>
+              <Text variant="bodyMedium">
+                {t('package.summary.basePrice', { type: t(`package.packageType.${packageType}`) })}
+              </Text>
               <Text variant="bodyMedium">{packageOptions.find(opt => opt.type === packageType)?.basePrice} XAF</Text>
             </View>
             
             {parseFloat(bookingForm.packageWeight) > 5 && (
               <View style={styles.priceSummaryRow}>
-                <Text variant="bodyMedium">Weight Surcharge ({parseFloat(bookingForm.packageWeight) - 5} kg over 5kg)</Text>
+                <Text variant="bodyMedium">
+                  {t('package.packageInfo.weightSurcharge', { weight: (parseFloat(bookingForm.packageWeight) - 5).toFixed(1) })}
+                </Text>
                 <Text variant="bodyMedium">{((parseFloat(bookingForm.packageWeight) - 5) * 200).toFixed(0)} XAF</Text>
               </View>
             )}
@@ -565,7 +571,7 @@ export default function PackageScreen() {
             <Divider style={{ marginVertical: 12 }} />
             
             <View style={styles.priceSummaryTotal}>
-              <Text variant="titleMedium" style={{ fontWeight: '700' }}>Total</Text>
+              <Text variant="titleMedium" style={{ fontWeight: '700' }}>{t('package.summary.total')}</Text>
               <Text variant="headlineSmall" style={{ fontWeight: '700', color: theme.colors.primary }}>
                 {calculatePackagePrice().toFixed(0)} XAF
               </Text>
@@ -581,7 +587,7 @@ export default function PackageScreen() {
           labelStyle={{ fontSize: 16, fontWeight: 'bold' }}
           contentStyle={{ paddingVertical: 8 }}
         >
-          Book Delivery
+          {t('package.action.book')}
         </Button>
       </ScrollView>
       
@@ -593,6 +599,7 @@ export default function PackageScreen() {
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           onChange={onPickupDateChange}
           minimumDate={new Date()}
+          locale={i18n.language}
         />
       )}
       
@@ -602,6 +609,7 @@ export default function PackageScreen() {
           mode="time"
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           onChange={onPickupTimeChange}
+          locale={i18n.language}
         />
       )}
       
@@ -620,50 +628,52 @@ export default function PackageScreen() {
             />
           </View>
           <Dialog.Content>
-            <Text variant="titleLarge" style={{ marginBottom: 12, textAlign: 'center', fontWeight: '700' }}>Confirm Booking</Text>
+            <Text variant="titleLarge" style={{ marginBottom: 12, textAlign: 'center', fontWeight: '700' }}>
+              {t('package.confirmation.title')}
+            </Text>
             <Text variant="bodyMedium" style={{ textAlign: 'center', marginBottom: 16 }}>
-              You are about to book a package delivery for <Text style={{ fontWeight: 'bold', color: theme.colors.primary }}>{calculatePackagePrice().toFixed(0)} XAF</Text>.
+              {t('package.confirmation.message', { price: calculatePackagePrice().toFixed(0) })}
             </Text>
             <View style={styles.confirmationDetails}>
               <View style={styles.confirmationRow}>
                 <MaterialCommunityIcons name="package-variant" size={18} color={theme.colors.primary} />
-                <Text variant="bodyMedium" style={styles.confirmationLabel}>Package Type:</Text>
+                <Text variant="bodyMedium" style={styles.confirmationLabel}>{t('package.confirmation.packageType')}</Text>
                 <Text variant="bodyMedium" style={styles.confirmationValue}>
-                  {packageOptions.find(opt => opt.type === packageType)?.label}
+                  {t(`package.packageType.${packageType}`)}
                 </Text>
               </View>
               
               <View style={styles.confirmationRow}>
                 <MaterialCommunityIcons name="calendar-clock" size={18} color={theme.colors.primary} />
-                <Text variant="bodyMedium" style={styles.confirmationLabel}>Pickup:</Text>
+                <Text variant="bodyMedium" style={styles.confirmationLabel}>{t('package.confirmation.pickup')}</Text>
                 <Text variant="bodyMedium" style={styles.confirmationValue}>
-                  {bookingForm.pickupDate.toLocaleDateString()} at {bookingForm.pickupTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {bookingForm.pickupDate.toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')} at {bookingForm.pickupTime.toLocaleTimeString(i18n.language === 'fr' ? 'fr-FR' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
                 </Text>
               </View>
               
               <View style={styles.confirmationRow}>
                 <MaterialCommunityIcons name="map-marker" size={18} color={theme.colors.primary} />
-                <Text variant="bodyMedium" style={styles.confirmationLabel}>From:</Text>
+                <Text variant="bodyMedium" style={styles.confirmationLabel}>{t('package.confirmation.from')}</Text>
                 <Text variant="bodyMedium" style={styles.confirmationValue} numberOfLines={1}>
-                  {bookingForm.pickupAddress || 'Not specified'}
+                  {bookingForm.pickupAddress || t('package.confirmation.notSpecified')}
                 </Text>
               </View>
               
               <View style={styles.confirmationRow}>
                 <MaterialCommunityIcons name="map-marker-radius" size={18} color={theme.colors.primary} />
-                <Text variant="bodyMedium" style={styles.confirmationLabel}>To:</Text>
+                <Text variant="bodyMedium" style={styles.confirmationLabel}>{t('package.confirmation.to')}</Text>
                 <Text variant="bodyMedium" style={styles.confirmationValue} numberOfLines={1}>
-                  {bookingForm.deliveryAddress || 'Not specified'}
+                  {bookingForm.deliveryAddress || t('package.confirmation.notSpecified')}
                 </Text>
               </View>
             </View>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowConfirmDialog(false)} mode="outlined" style={{ borderRadius: 8 }}>
-              Cancel
+              {t('package.confirmation.cancel')}
             </Button>
             <Button onPress={handleConfirmBooking} mode="contained" style={{ borderRadius: 8 }}>
-              Confirm Booking
+              {t('package.confirmation.confirm')}
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -681,11 +691,10 @@ export default function PackageScreen() {
               style={{ marginBottom: 16 }}
             />
             <Text variant="titleMedium" style={{ textAlign: 'center', marginBottom: 8, fontWeight: '700' }}>
-              Booking Successful!
+              {t('package.success.title')}
             </Text>
             <Text variant="bodyMedium" style={{ textAlign: 'center' }}>
-              Your package delivery has been scheduled.
-              You will receive a confirmation email shortly.
+              {t('package.success.message')}
             </Text>
           </Dialog.Content>
         </Dialog>

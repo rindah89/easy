@@ -23,7 +23,19 @@
     "selectLanguage": "Select Language",
     "english": "English",
     "french": "French",
-    "selectService": "What would you like to do today?"
+    "selectService": "What would you like to do today?",
+    "getStarted": "Get Started",
+    "continue": "Continue",
+    "done": "Done",
+    "ok": "OK",
+    "filter": "Filter",
+    "sort": "Sort",
+    "clear": "Clear",
+    "apply": "Apply",
+    "notifications": "Notifications",
+    "currency": "XAF {{price}}",
+    "error": "Error",
+    "permissionDenied": "Permission Denied"
   },
   "auth": {
     "email": "Email",
@@ -33,7 +45,15 @@
     "createAccount": "Create new account",
     "alreadyHaveAccount": "Already have an account?",
     "resetPassword": "Reset Password",
-    "resetInstructions": "Enter your email to receive reset instructions"
+    "resetInstructions": "Enter your email to receive reset instructions",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "phoneNumber": "Phone Number",
+    "termsConditions": "Terms & Conditions",
+    "privacyPolicy": "Privacy Policy",
+    "dontHaveAccount": "Don't have an account?"
   },
   "profile": {
     "title": "Profile",
@@ -48,6 +68,13 @@
     "changePhoto": "Change photo",
     "noName": "User",
     "logoutConfirmTitle": "Sign Out",
+    "logoutConfirmMessage": "Are you sure you want to sign out?",
+    "personalInfo": "Personal Information",
+    "addresses": "Addresses",
+    "paymentMethods": "Payment Methods",
+    "orders": "Orders",
+    "support": "Support",
+    "language": "Language",
     "logoutConfirmMessage": "Are you sure you want to sign out?"
   },
   "rides": {
@@ -76,9 +103,268 @@
     "labTests": "Lab Tests",
     "orders": "Orders",
     "prescription": "Prescription",
-    "bookSampleCollection": "Book Sample Collection",
-    "allMedications": "All Medications",
-    "allLabTests": "All Lab Tests"
+    "bookSampleCollection": {
+      "title": "Book Lab Sample Collection",
+      "personalInfo": "Personal Information",
+      "fullName": "Full Name",
+      "phoneNumber": "Phone Number",
+      "emailAddress": "Email Address",
+      "address": "Home Address",
+      "selectDate": "Select Date",
+      "selectTime": "Select Time",
+      "tests": "Select Tests",
+      "testsSubtitle": "Choose the tests you want to book",
+      "paymentMethod": "Payment Method",
+      "cashOnCollection": "Cash on Collection",
+      "mobileMoney": "Mobile Money",
+      "creditCard": "Credit Card",
+      "specialInstructions": "Special Instructions (optional)",
+      "disclaimer": "By confirming this booking, you agree to be available at the specified address during the selected time slot. Cancellations should be made at least 4 hours before the appointment.",
+      "summary": {
+        "title": "Booking Summary",
+        "selectedTests": "Selected Tests",
+        "collectionFee": "Home Collection Fee",
+        "total": "Total",
+        "freeCollection": "Free"
+      },
+      "confirmBooking": "Confirm Booking",
+      "success": {
+        "title": "Booking Successful",
+        "message": "Your sample collection has been scheduled for {{date}} at {{time}}",
+        "labRepresentative": "A lab representative will contact you to confirm the appointment.",
+        "viewBookings": "View My Bookings",
+        "backToHome": "Back to Home"
+      },
+      "howItWorks": "How It Works",
+      "howItWorks.step1": "Schedule a convenient time for sample collection",
+      "howItWorks.step2": "Our technician will visit your home to collect samples",
+      "howItWorks.step3": "Samples are tested in our certified laboratory",
+      "howItWorks.step4": "Results are securely delivered to you within the specified time",
+      "selectTests": "Select Tests",
+      "scheduleAppointment": "Schedule Appointment",
+      "contactInformation": "Contact Information",
+      "total": "Total",
+      "discount": "Collection fee waived on orders above XAF 50,000"
+    },
+    "orderDetails": {
+      "title": "Order Details",
+      "orderNumber": "Order Number",
+      "orderDate": "Order Date",
+      "orderStatus": "Order Status",
+      "orderItems": "Order Items",
+      "deliveryAddress": "Delivery Address",
+      "paymentMethod": "Payment Method",
+      "contactPharmacist": "Contact Pharmacist",
+      "subtotal": "Subtotal",
+      "deliveryFee": "Delivery Fee",
+      "orderTotal": "Order Total",
+      "pharmacistNotes": "Pharmacist Notes",
+      "timeline": {
+        "title": "Order Timeline",
+        "orderPlaced": "Order Placed",
+        "orderProcessing": "Order Processing",
+        "orderReady": "Order Ready",
+        "orderDelivered": "Order Delivered"
+      },
+      "tracking": {
+        "title": "Track Delivery",
+        "message": "You can track your order here once it's dispatched"
+      },
+      "status": "Order Status",
+      "prescription": "Prescription",
+      "items": "Order Items",
+      "quantity": "Quantity",
+      "instructions": "Special Instructions",
+      "prescriptionOnly": "Prescription Only Order",
+      "prescriptionOnlyMessage": "This order is based on your uploaded prescription. Our pharmacist has processed it according to your doctor's instructions.",
+      "deliveryInfo": "Delivery Information",
+      "note": "Note:",
+      "estimatedDelivery": "Estimated Delivery",
+      "toBeScheduled": "To be scheduled",
+      "delivered": "Delivered on",
+      "paymentMethod": "Payment Method",
+      "pharmacistNotes": "Pharmacist Notes",
+      "pharmacist": "Pharmacist",
+      "callPharmacist": "Call Pharmacist",
+      "orderSummary": "Order Summary",
+      "total": "Total",
+      "contactSupport": "Contact Support",
+      "trackDelivery": "Track Delivery",
+      "notFound": {
+        "title": "Order not found",
+        "backButton": "Back to Orders"
+      }
+    },
+    "medication": {
+      "addToCart": "Add to Cart",
+      "description": "Description",
+      "dosage": "Dosage",
+      "form": "Form",
+      "manufacturer": "Manufacturer",
+      "sideEffects": "Side Effects",
+      "requiresPrescription": "Requires Prescription",
+      "quantity": "Quantity",
+      "alternatives": "Alternative Medications",
+      "rating": "Rating",
+      "reviews": "Reviews",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+      "back": "Back to Pharmacy",
+      "pricePerUnit": "Price per unit",
+      "yes": "Yes",
+      "no": "No",
+      "prescriptionRequired": {
+        "title": "Prescription Required",
+        "message": "This medication requires a valid prescription. Would you like to upload a prescription now?",
+        "uploadNow": "Upload Now",
+        "cancel": "Cancel"
+      },
+      "addedToCart": {
+        "title": "Added to Cart",
+        "message": "{{quantity}} x {{name}} has been added to your cart",
+        "totalPrice": "Total: XAF {{price}}",
+        "viewCart": "View Cart",
+        "continueShopping": "Continue Shopping"
+      }
+    },
+    "allMedications": {
+      "title": "All Medications",
+      "search": "Search medications...",
+      "sort": {
+        "title": "Sort By",
+        "priceLow": "Price: Low to High",
+        "priceHigh": "Price: High to Low",
+        "rating": "Rating",
+        "popularity": "Popularity"
+      },
+      "filter": {
+        "title": "Filter",
+        "category": "Category",
+        "priceRange": "Price Range",
+        "availability": "Availability",
+        "apply": "Apply Filters",
+        "clear": "Clear All",
+        "inStock": "In Stock"
+      },
+      "noMedications": {
+        "title": "No Medications Found",
+        "subtitle": "Try adjusting your search or filters",
+        "clearFilters": "Clear Filters"
+      },
+      "itemsFound": "{{count}} items found"
+    },
+    "labTest": {
+      "title": "Lab Test Details",
+      "loading": "Loading test details...",
+      "about": "About This Test",
+      "preparation": "Preparation Requirements",
+      "recommendedFor": "Recommended For",
+      "collectionProcess": {
+        "title": "Sample Collection Process",
+        "step1Title": "Book Your Slot",
+        "step1Description": "Schedule a convenient time for our phlebotomist to visit your home.",
+        "step2Title": "Sample Collection",
+        "step2Description": "Our trained professional will collect your blood sample following all safety protocols.",
+        "step3Title": "Lab Processing",
+        "step3Description": "Your sample is securely transported to our certified lab for testing.",
+        "step4Title": "Get Results",
+        "step4Description": "Access your reports online or receive them via email within the specified turnaround time."
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "question1": "Is fasting required for this test?",
+        "answer1Fast": "Yes, fasting is required as specified in the preparation requirements.",
+        "answer1NoFast": "No, fasting is not required for this test, but follow any other preparation guidelines.",
+        "question2": "How long does it take to get the results?",
+        "answer2": "Results will be available within {{time}} after the sample is collected. You'll be notified via email or SMS.",
+        "question3": "Can I reschedule my sample collection appointment?",
+        "answer3": "Yes, you can reschedule up to 4 hours before your scheduled appointment without any additional charges."
+      },
+      "bookButton": "Book Sample Collection",
+      "discount": "{{discount}}% OFF",
+      "resultsIn": "Results in: {{time}}",
+      "disclaimer": "The information provided is for educational purposes only. Always consult with a healthcare professional about your test results and medical conditions.",
+      "notFound": {
+        "title": "Test not found",
+        "backButton": "Back to Pharmacy"
+      }
+    },
+    "allLabTests": {
+      "title": "All Lab Tests",
+      "search": "Search lab tests...",
+      "sort": {
+        "title": "Sort By",
+        "priceLow": "Price: Low to High",
+        "priceHigh": "Price: High to Low",
+        "turnaround": "Fastest Results",
+        "popularity": "Popularity"
+      },
+      "filter": {
+        "title": "Filter",
+        "category": "Category",
+        "priceRange": "Price Range",
+        "apply": "Apply Filters",
+        "clear": "Clear All"
+      },
+      "noTests": {
+        "title": "No Lab Tests Found",
+        "subtitle": "Try adjusting your search or filters",
+        "clearFilters": "Clear Filters"
+      },
+      "results": "Results in: {{time}}",
+      "preparation": "Preparation: {{prep}}",
+      "itemsFound": "{{count}} tests found",
+      "bookTest": "Book Test"
+    },
+    "promotions": {
+      "healthEssentials": {
+        "title": "Health Essentials",
+        "description": "Get 25% off on all vitamins and supplements"
+      },
+      "diabetesCare": {
+        "title": "Diabetes Care",
+        "description": "Free glucose monitoring with any purchase over XAF 30,000"
+      },
+      "babyMother": {
+        "title": "Baby & Mother",
+        "description": "Special discounts on baby care products this week"
+      },
+      "shopNow": "Shop Now",
+      "learnMore": "Learn More",
+      "viewOffers": "View Offers"
+    },
+    "prescription": {
+      "received": "Prescription Received",
+      "receivedTime": "Just now",
+      "review": "Pharmacist Review",
+      "reviewTime": "Within 30 minutes",
+      "delivery": "Delivery",
+      "deliveryTime": "Same day if ordered before 4 PM"
+    },
+    "promoCard": {
+      "title": "Need your medicine delivered?",
+      "description": "Upload your prescription and get your medicines delivered to your doorstep",
+      "button": "Upload Now"
+    },
+    "orders": {
+      "title": "My Prescriptions",
+      "uploadNew": "Upload New Prescription",
+      "emptyTitle": "No Prescriptions Yet",
+      "emptyDescription": "Upload a prescription and our pharmacists will process your order.",
+      "uploadButton": "Upload Prescription",
+      "itemsTitle": "Medications",
+      "viewDetails": "View Details",
+      "expectedDelivery": "Expected delivery",
+      "deliveredOn": "Delivered on",
+      "total": "Total",
+      "status": {
+        "pendingReview": "Pending Review",
+        "processing": "Processing",
+        "readyForDelivery": "Ready for Delivery",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      }
+    }
   },
   "furniture": {
     "allItems": "All Items",
@@ -99,5 +385,329 @@
     "passwordLength": "Password must be at least 8 characters",
     "networkError": "Network error. Please check your connection",
     "unknownError": "Something went wrong. Please try again"
+  },
+  "orders": {
+    "title": "Orders",
+    "orderNumber": "Order #",
+    "date": "Date",
+    "items": "Items",
+    "totalAmount": "Total Amount",
+    "noOrders": "You don't have any orders yet",
+    "filter": {
+      "all": "All"
+    },
+    "status": {
+      "delivered": "Delivered",
+      "intransit": "In Transit",
+      "processing": "Processing",
+      "booked": "Booked",
+      "readyforpickup": "Ready for Pickup",
+      "completed": "Completed"
+    },
+    "types": {
+      "furniture": "Furniture",
+      "pharmacy": "Pharmacy",
+      "grocery": "Grocery",
+      "restaurant": "Restaurant",
+      "ride": "Ride",
+      "car rental": "Car Rental",
+      "textiles": "Textiles"
+    }
+  },
+  "home": {
+    "greeting": "Hello, {{name}}",
+    "whereToday": "Where are you going today?",
+    "currentLocation": "Current location",
+    "whereTo": "Where to?",
+    "recentPlaces": "Recent Places",
+    "locations": {
+      "home": "Home",
+      "work": "Work",
+      "gym": "Gym"
+    },
+    "services": {
+      "ride": "Ride",
+      "package": "Package",
+      "pharmacy": "Pharmacy",
+      "grocery": "Grocery",
+      "carRental": "Car Rental",
+      "homeDecor": "Home & Decor",
+      "textiles": "Textiles",
+      "food": "Food"
+    },
+    "actions": {
+      "requestRide": "Request Ride",
+      "continueToSelectRide": "Continue to Select Ride",
+      "browseCars": "Browse Cars",
+      "sendPackage": "Send Package",
+      "browseTextiles": "Browse Textiles",
+      "browsePharmacy": "Browse Pharmacy",
+      "browseHomeDecor": "Browse Home & Decor",
+      "browseGrocery": "Browse Grocery",
+      "browseRestaurants": "Browse Restaurants"
+    }
+  },
+  "carRental": {
+    "title": "Car Rental",
+    "search": "Search for cars, categories, features...",
+    "browseByCategory": "Browse by Category",
+    "popularCars": "Popular Cars",
+    "seeAll": "See All",
+    "allCars": "All Cars",
+    "noResults": {
+      "title": "No cars found",
+      "subtitle": "Try adjusting your search or category filter"
+    },
+    "categories": {
+      "all": "All",
+      "sedan": "Sedan",
+      "suv": "SUV",
+      "pickup": "Pickup",
+      "luxury": "Luxury"
+    },
+    "car": {
+      "available": "Available Now",
+      "unavailable": "Currently Unavailable",
+      "seats": "seats",
+      "viewDetails": "View Details",
+      "notAvailable": "Not Available",
+      "features": "Features",
+      "specifications": "Specifications",
+      "day": "day",
+      "transmission": "Transmission",
+      "fuelType": "Fuel Type"
+    },
+    "bookNow": "Book Now",
+    "promo": {
+      "title": "Special Offer!",
+      "description": "Get 15% off on weekly rentals when you book through our app",
+      "code": "Use code: DRIVE15",
+      "action": "Apply Now"
+    },
+    "featured": {
+      "weekendSpecial": {
+        "title": "Weekend Special!",
+        "description": "Get 20% off on all weekend rentals",
+        "action": "Book Now"
+      },
+      "premiumSUVs": {
+        "title": "Premium SUVs",
+        "description": "Luxury SUVs now available at special rates",
+        "action": "View Options"
+      },
+      "extendedRentals": {
+        "title": "Extended Rentals",
+        "description": "Discounted rates for rentals over 7 days",
+        "action": "Learn More"
+      }
+    }
+  },
+  "carBooking": {
+    "title": "Book Your Car",
+    "rentalPeriod": "Rental Period",
+    "pickupDate": "Pickup Date",
+    "pickupTime": "Pickup Time",
+    "returnDate": "Return Date",
+    "duration": "Duration",
+    "day": "day",
+    "days": "days",
+    "driverInfo": "Driver Information",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "emailAddress": "Email Address",
+    "driversLicense": "Driver's License",
+    "paymentMethod": {
+      "title": "Payment Method",
+      "mobileMoney": "Mobile Money",
+      "creditCard": "Credit Card",
+      "cashOnPickup": "Cash on Pickup"
+    },
+    "bookingSummary": {
+      "title": "Booking Summary",
+      "carRental": "Car Rental",
+      "insurance": "Insurance",
+      "included": "Included",
+      "securityDeposit": "Security Deposit (Caution)",
+      "total": "Total",
+      "cautionRequired": "Caution Required"
+    },
+    "confirmBooking": "Confirm Booking",
+    "cancel": "Cancel",
+    "success": {
+      "title": "Booking Successful!",
+      "subtitle": "Your car rental request has been submitted.",
+      "notice": "You will receive email and SMS confirmations once your booking is approved.",
+      "confirm": "Confirm",
+      "toast": "Booking successful! Your car rental has been confirmed."
+    }
+  },
+  "package": {
+    "title": "Package Delivery",
+    "progress": {
+      "complete": "Complete all fields to continue",
+      "ready": "Ready to book!"
+    },
+    "promo": {
+      "title": "Fast Delivery!",
+      "description": "Get 20% off your first delivery with code FIRST20"
+    },
+    "packageType": {
+      "title": "Select Package Type",
+      "document": "Document",
+      "small": "Small Package",
+      "medium": "Medium Package",
+      "large": "Large Package",
+      "documentDescription": "Letters, documents - Minimum fare",
+      "smallDescription": "Small items up to 3kg - Minimum fare",
+      "mediumDescription": "Medium items up to 10kg - Minimum fare",
+      "largeDescription": "Large items up to 30kg - Minimum fare"
+    },
+    "pickup": {
+      "title": "Pickup Details",
+      "date": "Pickup Date",
+      "time": "Pickup Time",
+      "address": "Pickup Address",
+      "addressPlaceholder": "Enter pickup address"
+    },
+    "packageInfo": {
+      "title": "Package Information",
+      "details": "Package Details",
+      "detailsPlaceholder": "Enter package description",
+      "weight": "Package Weight (kg)",
+      "weightPlaceholder": "Enter package weight",
+      "weightSurcharge": "Weight Surcharge ({{weight}} kg over 5kg)"
+    },
+    "delivery": {
+      "title": "Delivery Information",
+      "address": "Delivery Address",
+      "addressPlaceholder": "Enter delivery address",
+      "recipientName": "Recipient Name",
+      "recipientNamePlaceholder": "Enter recipient's full name",
+      "recipientPhone": "Recipient Phone",
+      "recipientPhonePlaceholder": "Enter recipient's phone number"
+    },
+    "payment": {
+      "title": "Payment Method",
+      "creditCard": "Credit Card",
+      "mobileMoney": "Mobile Money",
+      "cash": "Cash"
+    },
+    "summary": {
+      "title": "Price Summary",
+      "basePrice": "Base Price ({{type}})",
+      "total": "Total"
+    },
+    "action": {
+      "book": "Book Delivery"
+    },
+    "confirmation": {
+      "title": "Confirm Booking",
+      "message": "You are about to book a package delivery for {{price}} XAF.",
+      "packageType": "Package Type:",
+      "pickup": "Pickup:",
+      "from": "From:",
+      "to": "To:",
+      "notSpecified": "Not specified",
+      "cancel": "Cancel",
+      "confirm": "Confirm Booking"
+    },
+    "success": {
+      "title": "Booking Successful!",
+      "message": "Your package delivery has been scheduled. You will receive a confirmation email shortly."
+    },
+    "deliveryAgents": {
+      "title": "Select Delivery Agent",
+      "subtitle": "Choose a delivery agent for your package",
+      "searchPlaceholder": "Search for agents...",
+      "noAgents": "No delivery agents available at the moment",
+      "filter": {
+        "title": "Filter Agents",
+        "all": "All Agents",
+        "topRated": "Top Rated",
+        "nearest": "Nearest",
+        "fastestDelivery": "Fastest Delivery",
+        "apply": "Apply Filters"
+      },
+      "agent": {
+        "rating": "Rating",
+        "distanceAway": "{{distance}} km away",
+        "deliveryTime": "Delivery in {{time}}",
+        "pickupTime": "Pickup in {{time}}",
+        "price": "Delivery Fee",
+        "availability": "Available",
+        "unavailable": "Unavailable",
+        "reviews": "Reviews",
+        "viewDetails": "View Details",
+        "select": "Select"
+      },
+      "details": {
+        "title": "Delivery Agent Details",
+        "about": "About",
+        "languages": "Languages",
+        "vehicle": "Vehicle",
+        "experience": "Experience",
+        "deliveries": "Deliveries Completed",
+        "recentReviews": "Recent Reviews",
+        "noReviews": "No reviews yet"
+      },
+      "confirmation": {
+        "title": "Booking Confirmed",
+        "message": "Your delivery has been scheduled with {{agentName}}",
+        "details": "Delivery Details",
+        "package": "Package Type",
+        "pickupTime": "Pickup Time",
+        "agentArrival": "Agent will arrive at pickup location in",
+        "deliveryEstimate": "Estimated delivery time",
+        "trackDelivery": "Track Delivery",
+        "contactAgent": "Contact Agent",
+        "close": "Done"
+      }
+    }
+  },
+  "delivery-agents": {
+    "title": "Choose Delivery Agent",
+    "selectAgent": "Select an agent to deliver your package",
+    "selectButton": "Select",
+    "selected": "Selected",
+    "rating": "Rating",
+    "distance": "Distance",
+    "estimatedTime": "Est. arrival time",
+    "available": "Available",
+    "vehicleType": "Vehicle Type",
+    "bookingSummary": "Booking Summary",
+    "packageType": "Package Type",
+    "pickupAddress": "Pickup Address",
+    "deliveryAddress": "Delivery Address",
+    "selectedPickupTime": "Selected Pickup Time",
+    "confirmButton": "Confirm",
+    "viewDetails": "View Details",
+    "close": "Close",
+    "success": {
+      "title": "Booking Confirmed!",
+      "subtitle": "Your delivery agent has been assigned",
+      "message": "{{name}} will arrive at the pickup location shortly",
+      "trackDelivery": "Track Delivery"
+    },
+    "details": {
+      "title": "Agent Details",
+      "languages": "Languages",
+      "vehicle": "Vehicle",
+      "experience": "Experience",
+      "deliveries": "Deliveries Completed",
+      "recentReviews": "Recent Reviews",
+      "noReviews": "No reviews yet"
+    },
+    "confirmation": {
+      "title": "Booking Confirmed",
+      "message": "Your delivery has been scheduled with {{agentName}}",
+      "details": "Delivery Details",
+      "package": "Package Type",
+      "pickupTime": "Pickup Time",
+      "agentArrival": "Agent will arrive at pickup location in",
+      "deliveryEstimate": "Estimated delivery time",
+      "trackDelivery": "Track Delivery",
+      "contactAgent": "Contact Agent",
+      "close": "Done"
+    }
   }
 } 

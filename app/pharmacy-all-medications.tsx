@@ -24,6 +24,7 @@ import { Divider } from '../components/CustomDivider';
 import { Chip } from '../components/CustomChip';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../context/CartContext';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 const COLUMN_COUNT = 2;
@@ -299,32 +300,6 @@ const cartModalStyles = StyleSheet.create({
   },
 });
 
-// Add this function outside the main component
-const EmptyListComponent = ({ 
-  onClearFilters, 
-  theme 
-}: { 
-  onClearFilters: () => void; 
-  theme: MD3Theme;
-}) => (
-  <View style={styles.emptyContainer}>
-    <MaterialCommunityIcons name="pill" size={64} color={theme.colors.outline} />
-    <CustomText variant="titleMedium" style={styles.emptyTitle}>
-      No medications found
-    </CustomText>
-    <CustomText variant="bodyMedium" style={styles.emptyDescription}>
-      Try adjusting your search or filters
-    </CustomText>
-    <Button
-      mode="contained"
-      onPress={onClearFilters}
-      style={styles.clearButton}
-    >
-      Clear Filters
-    </Button>
-  </View>
-);
-
 // Custom SearchBar component
 const CustomSearchBar = ({ 
   value, 
@@ -338,6 +313,7 @@ const CustomSearchBar = ({
   style?: any;
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   
   return (
     <View style={[styles.searchBarContainer, style]}>
@@ -345,7 +321,7 @@ const CustomSearchBar = ({
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder={placeholder || "Search..."}
+        placeholder={placeholder || t('pharmacy.allMedications.search')}
         style={styles.searchInput}
         placeholderTextColor={theme.colors.outline}
       />
@@ -370,21 +346,20 @@ const SortMenu = ({
   onSelect: (sort: 'price_low' | 'price_high' | 'rating' | 'popularity') => void;
   currentSort: 'price_low' | 'price_high' | 'rating' | 'popularity';
 }) => {
-  if (!visible) return null;
-  
   const theme = useTheme();
+  const { t } = useTranslation();
   
   return (
     <View style={styles.menuOverlay}>
       <TouchableOpacity style={styles.menuBackground} onPress={onDismiss} />
       <View style={styles.menuContainer}>
-        <CustomText variant="titleMedium" style={styles.menuTitle}>Sort By</CustomText>
+        <CustomText variant="titleMedium" style={styles.menuTitle}>{t('pharmacy.allMedications.sort.title')}</CustomText>
         <TouchableOpacity 
           style={styles.menuItem} 
           onPress={() => { onSelect('popularity'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'popularity' ? styles.selectedMenuItem : null}>
-            Most Popular
+            {t('pharmacy.allMedications.sort.popularity')}
           </CustomText>
           {currentSort === 'popularity' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -395,7 +370,7 @@ const SortMenu = ({
           onPress={() => { onSelect('price_low'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'price_low' ? styles.selectedMenuItem : null}>
-            Price: Low to High
+            {t('pharmacy.allMedications.sort.priceLow')}
           </CustomText>
           {currentSort === 'price_low' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -406,7 +381,7 @@ const SortMenu = ({
           onPress={() => { onSelect('price_high'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'price_high' ? styles.selectedMenuItem : null}>
-            Price: High to Low
+            {t('pharmacy.allMedications.sort.priceHigh')}
           </CustomText>
           {currentSort === 'price_high' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -417,7 +392,7 @@ const SortMenu = ({
           onPress={() => { onSelect('rating'); onDismiss(); }}
         >
           <CustomText style={currentSort === 'rating' ? styles.selectedMenuItem : null}>
-            Highest Rated
+            {t('pharmacy.allMedications.sort.rating')}
           </CustomText>
           {currentSort === 'rating' && (
             <Ionicons name="checkmark" size={18} color={theme.colors.primary} />
@@ -428,10 +403,41 @@ const SortMenu = ({
   );
 };
 
+// Empty list component
+const EmptyListComponent = ({ 
+  onClearFilters, 
+  theme 
+}: { 
+  onClearFilters: () => void; 
+  theme: MD3Theme;
+}) => {
+  const { t } = useTranslation();
+  
+  return (
+    <View style={styles.emptyContainer}>
+      <MaterialCommunityIcons name="pill" size={64} color={theme.colors.outlineVariant} />
+      <CustomText variant="titleLarge" style={styles.emptyTitle}>
+        {t('pharmacy.allMedications.noMedications.title')}
+      </CustomText>
+      <CustomText variant="bodyMedium" style={styles.emptyDescription}>
+        {t('pharmacy.allMedications.noMedications.subtitle')}
+      </CustomText>
+      <Button 
+        mode="outlined" 
+        onPress={onClearFilters}
+        style={styles.clearButton}
+      >
+        {t('pharmacy.allMedications.noMedications.clearFilters')}
+      </Button>
+    </View>
+  );
+};
+
 const PharmacyAllMedicationsScreen = () => {
   const theme = useTheme();
   const params = useLocalSearchParams<{ category?: string }>();
   const { cartItems, addToCart } = useCart();
+  const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleMenu, setVisibleMenu] = useState(false);
@@ -439,10 +445,8 @@ const PharmacyAllMedicationsScreen = () => {
   const [sortBy, setSortBy] = useState<'price_low' | 'price_high' | 'rating' | 'popularity'>('popularity');
   const [refreshing, setRefreshing] = useState(false);
   const [addingToCart, setAddingToCart] = useState<number | null>(null);
-  // Add state to track quantity for each medication
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   
-  // Add state for cart modal
   const [cartModalVisible, setCartModalVisible] = useState(false);
   const [cartModalDetails, setCartModalDetails] = useState({
     medicationName: '',
@@ -451,14 +455,12 @@ const PharmacyAllMedicationsScreen = () => {
     category: ''
   });
 
-  // Check for category parameter in the URL
   useEffect(() => {
     if (params.category) {
       setSelectedCategory(params.category);
     }
   }, [params.category]);
 
-  // Initialize quantities for each medication
   useEffect(() => {
     const initialQuantities: Record<number, number> = {};
     medications.forEach(med => {
@@ -467,7 +469,6 @@ const PharmacyAllMedicationsScreen = () => {
     setQuantities(initialQuantities);
   }, []);
 
-  // Helper function to update quantity for a specific medication
   const updateQuantity = (medicationId: number, newQuantity: number) => {
     if (newQuantity < 1) return; // Don't allow quantities less than 1
     
@@ -477,7 +478,6 @@ const PharmacyAllMedicationsScreen = () => {
     }));
   };
 
-  // Mock data - in a real app, this would come from an API
   const [medications, setMedications] = useState<Medication[]>([
     {
       id: 1,
@@ -625,7 +625,6 @@ const PharmacyAllMedicationsScreen = () => {
     { id: 9, name: 'Eye Care', icon: 'eye' },
   ]);
 
-  // Filter medications based on search query and selected category
   const filteredMedications = medications.filter(medication => {
     const matchesSearch = medication.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           medication.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -633,7 +632,6 @@ const PharmacyAllMedicationsScreen = () => {
     return matchesSearch && matchesCategory;
   });
 
-  // Sort medications based on selected sort option
   const sortedMedications = [...filteredMedications].sort((a, b) => {
     switch (sortBy) {
       case 'price_low':
@@ -651,7 +649,6 @@ const PharmacyAllMedicationsScreen = () => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    // In a real app, this would refetch data from an API
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -664,13 +661,11 @@ const PharmacyAllMedicationsScreen = () => {
     });
   };
 
-  // Get the cart item count for displaying on the cart badge
   const cartItemCount = useMemo(() => {
     return cartItems.length;
   }, [cartItems]);
 
   const handleAddToCart = async (medication: Medication) => {
-    // Check if medication is in stock
     if (medication.stock <= 0) {
       Alert.alert(
         "Out of Stock",
@@ -679,10 +674,8 @@ const PharmacyAllMedicationsScreen = () => {
       return;
     }
 
-    // Get current quantity for this medication
     const quantity = quantities[medication.id] || 1;
     
-    // Check if user is trying to add more than available stock
     if (quantity > medication.stock) {
       Alert.alert(
         "Insufficient Stock",
@@ -693,14 +686,12 @@ const PharmacyAllMedicationsScreen = () => {
 
     setAddingToCart(medication.id);
     try {
-      // Check if this exact medication is already in the cart
       const existingMedItem = cartItems.find(item => 
         item.productType === 'medication' && 
         item.id.includes(`medication_${medication.id}`)
       );
 
       if (existingMedItem) {
-        // If it exists, update the quantity and total price
         const updatedItem = {
           ...existingMedItem,
           totalQuantity: existingMedItem.totalQuantity + quantity,
@@ -710,7 +701,6 @@ const PharmacyAllMedicationsScreen = () => {
         console.log('Updating medication quantity in cart:', medication.name);
         await addToCart(updatedItem);
         
-        // Show the modal instead of Alert
         setCartModalDetails({
           medicationName: medication.name,
           quantity: quantity,
@@ -719,7 +709,6 @@ const PharmacyAllMedicationsScreen = () => {
         });
         setCartModalVisible(true);
       } else {
-        // Create a new cart item
         const cartItem = {
           id: `medication_${medication.id}_${Date.now()}`,
           productName: medication.name,
@@ -747,7 +736,6 @@ const PharmacyAllMedicationsScreen = () => {
         console.log('Adding new medication to cart:', medication.name);
         await addToCart(cartItem);
         
-        // Show the modal instead of Alert
         setCartModalDetails({
           medicationName: medication.name,
           quantity: quantity,
@@ -757,7 +745,6 @@ const PharmacyAllMedicationsScreen = () => {
         setCartModalVisible(true);
       }
       
-      // Reset quantity to 1 after adding to cart
       updateQuantity(medication.id, 1);
     } catch (error) {
       console.error('Failed to add to cart:', error);
@@ -770,12 +757,10 @@ const PharmacyAllMedicationsScreen = () => {
     }
   };
 
-  // Function to check if a medication is already in the cart
   const isInCart = useCallback((medicationId: number): boolean => {
     return cartItems.some(item => item.id.includes(`medication_${medicationId}`));
   }, [cartItems]);
 
-  // Rendering the medication item
   const renderMedicationItem = ({ item }: { item: Medication }) => {
     const medicationInCart = isInCart(item.id);
     const currentQuantity = quantities[item.id] || 1;
@@ -808,7 +793,6 @@ const PharmacyAllMedicationsScreen = () => {
             </CustomText>
           </View>
           
-          {/* Quantity selector */}
           <View style={styles.quantityContainer}>
             <CustomText variant="bodySmall" style={styles.quantityLabel}>Quantity:</CustomText>
             <View style={styles.quantityControls}>
@@ -891,7 +875,9 @@ const PharmacyAllMedicationsScreen = () => {
             <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
           </TouchableOpacity>
           <CustomText variant="headlineMedium" style={styles.heading}>
-            All Medications
+            {selectedCategory && selectedCategory !== 'All' 
+              ? selectedCategory 
+              : t('pharmacy.allMedications.title')}
           </CustomText>
           <TouchableOpacity 
             onPress={() => router.push('/(tabs)/cart')}
@@ -909,7 +895,6 @@ const PharmacyAllMedicationsScreen = () => {
         </View>
       </View>
 
-      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <CustomSearchBar
           placeholder="Search medications..."
@@ -932,7 +917,6 @@ const PharmacyAllMedicationsScreen = () => {
         currentSort={sortBy}
       />
 
-      {/* Categories */}
       <ScrollView 
         horizontal 
         showsHorizontalScrollIndicator={false}
@@ -951,7 +935,6 @@ const PharmacyAllMedicationsScreen = () => {
         ))}
       </ScrollView>
 
-      {/* Results Counter */}
       <View style={styles.resultsContainer}>
         <CustomText variant="bodyMedium">
           {sortedMedications.length} {sortedMedications.length === 1 ? 'result' : 'results'}
@@ -966,7 +949,6 @@ const PharmacyAllMedicationsScreen = () => {
         </View>
       </View>
 
-      {/* Medications Grid */}
       <FlatList
         data={sortedMedications}
         renderItem={renderMedicationItem}
@@ -985,7 +967,6 @@ const PharmacyAllMedicationsScreen = () => {
         ListEmptyComponent={<EmptyListComponent onClearFilters={clearFilters} theme={theme} />}
       />
       
-      {/* Cart Added Modal */}
       <CartAddedModal
         visible={cartModalVisible}
         onClose={() => setCartModalVisible(false)}
@@ -1223,7 +1204,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
-  // New styles for quantity controls
   quantityContainer: {
     marginBottom: 8,
   },

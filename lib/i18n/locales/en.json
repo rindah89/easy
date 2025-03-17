@@ -1,0 +1,103 @@
+{
+  "common": {
+    "welcome": "Welcome to EasyD",
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Settings",
+    "search": "Search",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "loading": "Loading...",
+    "errorOccurred": "An error occurred",
+    "tryAgain": "Try Again",
+    "noResults": "No results found",
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "french": "French",
+    "selectService": "What would you like to do today?"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "signInWith": "Sign in with",
+    "createAccount": "Create new account",
+    "alreadyHaveAccount": "Already have an account?",
+    "resetPassword": "Reset Password",
+    "resetInstructions": "Enter your email to receive reset instructions"
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "name": "Name",
+    "phoneNumber": "Phone Number",
+    "address": "Address",
+    "changePassword": "Change Password",
+    "notificationSettings": "Notification Settings",
+    "privacySettings": "Privacy Settings",
+    "uploading": "Uploading...",
+    "changePhoto": "Change photo",
+    "noName": "User",
+    "logoutConfirmTitle": "Sign Out",
+    "logoutConfirmMessage": "Are you sure you want to sign out?"
+  },
+  "rides": {
+    "findRide": "Find a Ride",
+    "selectDestination": "Select Destination",
+    "selectPickup": "Select Pickup Location",
+    "rideConfirmation": "Ride Confirmation",
+    "estimatedArrival": "Estimated Arrival",
+    "cancel": "Cancel Ride",
+    "driver": "Driver"
+  },
+  "food": {
+    "restaurants": "Restaurants",
+    "groceries": "Grocery Shopping",
+    "viewAll": "View All",
+    "popularItems": "Popular Items",
+    "featuredRestaurants": "Featured Restaurants",
+    "menu": "Menu",
+    "addToCart": "Add to Cart",
+    "cart": "Cart",
+    "checkout": "Checkout",
+    "deliveryTime": "Delivery Time"
+  },
+  "pharmacy": {
+    "medications": "Medications",
+    "labTests": "Lab Tests",
+    "orders": "Orders",
+    "prescription": "Prescription",
+    "bookSampleCollection": "Book Sample Collection",
+    "allMedications": "All Medications",
+    "allLabTests": "All Lab Tests"
+  },
+  "furniture": {
+    "allItems": "All Items",
+    "categories": "Categories",
+    "topPicks": "Top Picks",
+    "featured": "Featured Items"
+  },
+  "chat": {
+    "messages": "Messages",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "noMessages": "No messages yet",
+    "startConversation": "Start a conversation"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordLength": "Password must be at least 8 characters",
+    "networkError": "Network error. Please check your connection",
+    "unknownError": "Something went wrong. Please try again"
+  }
+} 

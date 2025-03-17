@@ -1,0 +1,103 @@
+{
+  "common": {
+    "welcome": "Bienvenue sur EasyD",
+    "home": "Accueil",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "search": "Rechercher",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "logout": "Déconnexion",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "back": "Retour",
+    "next": "Suivant",
+    "submit": "Soumettre",
+    "loading": "Chargement...",
+    "errorOccurred": "Une erreur est survenue",
+    "tryAgain": "Réessayer",
+    "noResults": "Aucun résultat trouvé",
+    "selectLanguage": "Sélectionner la langue",
+    "english": "Anglais",
+    "french": "Français",
+    "selectService": "Que souhaitez-vous faire aujourd'hui ?"
+  },
+  "auth": {
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signInWith": "Se connecter avec",
+    "createAccount": "Créer un nouveau compte",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetInstructions": "Entrez votre e-mail pour recevoir les instructions de réinitialisation"
+  },
+  "profile": {
+    "title": "Profil",
+    "editProfile": "Modifier le profil",
+    "name": "Nom",
+    "phoneNumber": "Numéro de téléphone",
+    "address": "Adresse",
+    "changePassword": "Changer le mot de passe",
+    "notificationSettings": "Paramètres de notification",
+    "privacySettings": "Paramètres de confidentialité",
+    "uploading": "Téléchargement...",
+    "changePhoto": "Changer la photo",
+    "noName": "Utilisateur",
+    "logoutConfirmTitle": "Déconnexion",
+    "logoutConfirmMessage": "Êtes-vous sûr de vouloir vous déconnecter ?"
+  },
+  "rides": {
+    "findRide": "Trouver un trajet",
+    "selectDestination": "Sélectionner la destination",
+    "selectPickup": "Sélectionner le lieu de prise en charge",
+    "rideConfirmation": "Confirmation du trajet",
+    "estimatedArrival": "Arrivée estimée",
+    "cancel": "Annuler le trajet",
+    "driver": "Conducteur"
+  },
+  "food": {
+    "restaurants": "Restaurants",
+    "groceries": "Courses alimentaires",
+    "viewAll": "Voir tout",
+    "popularItems": "Articles populaires",
+    "featuredRestaurants": "Restaurants en vedette",
+    "menu": "Menu",
+    "addToCart": "Ajouter au panier",
+    "cart": "Panier",
+    "checkout": "Paiement",
+    "deliveryTime": "Temps de livraison"
+  },
+  "pharmacy": {
+    "medications": "Médicaments",
+    "labTests": "Tests de laboratoire",
+    "orders": "Commandes",
+    "prescription": "Ordonnance",
+    "bookSampleCollection": "Réserver un prélèvement d'échantillon",
+    "allMedications": "Tous les médicaments",
+    "allLabTests": "Tous les tests de laboratoire"
+  },
+  "furniture": {
+    "allItems": "Tous les articles",
+    "categories": "Catégories",
+    "topPicks": "Meilleures sélections",
+    "featured": "Articles en vedette"
+  },
+  "chat": {
+    "messages": "Messages",
+    "typeMessage": "Tapez un message...",
+    "send": "Envoyer",
+    "noMessages": "Pas encore de messages",
+    "startConversation": "Démarrer une conversation"
+  },
+  "errors": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Adresse e-mail invalide",
+    "passwordLength": "Le mot de passe doit comporter au moins 8 caractères",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion",
+    "unknownError": "Quelque chose s'est mal passé. Veuillez réessayer"
+  }
+} 
